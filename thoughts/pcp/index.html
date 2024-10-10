@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Producer Consumer Problem</title>
+  
+  
+  <meta name="author" content="map[name:Aagaman Luitel]">
+  <link id="pagestyle" rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" id="switcher-id" href="">
+  
+</head>
+
+<body>
+  <header>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta charset="UTF-8">
+  <div class="site_title_index">
+    <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a>
+  </div>
+  
+</header>
+
+  
+<link rel="stylesheet" href="/css/single.css">
+
+
+
+<button class="theme_changer" onclick="theme_switch()">
+  <svg style="color: var(--text);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+</button>
+
+
+<nav class="url_nav_bar" id="url_nav_bar">
+  <a rel="nofollow" href="/about">Contact</a>
+  <a rel="nofollow" href="/writings">Writings</a>
+  <a rel="nofollow" href="/thoughts">Thoughts</a>
+</nav>
+
+<script>
+  if (localStorage.getItem("theme") === "light") {
+    document.getElementById('switcher-id').href = '/css/light.css';
+  } else {
+    document.getElementById('switcher-id').href = '/css/dark.css';
+  }
+
+  function theme_switch() {
+    if (localStorage.getItem("theme") === "light") {
+      document.getElementById('switcher-id').href = '/css/dark.css';
+      localStorage.setItem("theme", "dark")
+    } else {
+      document.getElementById('switcher-id').href = '/css/light.css';
+      localStorage.setItem("theme", "light")
+    }
+  }
+</script>
+
+<main>
+  <article>
+
+    <div class="single_main">
+      <div class="single_heading">
+        <h1>Producer Consumer Problem</h1>
+        Aagaman Luitel | words: 909 | 4 minutes |
+        <time datetime=" 2024-02-29">2024.02.29</time>
+        
+
+        <hr>
+      </div>
+      <div>
+        <p>I was given a presentation task on this topic and I found it super interesting.
+Prior to this I had never properly used multithreading in my programs so discovering
+this was super fun and insightful.</p>
+<h1 id="producer-consumer-problem-bounded-buffer-problem">
+  <a style="text-decoration: none;" href="#producer-consumer-problem-bounded-buffer-problem">Producer Consumer Problem (Bounded buffer problem)</a>
+  <br>
+</h1>
+<p>The concept is simple. There are two working entity (functions/threads) and one buffer.</p>
+<ul>
+<li>producer -&gt; produces data</li>
+<li>consumer -&gt; consumed data</li>
+<li>buffer   -&gt; Common shared buffer/data</li>
+</ul>
+<p>One simple example will be, suppose I have a stock analysis program,
+producer will generate stock values, profit and loss and so on and put
+theat generated value in the buffer, consumer takes that value
+and generates a real time graph.
+Thats it! Thats what producer and consumers are.</p>
+<p>But&hellip;</p>
+<p>On multithreading system implementing this simple architecture gives a problem.
+The problem might also happen in single threaded program but the margin of error
+is too low. Lets say its hard to get it wrong on single threaded program. But
+on multithreading, this is not a simple fix&hellip; well if you stick to this article
+its actually quite easy fix.</p>
+<p>What happens in multithreading?</p>
+<ul>
+<li>[<em>M</em>] producers</li>
+<li>[<em>N</em>] consumers</li>
+<li>buffer</li>
+</ul>
+<p>There are M no of producers and N no of consumers where
+each producers and consumers will have a thread of its own. Even so they will act on
+a single buffer. Even if there are 100 threads, all of them will put value in the
+same buffer.</p>
+<p>Now whats the problem in that? You might say</p>
+<p>Suppose if one producer thread produces 1 byte of data and one consumer thread
+consumes 1 byte of data and the buffer size is just 10 bytes. What happens if
+we have 13 threads trying to put the value in the buffer? It will most likely
+give overflow. Similarly if we have nothing in the buffer and consumers
+are trying to consume then they will consume garbage value and probably show
+garbage result or crash on some instruction error.</p>
+<h2 id="rules">
+  <a style="text-decoration: none;" href="#rules">Rules</a>
+  <br>
+</h2>
+<p>To solve this we need to make some rules</p>
+<ul>
+<li>on buffer full lock the producer threads</li>
+<li>on buffer empty lock the consumer threads</li>
+<li>mutually exclusive data using mutexes</li>
+</ul>
+<p>Note: here are some definitions you need to know. Consulting wikipedia on this topics
+is preferred.</p>
+<ul>
+<li>semaphore: semaphores are signals that can be used by multiple thread to request an access</li>
+<li>mutex: mutex is like a unique key that can be used by only one thread</li>
+</ul>
+<h2 id="solution">
+  <a style="text-decoration: none;" href="#solution">Solution</a>
+  <br>
+</h2>
+<p>To solve this we need to use semaphores and mutex. More specifically
+2 binary semaphores and 1 mutex is needed</p>
+<ul>
+<li>empty semaphore[P]
+<ul>
+<li>tracks no of empty slots available in the buffer</li>
+<li>producer [M] have to wait if there are no semaphores available</li>
+<li>ideally we make P semaphores where P = sizeof(buffer)/sizeof(produced item)</li>
+</ul>
+</li>
+<li>full semaphore[0]
+<ul>
+<li>acts as a flag if buffer is empty or not empty</li>
+<li>consumer [N] consumes if buffer is not empty i.e 1</li>
+</ul>
+</li>
+<li>mutex
+<ul>
+<li>does not allows other thread to access the buffer</li>
+</ul>
+</li>
+</ul>
+<p>Lets take a scenario where there are</p>
+<ul>
+<li>10 producers generates 1 byte</li>
+<li>10 consumers consumes 1 byte</li>
+<li>buffer size is 5 bytes</li>
+</ul>
+<p>In this case we make 5 semaphores since creating any more than that means
+there is a chance of buffer overflow. So in this case we create list of
+binary semaphore and call it empty_semaphore. Empty sempahore is taken
+by a thread and decreased and threads that don&rsquo;t have the semaphore will
+wait until its available again. Similarly consusmers use full_semaphore.
+Full semaphore is just a flag that is set by producers to say there is a
+value at the buffer. Producers increment this flag to let consumers know
+its their turn. This just makes sure that consumers never act on an
+empty buffer. After one whole process of producing and consuming conusmers
+increment full_semaphore indicating one thread can now get access now that
+one thread work had already been consumed.</p>
+<p>Here is a simple C++ program to demonstrate this. Try changing the return size
+to 1 byte (meaning we would gives semaphores to more thread).</p>
+
+  
+    
+  
+
+
+<style>
+
+#highlight_render {
+    position: relative;
+    border: 1px solid var(--text);
+}
+
+#highlight_render::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-tint);
+    z-index: 1;
+    pointer-events: none;
+}
+
+</style>
+
+
+
+<div id="highlight_render">
+  <div class="highlight"><div style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#a8a8a8">#include</span> <span style="color:#a8a8a8">&lt;iostream&gt;</span><span style="color:#a8a8a8">
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8">#include</span> <span style="color:#a8a8a8">&lt;mutex&gt;</span><span style="color:#a8a8a8">
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8">#include</span> <span style="color:#a8a8a8">&lt;semaphore&gt;</span><span style="color:#a8a8a8">
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8">#include</span> <span style="color:#a8a8a8">&lt;thread&gt;</span><span style="color:#a8a8a8">
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8"></span>
+</span></span><span style="display:flex;"><span><span style="color:#a8a8a8">#define BUFFER_SIZE 16
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8">#define RETURN_SIZE 2
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8"></span>
+</span></span><span style="display:flex;"><span><span style="color:#b6a0ff">struct</span> IntStorage {
+</span></span><span style="display:flex;"><span>  <span style="color:#6ae4b9">int</span> buffer[BUFFER_SIZE];
+</span></span><span style="display:flex;"><span>  <span style="color:#6ae4b9">int</span> index <span style="color:#00d3d0">=</span> <span style="color:#00bcff">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#6ae4b9">void</span> <span style="color:#feacd0">insert</span>(<span style="color:#6ae4b9">int</span> c) {
+</span></span><span style="display:flex;"><span>    buffer[index] <span style="color:#00d3d0">=</span> c;
+</span></span><span style="display:flex;"><span>    index<span style="color:#00d3d0">++</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#6ae4b9">int</span> <span style="color:#feacd0">pop</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#6ae4b9">int</span> c <span style="color:#00d3d0">=</span> buffer[index];
+</span></span><span style="display:flex;"><span>    index<span style="color:#00d3d0">--</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#b6a0ff">return</span> c;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>IntStorage buffer;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>std<span style="color:#00d3d0">::</span>binary_semaphore full_semaphore{<span style="color:#00bcff">0</span>};
+</span></span><span style="display:flex;"><span>std<span style="color:#00d3d0">::</span>binary_semaphore empty_semaphore{BUFFER_SIZE <span style="color:#00d3d0">/</span> RETURN_SIZE};
+</span></span><span style="display:flex;"><span>std<span style="color:#00d3d0">::</span>mutex mutex;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a8a8a8">// puts 2 byte data in the buffer
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8"></span><span style="color:#6ae4b9">void</span> <span style="color:#feacd0">producer</span>(<span style="color:#6ae4b9">int</span> c) {
+</span></span><span style="display:flex;"><span>  <span style="color:#b6a0ff">while</span> (<span style="color:#f78fe7">true</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a8a8a8">// empty--
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8"></span>    empty_semaphore.acquire();
+</span></span><span style="display:flex;"><span>    mutex.lock();
+</span></span><span style="display:flex;"><span>    std<span style="color:#00d3d0">::</span>cout <span style="color:#00d3d0">&lt;&lt;</span> <span style="color:#79a8ff">&#34;inserted: &#34;</span> <span style="color:#00d3d0">&lt;&lt;</span> c <span style="color:#00d3d0">&lt;&lt;</span> <span style="color:#79a8ff">&#39;\n&#39;</span>;
+</span></span><span style="display:flex;"><span>    buffer.insert(c);
+</span></span><span style="display:flex;"><span>    buffer.insert(c);
+</span></span><span style="display:flex;"><span>    mutex.unlock();
+</span></span><span style="display:flex;"><span>    full_semaphore.release();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a8a8a8">// pops 2 bytes of data
+</span></span></span><span style="display:flex;"><span><span style="color:#a8a8a8"></span><span style="color:#6ae4b9">void</span> <span style="color:#feacd0">consumer</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#b6a0ff">while</span> (<span style="color:#f78fe7">true</span>) {
+</span></span><span style="display:flex;"><span>    full_semaphore.acquire();
+</span></span><span style="display:flex;"><span>    mutex.lock();
+</span></span><span style="display:flex;"><span>    std<span style="color:#00d3d0">::</span>cout <span style="color:#00d3d0">&lt;&lt;</span> <span style="color:#79a8ff">&#34;released: &#34;</span> <span style="color:#00d3d0">&lt;&lt;</span> buffer.pop() <span style="color:#00d3d0">&lt;&lt;</span> <span style="color:#79a8ff">&#39;\n&#39;</span>;
+</span></span><span style="display:flex;"><span>    buffer.pop();
+</span></span><span style="display:flex;"><span>    mutex.unlock();
+</span></span><span style="display:flex;"><span>    empty_semaphore.release();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6ae4b9">int</span> <span style="color:#feacd0">main</span>() {
+</span></span><span style="display:flex;"><span>  std<span style="color:#00d3d0">::</span><span style="color:#b6a0ff">thread</span> producers[<span style="color:#00bcff">32</span>];
+</span></span><span style="display:flex;"><span>  std<span style="color:#00d3d0">::</span><span style="color:#b6a0ff">thread</span> consumers[<span style="color:#00bcff">32</span>];
+</span></span><span style="display:flex;"><span>  <span style="color:#b6a0ff">for</span> (<span style="color:#6ae4b9">int</span> i <span style="color:#00d3d0">=</span> <span style="color:#00bcff">0</span>; i <span style="color:#00d3d0">&lt;</span> <span style="color:#00bcff">32</span>; <span style="color:#00d3d0">++</span>i) {
+</span></span><span style="display:flex;"><span>    producers[i] <span style="color:#00d3d0">=</span> std<span style="color:#00d3d0">::</span><span style="color:#b6a0ff">thread</span>(producer, i);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#b6a0ff">for</span> (<span style="color:#6ae4b9">int</span> i <span style="color:#00d3d0">=</span> <span style="color:#00bcff">0</span>; i <span style="color:#00d3d0">&lt;</span> <span style="color:#00bcff">32</span>; <span style="color:#00d3d0">++</span>i) {
+</span></span><span style="display:flex;"><span>    consumers[i] <span style="color:#00d3d0">=</span> std<span style="color:#00d3d0">::</span><span style="color:#b6a0ff">thread</span>(consumer);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#b6a0ff">for</span> (<span style="color:#b6a0ff">auto</span> <span style="color:#00d3d0">&amp;</span><span style="color:#b6a0ff">thread</span> <span style="color:#00d3d0">:</span> producers) {
+</span></span><span style="display:flex;"><span>    <span style="color:#b6a0ff">thread</span>.join();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#b6a0ff">for</span> (<span style="color:#b6a0ff">auto</span> <span style="color:#00d3d0">&amp;</span><span style="color:#b6a0ff">thread</span> <span style="color:#00d3d0">:</span> consumers) {
+</span></span><span style="display:flex;"><span>    <span style="color:#b6a0ff">thread</span>.join();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+<p>Compile and run</p>
+
+  
+    
+  
+
+
+<style>
+
+#highlight_render {
+    position: relative;
+    border: 1px solid var(--text);
+}
+
+#highlight_render::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-tint);
+    z-index: 1;
+    pointer-events: none;
+}
+
+</style>
+
+
+
+<div id="highlight_render">
+  <div class="highlight"><div style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>clang++ -std<span style="color:#00d3d0">=</span>c++20 pcp.cpp -o pcp
+</span></span><span style="display:flex;"><span>./pcp</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+<object data="./pcproblem.pdf" type="application/pdf" width="100%" height="900px">
+</object>
+
+
+      </div>
+    </div>
+
+
+    
+    </div>
+
+  </article>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<blockquote>
+  In a way, I feel sorry for the kids of this generation. They&#39;ll have parents who know how to check browser history.
+</blockquote>
+
+
+
+</main>
+<aside>
+	<div class="thoughts">
+		<div>
+			<h3>LATEST THOUGHTS</h3>
+		</div>
+		<div>
+			<ul>
+				
+				<li><a href="/thoughts/music_background/">best background music playlist</a></li>
+				
+				<li><a href="/thoughts/manga_thoughts001/">Bakemonogatari</a></li>
+				
+				<li><a href="/thoughts/literal_thoughts_001/">thoughts 001</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</aside>
+
+  <footer>
+	<p>&copy; 2024 <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a></p>
+</footer>
+
+<script id="MathJax-script" async src="/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+
+</html>

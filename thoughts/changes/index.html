@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>changes</title>
+  
+  
+  <meta name="author" content="map[name:Aagaman Luitel]">
+  <link id="pagestyle" rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" id="switcher-id" href="">
+  
+</head>
+
+<body>
+  <header>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta charset="UTF-8">
+  <div class="site_title_index">
+    <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a>
+  </div>
+  
+</header>
+
+  
+<link rel="stylesheet" href="/css/single.css">
+
+
+
+<button class="theme_changer" onclick="theme_switch()">
+  <svg style="color: var(--text);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+</button>
+
+
+<nav class="url_nav_bar" id="url_nav_bar">
+  <a rel="nofollow" href="/about">Contact</a>
+  <a rel="nofollow" href="/writings">Writings</a>
+  <a rel="nofollow" href="/thoughts">Thoughts</a>
+</nav>
+
+<script>
+  if (localStorage.getItem("theme") === "light") {
+    document.getElementById('switcher-id').href = '/css/light.css';
+  } else {
+    document.getElementById('switcher-id').href = '/css/dark.css';
+  }
+
+  function theme_switch() {
+    if (localStorage.getItem("theme") === "light") {
+      document.getElementById('switcher-id').href = '/css/dark.css';
+      localStorage.setItem("theme", "dark")
+    } else {
+      document.getElementById('switcher-id').href = '/css/light.css';
+      localStorage.setItem("theme", "light")
+    }
+  }
+</script>
+
+<main>
+  <article>
+
+    <div class="single_main">
+      <div class="single_heading">
+        <h1>changes</h1>
+        Aagaman Luitel | words: 127 | 0 minutes |
+        <time datetime=" 2023-05-30">2023.05.30</time>
+        
+
+        <hr>
+      </div>
+      <div>
+        <p>I did some digging and I found that I can change how feeds works in zola.
+You basically disable feeds globally and manually enable it on the subfolders
+of the content you want. The drawback is I cannot create atom feeds so I have to
+use RSS which is limited but hey at least it works now!</p>
+<p>I also introduced new fonts called Modern Computer. This font is used in
+default latex papers and I kinda like the look of this font. For writing
+this font is better than Iosevka.</p>
+<p>And regarding the writing, I decided I will write things with YAMAZAKI and DRAFT
+tag before I shift it to /dev/null section. I am lazy so I might sneak things
+and put it in YAMAZAKI&rsquo;s section forever.</p>
+<!-- raw HTML omitted -->
+
+      </div>
+    </div>
+
+
+    
+    </div>
+
+  </article>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<blockquote>
+  Uuuuuuuuuur Ahhhhrrrrrr Uhrrrr Ahhhhrrrrrr Aaaarhg...
+</blockquote>
+
+
+
+</main>
+<aside>
+	<div class="thoughts">
+		<div>
+			<h3>LATEST THOUGHTS</h3>
+		</div>
+		<div>
+			<ul>
+				
+				<li><a href="/thoughts/music_background/">best background music playlist</a></li>
+				
+				<li><a href="/thoughts/manga_thoughts001/">Bakemonogatari</a></li>
+				
+				<li><a href="/thoughts/literal_thoughts_001/">thoughts 001</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</aside>
+
+  <footer>
+	<p>&copy; 2024 <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a></p>
+</footer>
+
+<script id="MathJax-script" async src="/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+:root {
+  --url: #4882E0;
+  --background-tint: #FFFFFF1A;
+  --background-color: #000000;
+  --text: #dcdcdc;
+  --subtext: #c1c0d4;
+  --title_1: #5077D3;
+  --title_0: #c1c0d4;
+  --button: #5077D3;
+  --link: #af92f7;
+
+  --h1: white;
+  --h2: #868beb;
+  --h3: #fe640b;
+  --h4: #d20f39;
+  --toc: #5077D3;
+
+  --secondary-background: #19191a;
+}

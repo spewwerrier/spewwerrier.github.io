@@ -1,0 +1,24 @@
+:root {
+  --url: #221a98;
+  --background-color: #ffffff;
+  --background-tint: #0000000D;
+  --text: #000000;
+  --subtext: #616060;
+  --title_1: #292929;
+  --title_0: #5645f5;
+  --button: #5077D3;
+  --link: blue;
+
+  --h1: #252323;
+  --h2: #021a83;
+  --h3: #fe640b;
+  --h4: #d20f39;
+  --toc: #5077D3;
+
+  --secondary-background: #f2e4e9;
+
+}
+
+.highlight {
+  filter: invert(100%);
+}
