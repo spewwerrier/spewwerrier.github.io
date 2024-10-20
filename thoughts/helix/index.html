@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Helix editor</title>
+  
+  
+  <meta name="author" content="map[name:Aagaman Luitel]">
+  <link id="pagestyle" rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" id="switcher-id" href="">
+  
+</head>
+
+<body>
+  <header>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta charset="UTF-8">
+  <div class="site_title_index">
+    <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a>
+  </div>
+  
+</header>
+
+  
+<link rel="stylesheet" href="/css/single.css">
+
+
+
+<button class="theme_changer" onclick="theme_switch()">
+  <svg style="color: var(--text);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+</button>
+
+
+<nav class="url_nav_bar" id="url_nav_bar">
+  <a rel="nofollow" href="/about">Contact</a>
+  <a rel="nofollow" href="/writings">Writings</a>
+  <a rel="nofollow" href="/thoughts">Thoughts</a>
+</nav>
+
+<script>
+  if (localStorage.getItem("theme") === "light") {
+    document.getElementById('switcher-id').href = '/css/light.css';
+  } else {
+    document.getElementById('switcher-id').href = '/css/dark.css';
+  }
+
+  function theme_switch() {
+    if (localStorage.getItem("theme") === "light") {
+      document.getElementById('switcher-id').href = '/css/dark.css';
+      localStorage.setItem("theme", "dark")
+    } else {
+      document.getElementById('switcher-id').href = '/css/light.css';
+      localStorage.setItem("theme", "light")
+    }
+  }
+</script>
+
+<main>
+  <article>
+
+    <div class="single_main">
+      <div class="single_heading">
+        <h1>Helix editor</h1>
+        Aagaman Luitel | words: 944 | 4 minutes |
+        <time datetime=" 2023-06-10">2023.06.10</time>
+        
+
+        <hr>
+      </div>
+      <div>
+        <p>Terminals clients are not my jam. I want to show some love to emacs but emacs is not
+snappy. VScode feels slow&hellip; resizing and re-rendering electron app is buggy
+in wayland session. Jetbrains product are too heavy and I have constant worry about
+my educational licenses.</p>
+<!-- raw HTML omitted -->
+<h1 id="helix">
+  <a style="text-decoration: none;" href="#helix">Helix</a>
+  <br>
+</h1>
+<p>These are the limitations that let me stick to neovim. Don&rsquo;t get me wrong neovim is a fantastic
+editor. A guy like me who is heavily opinionated about terminal editors uses it due to
+its sheer performace and flexibility. Flexibility seems wonderful but for me this is the
+reason why I shifted to helix. Neovim tries to be lightweight, lightweight in a sense
+that it has lsp integration but not any initalization. I have to create config and
+manually add that language. If I have lsp installed I am not so sure why would I not
+want it on on a working dir which is set by default. Even if I add that lsp
+manually, now I have to create a keymap and there are different ways to create keymap.
+Using which-key plugin I have to re-write that keymap for which-key. These can be done once
+and solved forever but what cannot be solved is the stability of extending like this.
+Neovim does not has its own autocompletion&hellip; which is why I assume most people install lsp in the
+first place. Fine, I install an autocompletion but now I get random
+error every once a while. Maybe once every 1-2hrs. I don&rsquo;t know what the error is,
+it is pointing to some built-in lua scripts in runtime folder. The bug is nothing too major, it
+just stderrs on autocompletion, given
+proper patience I could find it in my config. But what you see above is my config.
+The ~200 lines jargon I wrote just to have a proper autocompletion is now giving
+me a random error. I have no clue which plugin is giving this error. I have 3-4
+different plugins just for autocompletion. 50% of the lua scripts I wrote is the
+jargon I don&rsquo;t understand. Rewriting will help but writing some lua scripts gluing
+basic features is rather boring and tedious. If I truly learnt the editor and what all these lua script
+did instead of just knowing the abstract, this would have been a trivial fix. Is this
+the incompetence of my patience? I don&rsquo;t know. Maybe I just don&rsquo;t like investigating
+4 sources for an error that is hard to reproduce.</p>
+<p>This is one reason of me switching editor. Another is helix has better editing
+system.  Its modal editing but its just more comfier than that of vim. You get
+to see what you act on before acting. Like instead of dw in vim where you will
+delete first and act on the word, its wd on helix where w highlights things
+and then you act, in this case pressing d to delete. This means I can press
+w and think for a second before deleting or change my act. That being said I
+see lots of people getting put off by this - &ldquo;Helix modal is not implemented
+on other editors&rdquo; which I find kinda stupid. I sometime use vscode (with vim)
+to do occasional css and python and I don&rsquo;t find doing simple editing difficult
+just because the mappings are different. If I&rsquo;m doing real project I would
+fire up helix to become efficient but that does not mean I will dumb out
+and forget all my vim stuffs. Coincidentally helix also uses HKJL and many
+ctrl keybinds that vim uses so things become much easier after some time.
+So anyone who is used to modal editing system will be able
+to smoothly navigate this editor in few days. Multiple cursors are also generally comfier to use in helix.
+Another good to know is helix mostly uses leader key shortcut orientation but you
+can also implement emacs style &lsquo;C-x C-f&rsquo;.
+Plugin system is also on the <a href="https://github.com/helix-editor/helix/discussions/3806">way</a>
+(thankfully not lua)
+and since most core features are already in editor I don&rsquo;t need to worry about basic
+stuffs breaking.</p>
+<p>The only thing that&rsquo;s bugging me is helix treatment to <code>ctrl-c</code>. Unlike
+neovim <code>ctrl-c</code>, helix does not has same functionality like of <code>esc</code> and rebinding hardcoded
+keybind like <code>ctrl-c</code> is buggy from what I have experienced.</p>
+<p>This is the basic config I&rsquo;ve been using and it just werks.</p>
+
+  
+    
+  
+
+
+<style>
+
+#highlight_render {
+    position: relative;
+    border: 1px solid var(--text);
+}
+
+#highlight_render::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-tint);
+    z-index: 1;
+    pointer-events: none;
+}
+
+</style>
+
+
+
+<div id="highlight_render">
+  <div class="highlight"><div style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#fff;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>theme = <span style="color:#79a8ff">&#34;catppuccin_mocha&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[editor]
+</span></span><span style="display:flex;"><span>line-number = <span style="color:#79a8ff">&#34;relative&#34;</span>
+</span></span><span style="display:flex;"><span>cursorline = <span style="color:#00bcff">true</span>
+</span></span><span style="display:flex;"><span>rulers = [<span style="color:#00bcff">90</span>]
+</span></span><span style="display:flex;"><span>gutters = [<span style="color:#79a8ff">&#34;diff&#34;</span>, <span style="color:#79a8ff">&#34;diagnostics&#34;</span>, <span style="color:#79a8ff">&#34;spacer&#34;</span>, <span style="color:#79a8ff">&#34;line-numbers&#34;</span>, <span style="color:#79a8ff">&#34;spacer&#34;</span>]
+</span></span><span style="display:flex;"><span>color-modes = <span style="color:#00bcff">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[editor.cursor-shape]
+</span></span><span style="display:flex;"><span>insert = <span style="color:#79a8ff">&#34;bar&#34;</span>
+</span></span><span style="display:flex;"><span>normal = <span style="color:#79a8ff">&#34;block&#34;</span>
+</span></span><span style="display:flex;"><span>select = <span style="color:#79a8ff">&#34;underline&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[editor.soft-wrap]
+</span></span><span style="display:flex;"><span>enable = <span style="color:#00bcff">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[editor.statusline]
+</span></span><span style="display:flex;"><span>left = [<span style="color:#79a8ff">&#34;mode&#34;</span>, <span style="color:#79a8ff">&#34;file-name&#34;</span>, <span style="color:#79a8ff">&#34;spinner&#34;</span>]
+</span></span><span style="display:flex;"><span>center = []
+</span></span><span style="display:flex;"><span>right = [<span style="color:#79a8ff">&#34;diagnostics&#34;</span>, <span style="color:#79a8ff">&#34;position&#34;</span>, <span style="color:#79a8ff">&#34;file-type&#34;</span>]
+</span></span><span style="display:flex;"><span>separator = <span style="color:#79a8ff">&#34;│&#34;</span>
+</span></span><span style="display:flex;"><span>mode.normal = <span style="color:#79a8ff">&#34;N&#34;</span>
+</span></span><span style="display:flex;"><span>mode.insert = <span style="color:#79a8ff">&#34;I&#34;</span>
+</span></span><span style="display:flex;"><span>mode.select = <span style="color:#79a8ff">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[editor.lsp]
+</span></span><span style="display:flex;"><span>auto-signature-help	= <span style="color:#00bcff">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[keys.normal]
+</span></span><span style="display:flex;"><span>C-s = <span style="color:#79a8ff">&#34;:w&#34;</span>
+</span></span><span style="display:flex;"><span>C-b = [<span style="color:#79a8ff">&#34;keep_primary_selection&#34;</span>, <span style="color:#79a8ff">&#34;collapse_selection&#34;</span>]
+</span></span><span style="display:flex;"><span>y = <span style="color:#79a8ff">&#34;yank_joined_to_clipboard&#34;</span>
+</span></span><span style="display:flex;"><span>p = <span style="color:#79a8ff">&#34;paste_clipboard_after&#34;</span>
+</span></span><span style="display:flex;"><span>X = <span style="color:#79a8ff">&#34;extend_line_up&#34;</span>
+</span></span><span style="display:flex;"><span>D = <span style="color:#79a8ff">&#34;delete_char_forward&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[keys.normal.<span style="color:#79a8ff">&#34; &#34;</span>]
+</span></span><span style="display:flex;"><span>q = <span style="color:#79a8ff">&#34;:buffer-close&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#79a8ff">&#34; &#34;</span> = <span style="color:#79a8ff">&#34;buffer_picker&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a8a8a8"># [keys.normal.&#34;C-x&#34;]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a8a8a8"># &#34;C-f&#34; = &#34;file_picker&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[keys.insert]
+</span></span><span style="display:flex;"><span>C-l = <span style="color:#79a8ff">&#34;move_char_right&#34;</span>
+</span></span><span style="display:flex;"><span>C-i = <span style="color:#79a8ff">&#34;normal_mode&#34;</span>
+</span></span><span style="display:flex;"><span>C-s = <span style="color:#79a8ff">&#34;signature_help&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[keys.select]
+</span></span><span style="display:flex;"><span>C-i = [<span style="color:#79a8ff">&#34;normal_mode&#34;</span>, <span style="color:#79a8ff">&#34;keep_primary_selection&#34;</span>, <span style="color:#79a8ff">&#34;collapse_selection&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[keys.normal.<span style="color:#79a8ff">&#34;+&#34;</span>]
+</span></span><span style="display:flex;"><span>m = <span style="color:#79a8ff">&#34;:run-shell-command make&#34;</span>
+</span></span><span style="display:flex;"><span>c = <span style="color:#79a8ff">&#34;:run-shell-command cargo build&#34;</span>
+</span></span><span style="display:flex;"><span>t = [<span style="color:#79a8ff">&#34;:run-shell-command zathura *.pdf&#34;</span>, <span style="color:#79a8ff">&#34;:run-shell-command typst w *.typ&#34;</span>]
+</span></span><span style="display:flex;"><span>z = [<span style="color:#79a8ff">&#34;:run-shell-command zola serve&#34;</span>, <span style="color:#79a8ff">&#34;:run-shell-command brave http://127.0.0.1:1111&#34;</span>]
+</span></span><span style="display:flex;"><span>b = <span style="color:#79a8ff">&#34;:run-shell-command bun run dev&#34;</span>
+</span></span><span style="display:flex;"><span>g = <span style="color:#79a8ff">&#34;:sh ./gradlew build&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+
+
+    
+    </div>
+
+  </article>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<blockquote>
+  Perl, the only language that looks the same before and after RSA encryption.
+</blockquote>
+
+
+
+</main>
+<aside>
+	<div class="thoughts">
+		<div>
+			<h3>LATEST THOUGHTS</h3>
+		</div>
+		<div>
+			<ul>
+				
+				<li><a href="/thoughts/music_background/">best background music playlist</a></li>
+				
+				<li><a href="/thoughts/modern_web/">modern web is so fast</a></li>
+				
+				<li><a href="/thoughts/manga_thoughts001/">Bakemonogatari</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</aside>
+
+  <footer>
+	<p>&copy; 2024 <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a></p>
+</footer>
+
+<script id="MathJax-script" async src="/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+
+</html>

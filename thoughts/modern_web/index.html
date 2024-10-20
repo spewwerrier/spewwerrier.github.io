@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>modern web is so fast</title>
+  
+  
+  <meta name="author" content="map[name:Aagaman Luitel]">
+  <link id="pagestyle" rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" id="switcher-id" href="">
+  
+</head>
+
+<body>
+  <header>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta charset="UTF-8">
+  <div class="site_title_index">
+    <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a>
+  </div>
+  
+</header>
+
+  
+<link rel="stylesheet" href="/css/single.css">
+
+
+
+<button class="theme_changer" onclick="theme_switch()">
+  <svg style="color: var(--text);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+</button>
+
+
+<nav class="url_nav_bar" id="url_nav_bar">
+  <a rel="nofollow" href="/about">Contact</a>
+  <a rel="nofollow" href="/writings">Writings</a>
+  <a rel="nofollow" href="/thoughts">Thoughts</a>
+</nav>
+
+<script>
+  if (localStorage.getItem("theme") === "light") {
+    document.getElementById('switcher-id').href = '/css/light.css';
+  } else {
+    document.getElementById('switcher-id').href = '/css/dark.css';
+  }
+
+  function theme_switch() {
+    if (localStorage.getItem("theme") === "light") {
+      document.getElementById('switcher-id').href = '/css/dark.css';
+      localStorage.setItem("theme", "dark")
+    } else {
+      document.getElementById('switcher-id').href = '/css/light.css';
+      localStorage.setItem("theme", "light")
+    }
+  }
+</script>
+
+<main>
+  <article>
+
+    <div class="single_main">
+      <div class="single_heading">
+        <h1>modern web is so fast</h1>
+        Aagaman Luitel | words: 120 | 0 minutes |
+        <time datetime=" 2024-10-10">2024.10.10</time>
+        
+
+        <hr>
+      </div>
+      <div>
+        <p>I was doing some react dev and I saw this today</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=-Ln-8QM8KhQ">https://www.youtube.com/watch?v=-Ln-8QM8KhQ</a></li>
+</ul>
+<p>My localhost barebones react/daisyui website clearly takes 200ms to load and this old framework
+agressive loads content before the browser changes its url.
+Changing the web to less bloat would be so better. Not having a rgb-drop-shadowed-on-scroll-change-effect
+horizontal box css in your website styled with 200LOC of css is much more healthier than having one. Modern standards
+are bad, it should be changed. And on JS side, most JS framework do the same thing
+but uses different config/init and design concepts which we like over other and I think adapting
+to one even if we don&rsquo;t like is better than creating a new one over and over again.</p>
+
+      </div>
+    </div>
+
+
+    
+    </div>
+
+  </article>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<blockquote>
+  RTFM is the true path of every developer. But it would happen only if there&#39;s no way out.
+</blockquote>
+
+
+
+</main>
+<aside>
+	<div class="thoughts">
+		<div>
+			<h3>LATEST THOUGHTS</h3>
+		</div>
+		<div>
+			<ul>
+				
+				<li><a href="/thoughts/music_background/">best background music playlist</a></li>
+				
+				<li><a href="/thoughts/modern_web/">modern web is so fast</a></li>
+				
+				<li><a href="/thoughts/manga_thoughts001/">Bakemonogatari</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</aside>
+
+  <footer>
+	<p>&copy; 2024 <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a></p>
+</footer>
+
+<script id="MathJax-script" async src="/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+
+</html>

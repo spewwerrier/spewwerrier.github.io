@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>workflow changes</title>
+  
+  
+  <meta name="author" content="map[name:Aagaman Luitel]">
+  <link id="pagestyle" rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" id="switcher-id" href="">
+  
+</head>
+
+<body>
+  <header>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta charset="UTF-8">
+  <div class="site_title_index">
+    <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a>
+  </div>
+  
+</header>
+
+  
+<link rel="stylesheet" href="/css/single.css">
+
+
+
+<button class="theme_changer" onclick="theme_switch()">
+  <svg style="color: var(--text);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+</button>
+
+
+<nav class="url_nav_bar" id="url_nav_bar">
+  <a rel="nofollow" href="/about">Contact</a>
+  <a rel="nofollow" href="/writings">Writings</a>
+  <a rel="nofollow" href="/thoughts">Thoughts</a>
+</nav>
+
+<script>
+  if (localStorage.getItem("theme") === "light") {
+    document.getElementById('switcher-id').href = '/css/light.css';
+  } else {
+    document.getElementById('switcher-id').href = '/css/dark.css';
+  }
+
+  function theme_switch() {
+    if (localStorage.getItem("theme") === "light") {
+      document.getElementById('switcher-id').href = '/css/dark.css';
+      localStorage.setItem("theme", "dark")
+    } else {
+      document.getElementById('switcher-id').href = '/css/light.css';
+      localStorage.setItem("theme", "light")
+    }
+  }
+</script>
+
+<main>
+  <article>
+
+    <div class="single_main">
+      <div class="single_heading">
+        <h1>workflow changes</h1>
+        Aagaman Luitel | words: 434 | 2 minutes |
+        <time datetime=" 2024-01-23">2024.01.23</time>
+        
+
+        <hr>
+      </div>
+      <div>
+        <p>I rarely change my workspace but I am at the point where I feel comfortable
+with my workspace (again).</p>
+<h2 id="tmux">
+  <a style="text-decoration: none;" href="#tmux">Tmux</a>
+  <br>
+</h2>
+<p>I was really hesitant to use tmux since all I believed tmux was for
+only splitting terminals but oh boy I was wrong. Yes it splits terminal
+and creates new window but its more than that: its how you can sit in one
+terminal and control all others terminals. I no longer have to golf through
+terminals to find the one I am searching for. No more moving terminal to
+background workspace, no more spawning new terminal to compile my code,
+no more terminal golfing now.  That being said, one of my big issue with
+tmux is its sixel support. Although tmux supports sixel I could not output
+a proper sixel pane through nnn. This is a bit problematic when I want to
+change wallpapers on the fly but it is what it is.</p>
+<p>After setting the prefix key to M-x I feel more emacs&rsquo;y as well. +1</p>
+<h2 id="hyprland">
+  <a style="text-decoration: none;" href="#hyprland">Hyprland</a>
+  <br>
+</h2>
+<p>Hyprland is nothing new to me. I&rsquo;ve been using it ever since I stopped using
+sway. Sway is good but hyprland is just better. And the support for shaders was
+exactly what I needed. I am a huge fan of monochrome colors. Its not that it
+looks good (I don&rsquo;t want to get achromatopsia) but monochrome colors keeps
+me focused on a single thing. I can open tmux, change color to monochrome and
+ignore every other possibility to get distracted. And which window manager
+lets you write your own shader? <strong>None</strong></p>
+<h2 id="typst">
+  <a style="text-decoration: none;" href="#typst">Typst</a>
+  <br>
+</h2>
+<p>I have begun write my notes using typst. This thing is really comfortable.
+Converting my shitty typst file to a template took me couple of minutes
+and I kept changing it as I began to use that template. I am pleased
+with this. All the horrors of writing my own pdf has disappeared, now I
+just need to focus on typing.  If you&rsquo;ve ever used latex watch this -&gt;
+<a href="https://youtube.com/watch?v=Zj2S0lOuhtM">https://youtube.com/watch?v=Zj2S0lOuhtM</a></p>
+<p>my github gist for a comfy template: <a href="https://gist.github.com/luitel777/cd15b946df437b1e6d9226986726de3c">https://gist.github.com/luitel777/cd15b946df437b1e6d9226986726de3c</a></p>
+<h2 id="windows">
+  <a style="text-decoration: none;" href="#windows">Windows</a>
+  <br>
+</h2>
+<p>No one really uses windows anyway. I&rsquo;ve configured tailscale on my linux so
+when opening wsl, it automatically fires up tailscale and makes a ssh
+connection to my linux no matter where I am at. Although most of the time
+I don&rsquo;t run my tailscale on my main desktop when I need to tailscale becomes
+a godsent.</p>
+<p>Also windows power tool is actually good. Just the keyboard remapping ability
+makes me write code on windows. Other than that I think windows just moves
+very slow to me as I find it harder to adapt.</p>
+
+      </div>
+    </div>
+
+
+    
+    </div>
+
+  </article>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<blockquote>
+  Q: Why do we need a backend, why not just connect front end to database??? A: Yeah! And why do we eat and go to the bathroom while we can throw the food directly in the toilet? Because stuff needs to get processed. ;)
+</blockquote>
+
+
+
+</main>
+<aside>
+	<div class="thoughts">
+		<div>
+			<h3>LATEST THOUGHTS</h3>
+		</div>
+		<div>
+			<ul>
+				
+				<li><a href="/thoughts/music_background/">best background music playlist</a></li>
+				
+				<li><a href="/thoughts/modern_web/">modern web is so fast</a></li>
+				
+				<li><a href="/thoughts/manga_thoughts001/">Bakemonogatari</a></li>
+				
+			</ul>
+		</div>
+	</div>
+</aside>
+
+  <footer>
+	<p>&copy; 2024 <a href="https://luitelaagaman.com.np/">Aagaman Luitel</a></p>
+</footer>
+
+<script id="MathJax-script" async src="/mathjax/es5/tex-mml-chtml.js"></script>
+
+
+</body>
+
+</html>
