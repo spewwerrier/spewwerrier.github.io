@@ -1,0 +1,19 @@
+.subtitle {
+  text-align: center;
+}
+
+
+.toc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.toc details {
+    text-align: center;
+}
+
+.toc ul {
+    list-style-type: none;
+}

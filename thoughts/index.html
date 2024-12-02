@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+<title> List of blog posts</title>
+<h1 class="title">
+  List of blog posts
+</h1>
+
+<article>
+  <div class="posts">
+    <ul class="description_list">
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;thisweek2&#x2F;> this week 002 </a> </li>
+      <h1 id="rust">Rust</h1>
+<p>I finally sat down and started learning rust. Rust in action is a great book
+since it is easily digestible and fast to read if you already have prior
+knowledge to programming.</p>
+<ul>
+<li>https://www.manning.com/books/rust-in-action</li>
+</ul>
+<h1 id="helix">Helix</h1>
+<p>I always hated autocomplete since some lsp are so good, it just completes my
+intuition making me incapable to write the accurate syntax without lsp.
+(Note: its not metals). To solve this I am trying out rawdog the source code method.
+In neovim I used to have a keyboard shortcut that opened the popular
+<code>gd</code> <code>go to definition</code> in new pane, but in helix it opened in the pane I am currently
+in. This is annoying since I often get confused and I am forced to do bunch of <code>C-o</code> and <code>C-i</code> which I kinda hate.
+In this godly PR
+https://github.com/helix-editor/helix/pull/4709
+I can finally have macros meaning I can map <code>Gd</code> to <code>C-wvgd</code> which means open new
+pane and do gd. Now I have no longer autocomplete enable, been like a week and I don't
+miss it. I can also do <code>C-x</code> to show autocomplete whenever I want.</p>
+<h1 id="browsers-improved-darastically">Browsers improved darastically</h1>
+<ul>
+<li>Totally new, independent browser
+<ul>
+<li>https://ladybird.org</li>
+</ul>
+</li>
+<li>https://alfy.blog/2024/10/19/linking-directly-to-web-page-content.html</li>
+<li>splits are now a thing in firefox and chrome browsers
+<ul>
+<li>https://github.com/zen-browser/desktop/discussions/813</li>
+<li>https://community.brave.com/t/new-split-view-shortcut/560089</li>
+</ul>
+</li>
+</ul>
+<h1 id="notebook-lm">Notebook LM</h1>
+<p>This is godsent for people like me who don't like hallucinations in AI and
+just want relevant thing. Notebook lm only answers questions present in
+the notes you provide.  It does not even answer basic question beyond what
+you have provided. Currently I dump things I am reading. And since I like
+to skip chapters (which I find boring) I can just ask NotebookLM if I ever
+get stuck on any chapter due to me not reading previous chapter. This is
+just tip of iceberg, it has podcast generation and is usable with multiple
+source. I hope this is free forever.</p>
+<h1 id="arknights">Arknights</h1>
+<p>My gaming addiction is minimal on arknights. In logos and wisadel banner I got logos
+and mlynar and honestly I am happy since I was just in my 23rd pull when all this happened. I screamed
+when I got mlynar since</p>
+<ul>
+<li>I watched a Kyostin vid using mlynar (day 1)</li>
+<li>Went to gamepress and saw he is super OP. (I wish I had him... sadge)</li>
+<li>(day 3) Wisadel banner is up, I being poor cuz I spent all my shit to get Ines was
+not expecting any 6 star</li>
+<li>first 10 pull nothing</li>
+<li>second 10 pull MLYNARRRRRR. Just imagine the possibility of getting offbanner op you dreamed 2 days ago. Even if you get a 6 star which is already 1 in 50 (2%)
+chance of getting in banner is 70% (I assume boldly) so and there are like 15ish offbanners 2% to get off banner you want. I think the probability is 0.04. Hitting
+that probability in 20 tries is super lucky.</li>
+<li>I do one pulls cuz brokie, got LOGOSSSSS</li>
+<li>I sleep happily</li>
+</ul>
+<p>My satisfaction is 90% with this event, I am coping with not getting Wisadel since her
+playstyle is kinda boring... but I want her since she is most overpowered character in game.</p>
+<p>Life update: I also got wisadel around 80th pull. I am happy as I can now play this game on easy mode.</p>
+<h1 id="automatic-theming-in-linux">Automatic theming in Linux</h1>
+<p>I always thought automatic theming is impossible in WM and impossible to do correctly in DE (I have no
+experience with DE). But apparently this is the easiest thing in the world. Lemme explain</p>
+<ul>
+<li>Download themix (https://github.com/themix-project/themix-gui)</li>
+<li>Select/create theme and export in ~/.themes</li>
+<li>Read this https://wiki.archlinux.org/title/Dark_mode_switching</li>
+<li>Use nwg-look to test if theme applies (DONE if you dont want automatic)
+<ul>
+<li>Note that a theme can only be dark mode or light mode despite having a setting called prefer dark/light</li>
+<li>So keep note of light themes (your UI and firefox/brave should be white) and dark respectively</li>
+</ul>
+</li>
+<li>Use gsettings to set theme (requires theme name) from terminal</li>
+<li>Make a script</li>
+<li>Profit</li>
+</ul>
+<pre data-lang="bash" style="background-color:#ffffff;color:#000000;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#919191;">#!/usr/bin/env sh
+</span><span>
+</span><span>dark_theme</span><span style="color:#ff5600;">=</span><span style="color:#00a33f;">&quot;oomox-lcars_scrot-dark&quot;
+</span><span>light_theme</span><span style="color:#ff5600;">=</span><span style="color:#00a33f;">&quot;oomox-chesnut-light&quot;
+</span><span>
+</span><span>theme_status</span><span style="color:#ff5600;">=</span><span style="color:#00a33f;">&quot;$(gsettings get org.gnome.desktop.interface color-scheme)&quot;
+</span><span>
+</span><span style="color:#ff5600;">if </span><span style="color:#a535ae;">[ </span><span>$theme_status </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;&#39;prefer-light&#39;&quot; </span><span style="color:#a535ae;">]
+</span><span style="color:#ff5600;">then
+</span><span>  notify-send </span><span style="color:#00a33f;">&quot;dark theme set up&quot;
+</span><span>  gsettings set org.gnome.desktop.interface gtk-theme $dark_theme
+</span><span>  gsettings set org.gnome.desktop.interface color-scheme </span><span style="color:#00a33f;">&quot;prefer-dark&quot;
+</span><span style="color:#ff5600;">else
+</span><span>  notify-send </span><span style="color:#00a33f;">&quot;light theme set up&quot;
+</span><span>  gsettings set org.gnome.desktop.interface gtk-theme $light_theme
+</span><span>  gsettings set org.gnome.desktop.interface color-scheme </span><span style="color:#00a33f;">&quot;prefer-light&quot;
+</span><span style="color:#ff5600;">fi
+</span></code></pre>
+<p>Hyprland</p>
+<pre style="background-color:#ffffff;color:#000000;"><code><span>binde=SUPER,t,exec,$HOME/.config/hypr/script/theme
+</span></code></pre>
+<h1 id="festivals-are-over">Festivals are over</h1>
+<p>Dashain and Tihar is over (30 days). I can finally relax, stay in home and do things I like. Festives
+makes me busy so I cannot focus on things I was planning to do. Festives this year was fun (mostly) and I look forward to it next year.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;thisweek&#x2F;> this week 001 </a> </li>
+      <h1 id="image-filter-formula-for-grayscaling-images">Image filter formula for grayscaling images</h1>
+<p>Initially mentioned</p>
+<ul>
+<li>https://pedropark99.github.io/zig-book/Chapters/13-image-filter.html#applying-the-image-filter<br />
+Wikipedia URL</li>
+<li>https://en.wikipedia.org/wiki/Grayscale#Luma_coding_in_video_systems</li>
+</ul>
+<h1 id="guide-to-writing-dns-server-from-scratch">Guide to writing DNS Server from scratch</h1>
+<p>https://github.com/EmilHernvall/dnsguide/tree/master</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;modern-web&#x2F;> modern web is so fast </a> </li>
+      <p>I was doing some react dev and I saw this today</p>
+<ul>
+<li>https://www.youtube.com/watch?v=-Ln-8QM8KhQ</li>
+</ul>
+<p>My localhost barebones react/daisyui website clearly takes 200ms to load and this old framework
+agressive loads content before the browser changes its url.
+Changing the web to less bloat would be so better. Not having a rgb-drop-shadowed-on-scroll-change-effect
+horizontal box css in your website styled with 200LOC of css is much more healthier than having one. Modern standards
+are bad, it should be changed. And on JS side, most JS framework do the same thing
+but uses different config/init and design concepts which we like over other and I think adapting
+to one even if we don't like is better than creating a new one over and over again.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;music-background&#x2F;> best background music playlist </a> </li>
+      <p>Best music to listen in background</p>
+<h1 id="arknights">Arknights</h1>
+<ul>
+<li>https://open.spotify.com/playlist/4hsMCsQm0FMXa7ek5FfumW<br />
+I love them as a game company but even if they decide to change their business plan to music
+I will still love them. Apparently they also make good anime. Mind = Blown.</li>
+</ul>
+<h1 id="vidya-music">Vidya Music</h1>
+<ul>
+<li>https://www.vipvgm.net/<br />
+Game musics are always good since they are mostly made as a background music
+(FOR KEEPING PLAYERS PLAY THEIR GAME). There is a good chance that the studio hired by game
+company is paid a lot of money since they want their players to be hooked in game and music
+is a top factor. So video games musics are professionally and buiness logically good.</li>
+</ul>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;literal-thoughts-001&#x2F;> thoughts 001 </a> </li>
+      <p>My website was getting little bit dry since I have nothing quality to share. But on other
+hand I redesigned my website quite a lot. I made it more simple and fast and look good.</p>
+<p>My main concern is not with the website itself but with its content. I had initially decided
+I will keep random stuff in thoughts and good crafted articles on writings but I think
+I put the bar too high on myself.</p>
+<p>I will lower that bar on myself and write posts I think is good.
+My base motives are same; I will treat /thoughts like an actual twitter posts since I
+don't like social media in general. And I will try to post enough to keep me happy. Need
+that fuzzy warm feeling that I've accomplished something.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;manga-thoughts001&#x2F;> Bakemonogatari </a> </li>
+      <p>I have watched every monogatari series but only read ~30ish chapters of bakemonogatari since
+I thought its same as anime. But oh boy I was wrong. As much as like the series I loved reading the
+bakemonogatari manga more.</p>
+<p>Bake made me fall in love characters. Every character has their own funny and adorable traits.
+Lets go with something lighthearted, Kanbaru. Kanbaru story is not heavy but she is
+wayy damn cute. Her appearence and jokes are wonderfully done. Another one is Hachikuji. She
+and Rararagi's conversations are just funny to read. On a heavy note, Hanekawa.
+Boy this story made me depressed and motivated at same time. Hanekawa story is one of the
+best story I've ever read. I just feel sad and happy. Being released from a trap in an
+imperfect way you grow, suffer, cry, act, you hide your emotions, you want someone to say
+they care for you, you want to exist in someone's world. I have seen lots of scene where girls gets
+rejected and cuts her hair at end but this was more than that. The love story is beautifully
+done. This manga gave me hope, love, hate, despair and motivation. It has seemingly grown inside of me.
+I feel indebted to this story. It has changed how I think, how I should act and most of all
+what I should expect from someone and be ready to accept it after all.</p>
+<ul>
+<li>What's the difference between a man and a monkey? The difference is that man can decide the value of his own life for himself.</li>
+<li>It's ok for people to go ahead and run from bad things, but just looking away doesn't count as running.</li>
+<li>Staying miserable is nyothing more than laziness, anyway. It's cowardly to nyot fight for happiness.</li>
+<li>Bi-bi beep. Bi-bi beep. The sound of my heart throbbing. (ME CRY)</li>
+</ul>
+<p>here are some other quotes I found</p>
+<ul>
+<li>https://old.reddit.com/r/araragi/comments/z6gfee/whats_your_favorite_quote_from_the_monogatari/</li>
+</ul>
+<p>On a side note: The bake anime is an injustice to its manga. I was missing so many stuff watching bake.
+The manga is just FUCKING PERFECT!</p>
+<p>Here are my all time best anime/manga/novels</p>
+<ul>
+<li>Bakemonogatari (Manga)</li>
+<li>Tatami Galaxy (Anime/Novel)</li>
+<li>Oyasumi Punpun (Manga)</li>
+</ul>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;pcp&#x2F;> Producer Consumer Problem </a> </li>
+      <p>I was given a presentation task on this topic and I found it super interesting.
+Prior to this I had never properly used multithreading in my programs so discovering
+this was super fun and insightful.</p>
+<h1 id="producer-consumer-problem-bounded-buffer-problem">Producer Consumer Problem (Bounded buffer problem)</h1>
+<p>The concept is simple. There are two working entity (functions/threads) and one buffer.</p>
+<ul>
+<li>producer -&gt; produces data</li>
+<li>consumer -&gt; consumed data</li>
+<li>buffer   -&gt; Common shared buffer/data</li>
+</ul>
+<p>One simple example will be, suppose I have a stock analysis program,
+producer will generate stock values, profit and loss and so on and put
+theat generated value in the buffer, consumer takes that value
+and generates a real time graph.
+Thats it! Thats what producer and consumers are.</p>
+<p>But...</p>
+<p>On multithreading system implementing this simple architecture gives a problem.
+The problem might also happen in single threaded program but the margin of error
+is too low. Lets say its hard to get it wrong on single threaded program. But
+on multithreading, this is not a simple fix... well if you stick to this article
+its actually quite easy fix.</p>
+<p>What happens in multithreading?</p>
+<ul>
+<li>[<em>M</em>] producers</li>
+<li>[<em>N</em>] consumers</li>
+<li>buffer</li>
+</ul>
+<p>There are M no of producers and N no of consumers where
+each producers and consumers will have a thread of its own. Even so they will act on
+a single buffer. Even if there are 100 threads, all of them will put value in the
+same buffer.</p>
+<p>Now whats the problem in that? You might say</p>
+<p>Suppose if one producer thread produces 1 byte of data and one consumer thread
+consumes 1 byte of data and the buffer size is just 10 bytes. What happens if
+we have 13 threads trying to put the value in the buffer? It will most likely
+give overflow. Similarly if we have nothing in the buffer and consumers
+are trying to consume then they will consume garbage value and probably show
+garbage result or crash on some instruction error.</p>
+<h2 id="rules">Rules</h2>
+<p>To solve this we need to make some rules</p>
+<ul>
+<li>on buffer full lock the producer threads</li>
+<li>on buffer empty lock the consumer threads</li>
+<li>mutually exclusive data using mutexes</li>
+</ul>
+<p>Note: here are some definitions you need to know. Consulting wikipedia on this topics
+is preferred.</p>
+<ul>
+<li>semaphore: semaphores are signals that can be used by multiple thread to request an access</li>
+<li>mutex: mutex is like a unique key that can be used by only one thread</li>
+</ul>
+<h2 id="solution">Solution</h2>
+<p>To solve this we need to use semaphores and mutex. More specifically
+2 binary semaphores and 1 mutex is needed</p>
+<ul>
+<li>empty semaphore[P]
+<ul>
+<li>tracks no of empty slots available in the buffer</li>
+<li>producer [M] have to wait if there are no semaphores available</li>
+<li>ideally we make P semaphores where P = sizeof(buffer)/sizeof(produced item)</li>
+</ul>
+</li>
+<li>full semaphore[0]
+<ul>
+<li>acts as a flag if buffer is empty or not empty</li>
+<li>consumer [N] consumes if buffer is not empty i.e 1</li>
+</ul>
+</li>
+<li>mutex
+<ul>
+<li>does not allows other thread to access the buffer</li>
+</ul>
+</li>
+</ul>
+<p>Lets take a scenario where there are</p>
+<ul>
+<li>10 producers generates 1 byte</li>
+<li>10 consumers consumes 1 byte</li>
+<li>buffer size is 5 bytes</li>
+</ul>
+<p>In this case we make 5 semaphores since creating any more than that means
+there is a chance of buffer overflow. So in this case we create list of
+binary semaphore and call it empty_semaphore. Empty sempahore is taken
+by a thread and decreased and threads that don't have the semaphore will
+wait until its available again. Similarly consusmers use full_semaphore.
+Full semaphore is just a flag that is set by producers to say there is a
+value at the buffer. Producers increment this flag to let consumers know
+its their turn. This just makes sure that consumers never act on an
+empty buffer. After one whole process of producing and consuming conusmers
+increment full_semaphore indicating one thread can now get access now that
+one thread work had already been consumed.</p>
+<p>Here is a simple C++ program to demonstrate this. Try changing the return size
+to 1 byte (meaning we would gives semaphores to more thread).</p>
+<pre data-lang="cpp" style="background-color:#ffffff;color:#000000;" class="language-cpp "><code class="language-cpp" data-lang="cpp"><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;iostream&gt;
+</span><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;mutex&gt;
+</span><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;semaphore&gt;
+</span><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;thread&gt;
+</span><span>
+</span><span style="color:#ff5600;">#define </span><span>BUFFER_SIZE 16
+</span><span style="color:#ff5600;">#define </span><span>RETURN_SIZE 2
+</span><span>
+</span><span style="color:#ff5600;">struct </span><span>IntStorage {
+</span><span>  </span><span style="color:#ff5600;">int</span><span> buffer[BUFFER_SIZE];
+</span><span>  </span><span style="color:#ff5600;">int</span><span> index </span><span style="color:#ff5600;">= </span><span>0;
+</span><span>  </span><span style="color:#ff5600;">void </span><span style="color:#21439c;">insert</span><span>(</span><span style="color:#ff5600;">int </span><span>c) {
+</span><span>    buffer[index] </span><span style="color:#ff5600;">=</span><span> c;
+</span><span>    index</span><span style="color:#ff5600;">++</span><span>;
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">int </span><span style="color:#21439c;">pop</span><span>() {
+</span><span>    </span><span style="color:#ff5600;">int</span><span> c </span><span style="color:#ff5600;">=</span><span> buffer[index];
+</span><span>    index</span><span style="color:#ff5600;">--</span><span>;
+</span><span>    </span><span style="color:#ff5600;">return</span><span> c;
+</span><span>  }
+</span><span>};
+</span><span>
+</span><span>IntStorage buffer;
+</span><span>
+</span><span>std::binary_semaphore full_semaphore{0};
+</span><span>std::binary_semaphore empty_semaphore{BUFFER_SIZE </span><span style="color:#ff5600;">/</span><span> RETURN_SIZE};
+</span><span>std::mutex mutex;
+</span><span>
+</span><span style="color:#919191;">// puts 2 byte data in the buffer
+</span><span style="color:#ff5600;">void </span><span style="color:#21439c;">producer</span><span>(</span><span style="color:#ff5600;">int </span><span>c) {
+</span><span>  </span><span style="color:#ff5600;">while </span><span>(</span><span style="color:#a535ae;">true</span><span>) {
+</span><span>    </span><span style="color:#919191;">// empty--
+</span><span>    empty_semaphore.acquire();
+</span><span>    mutex.lock();
+</span><span>    std::cout </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&quot;inserted: &quot; </span><span style="color:#ff5600;">&lt;&lt;</span><span> c </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&#39;\n&#39;</span><span>;
+</span><span>    buffer.insert(c);
+</span><span>    buffer.insert(c);
+</span><span>    mutex.unlock();
+</span><span>    full_semaphore.release();
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style="color:#919191;">// pops 2 bytes of data
+</span><span style="color:#ff5600;">void </span><span style="color:#21439c;">consumer</span><span>() {
+</span><span>  </span><span style="color:#ff5600;">while </span><span>(</span><span style="color:#a535ae;">true</span><span>) {
+</span><span>    full_semaphore.acquire();
+</span><span>    mutex.lock();
+</span><span>    std::cout </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&quot;released: &quot; </span><span style="color:#ff5600;">&lt;&lt;</span><span> buffer.pop() </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&#39;\n&#39;</span><span>;
+</span><span>    buffer.pop();
+</span><span>    mutex.unlock();
+</span><span>    empty_semaphore.release();
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">int </span><span style="color:#21439c;">main</span><span>() {
+</span><span>  std::thread producers[32];
+</span><span>  std::thread consumers[32];
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">int</span><span> i </span><span style="color:#ff5600;">= </span><span>0; i </span><span style="color:#ff5600;">&lt; </span><span>32; </span><span style="color:#ff5600;">++</span><span>i) {
+</span><span>    producers[i] </span><span style="color:#ff5600;">= </span><span>std::thread(producer, i);
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">int</span><span> i </span><span style="color:#ff5600;">= </span><span>0; i </span><span style="color:#ff5600;">&lt; </span><span>32; </span><span style="color:#ff5600;">++</span><span>i) {
+</span><span>    consumers[i] </span><span style="color:#ff5600;">= </span><span>std::thread(consumer);
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">auto &amp;</span><span>thread </span><span style="color:#ff5600;">:</span><span> producers) {
+</span><span>    thread.join();
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">auto &amp;</span><span>thread </span><span style="color:#ff5600;">:</span><span> consumers) {
+</span><span>    thread.join();
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<p>Compile and run</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>clang++ -std</span><span style="color:#ff5600;">=</span><span>c++20 pcp.cpp -o pcp
+</span><span>./pcp
+</span></code></pre>
+<p>{{&lt; pdf src="./pcproblem.pdf" &gt;}}</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;workflow&#x2F;> workflow changes </a> </li>
+      <p>I rarely change my workspace but I am at the point where I feel comfortable
+with my workspace (again).</p>
+<h2 id="tmux">Tmux</h2>
+<p>I was really hesitant to use tmux since all I believed tmux was for
+only splitting terminals but oh boy I was wrong. Yes it splits terminal
+and creates new window but its more than that: its how you can sit in one
+terminal and control all others terminals. I no longer have to golf through
+terminals to find the one I am searching for. No more moving terminal to
+background workspace, no more spawning new terminal to compile my code,
+no more terminal golfing now.  That being said, one of my big issue with
+tmux is its sixel support. Although tmux supports sixel I could not output
+a proper sixel pane through nnn. This is a bit problematic when I want to
+change wallpapers on the fly but it is what it is.</p>
+<p>After setting the prefix key to M-x I feel more emacs'y as well. +1</p>
+<h2 id="hyprland">Hyprland</h2>
+<p>Hyprland is nothing new to me. I've been using it ever since I stopped using
+sway. Sway is good but hyprland is just better. And the support for shaders was
+exactly what I needed. I am a huge fan of monochrome colors. Its not that it
+looks good (I don't want to get achromatopsia) but monochrome colors keeps
+me focused on a single thing. I can open tmux, change color to monochrome and
+ignore every other possibility to get distracted. And which window manager
+lets you write your own shader? <strong>None</strong></p>
+<h2 id="typst">Typst</h2>
+<p>I have begun write my notes using typst. This thing is really comfortable.
+Converting my shitty typst file to a template took me couple of minutes
+and I kept changing it as I began to use that template. I am pleased
+with this. All the horrors of writing my own pdf has disappeared, now I
+just need to focus on typing.  If you've ever used latex watch this -&gt;
+https://youtube.com/watch?v=Zj2S0lOuhtM</p>
+<p>my github gist for a comfy template: https://gist.github.com/luitel777/cd15b946df437b1e6d9226986726de3c</p>
+<h2 id="windows">Windows</h2>
+<p>No one really uses windows anyway. I've configured tailscale on my linux so
+when opening wsl, it automatically fires up tailscale and makes a ssh
+connection to my linux no matter where I am at. Although most of the time
+I don't run my tailscale on my main desktop when I need to tailscale becomes
+a godsent.</p>
+<p>Also windows power tool is actually good. Just the keyboard remapping ability
+makes me write code on windows. Other than that I think windows just moves
+very slow to me as I find it harder to adapt.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;kafka&#x2F;> Franz Kafka </a> </li>
+      <h1 id="franz-kafka">franz_kafka</h1>
+<p><em>I read all of these in 1-2 months without giving it enough thought process, so I might be wrong or biased.</em></p>
+<p>Till now I've read his three writings</p>
+<ul>
+<li>"The Trial"</li>
+<li>"Metamorphosis"</li>
+<li>"Kafka's letter to his father"</li>
+</ul>
+<p>Truth to be told, I am not fan of his works, but I like the essence behind it. Being raised by his domineering father he became very timid and insecure. This led to his absurd thoughts of existentialism. Weirdly enough not nihilism. Existentialism says life is meaningless (which correlates to much of Kafka's life where he was simply following orders of his father, not truly living his own life) but it also says you can create your own purpose of your life (which weirdly enough Kafka did not succeed in his real life but wrote lots of in his books).</p>
+<p>Most of his books have absurd ending. I will not spoil but it felt like spilling a fine cup of tea after spending 3hrs to boil it. To me this is wrong. But it says a lot about his personality. How his thought correlates in his books and how he write things he wished was true for him. Remembering his books are not great experience to me but... but when on melancholy state, I try to view how Kafka life was and how his books relates to the condition I'm in, ultimately I feel glad someone is there with me, I feel glad its not only me. I feel glad that its normal to feel like crap and still go on with your life. That being said I am not an Existentialism guy, I don't make views on life.</p>
+<p>Right now I've nothing to compare his works against, but I will be reading Dostoevsky and see how it provokes my thought process.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;qemu&#x2F;> qemu </a> </li>
+      <p>Frequent qemu things I have been frequently using.</p>
+<p>create qemu image</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>qemu-img create disk.img -f qcow2 20G
+</span></code></pre>
+<p>run iso in the image</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>qemu-system-x86_64 -cdrom linux.iso -hda disk.img \
+</span><span>  -m 4096 --display sdl,gl=on -vga virtio -enable-kvm  -cpu host
+</span></code></pre>
+<p>note: cpu host uses your actual cpu instead of emulating one hence this increases
+performance darastically</p>
+<p>Run riscv compiled binary</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>qemu-riscv64 program
+</span></code></pre>
+<p>Debug an iso. Default target localhost:1234</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>qemu-system-x86_64 -S -s image.iso
+</span></code></pre>
+<p>Output stuffs in stdio</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>qemu-system-x86_64 image.iso -serial stdio
+</span></code></pre>
+<p>Debug qemu running an iso</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>qemu-system-x86_64 image.iso -monitor stdio
+</span></code></pre>
+<p><a href="https://luitelaagaman.com.np/thoughts/first/">writings</a></p>
+
+      
+    </ul>
+  </div>
+
+<nav class="pagination">
+  
+  
+  <a class="next" href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;page&#x2F;2&#x2F;">Next ›</a>
+  
+</nav>
+
+
+</article>
+
+
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

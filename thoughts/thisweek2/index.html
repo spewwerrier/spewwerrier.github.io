@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> this week 002</title>
+</head>
+
+
+<h1 class="title">
+  this week 002
+</h1>
+<p class="subtitle"><strong>2024-11-04</strong></p>
+
+<article>
+  <h1 id="rust">Rust</h1>
+<p>I finally sat down and started learning rust. Rust in action is a great book
+since it is easily digestible and fast to read if you already have prior
+knowledge to programming.</p>
+<ul>
+<li>https://www.manning.com/books/rust-in-action</li>
+</ul>
+<h1 id="helix">Helix</h1>
+<p>I always hated autocomplete since some lsp are so good, it just completes my
+intuition making me incapable to write the accurate syntax without lsp.
+(Note: its not metals). To solve this I am trying out rawdog the source code method.
+In neovim I used to have a keyboard shortcut that opened the popular
+<code>gd</code> <code>go to definition</code> in new pane, but in helix it opened in the pane I am currently
+in. This is annoying since I often get confused and I am forced to do bunch of <code>C-o</code> and <code>C-i</code> which I kinda hate.
+In this godly PR
+https://github.com/helix-editor/helix/pull/4709
+I can finally have macros meaning I can map <code>Gd</code> to <code>C-wvgd</code> which means open new
+pane and do gd. Now I have no longer autocomplete enable, been like a week and I don't
+miss it. I can also do <code>C-x</code> to show autocomplete whenever I want.</p>
+<h1 id="browsers-improved-darastically">Browsers improved darastically</h1>
+<ul>
+<li>Totally new, independent browser
+<ul>
+<li>https://ladybird.org</li>
+</ul>
+</li>
+<li>https://alfy.blog/2024/10/19/linking-directly-to-web-page-content.html</li>
+<li>splits are now a thing in firefox and chrome browsers
+<ul>
+<li>https://github.com/zen-browser/desktop/discussions/813</li>
+<li>https://community.brave.com/t/new-split-view-shortcut/560089</li>
+</ul>
+</li>
+</ul>
+<h1 id="notebook-lm">Notebook LM</h1>
+<p>This is godsent for people like me who don't like hallucinations in AI and
+just want relevant thing. Notebook lm only answers questions present in
+the notes you provide.  It does not even answer basic question beyond what
+you have provided. Currently I dump things I am reading. And since I like
+to skip chapters (which I find boring) I can just ask NotebookLM if I ever
+get stuck on any chapter due to me not reading previous chapter. This is
+just tip of iceberg, it has podcast generation and is usable with multiple
+source. I hope this is free forever.</p>
+<h1 id="arknights">Arknights</h1>
+<p>My gaming addiction is minimal on arknights. In logos and wisadel banner I got logos
+and mlynar and honestly I am happy since I was just in my 23rd pull when all this happened. I screamed
+when I got mlynar since</p>
+<ul>
+<li>I watched a Kyostin vid using mlynar (day 1)</li>
+<li>Went to gamepress and saw he is super OP. (I wish I had him... sadge)</li>
+<li>(day 3) Wisadel banner is up, I being poor cuz I spent all my shit to get Ines was
+not expecting any 6 star</li>
+<li>first 10 pull nothing</li>
+<li>second 10 pull MLYNARRRRRR. Just imagine the possibility of getting offbanner op you dreamed 2 days ago. Even if you get a 6 star which is already 1 in 50 (2%)
+chance of getting in banner is 70% (I assume boldly) so and there are like 15ish offbanners 2% to get off banner you want. I think the probability is 0.04. Hitting
+that probability in 20 tries is super lucky.</li>
+<li>I do one pulls cuz brokie, got LOGOSSSSS</li>
+<li>I sleep happily</li>
+</ul>
+<p>My satisfaction is 90% with this event, I am coping with not getting Wisadel since her
+playstyle is kinda boring... but I want her since she is most overpowered character in game.</p>
+<p>Life update: I also got wisadel around 80th pull. I am happy as I can now play this game on easy mode.</p>
+<h1 id="automatic-theming-in-linux">Automatic theming in Linux</h1>
+<p>I always thought automatic theming is impossible in WM and impossible to do correctly in DE (I have no
+experience with DE). But apparently this is the easiest thing in the world. Lemme explain</p>
+<ul>
+<li>Download themix (https://github.com/themix-project/themix-gui)</li>
+<li>Select/create theme and export in ~/.themes</li>
+<li>Read this https://wiki.archlinux.org/title/Dark_mode_switching</li>
+<li>Use nwg-look to test if theme applies (DONE if you dont want automatic)
+<ul>
+<li>Note that a theme can only be dark mode or light mode despite having a setting called prefer dark/light</li>
+<li>So keep note of light themes (your UI and firefox/brave should be white) and dark respectively</li>
+</ul>
+</li>
+<li>Use gsettings to set theme (requires theme name) from terminal</li>
+<li>Make a script</li>
+<li>Profit</li>
+</ul>
+<pre data-lang="bash" style="background-color:#ffffff;color:#000000;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#919191;">#!/usr/bin/env sh
+</span><span>
+</span><span>dark_theme</span><span style="color:#ff5600;">=</span><span style="color:#00a33f;">&quot;oomox-lcars_scrot-dark&quot;
+</span><span>light_theme</span><span style="color:#ff5600;">=</span><span style="color:#00a33f;">&quot;oomox-chesnut-light&quot;
+</span><span>
+</span><span>theme_status</span><span style="color:#ff5600;">=</span><span style="color:#00a33f;">&quot;$(gsettings get org.gnome.desktop.interface color-scheme)&quot;
+</span><span>
+</span><span style="color:#ff5600;">if </span><span style="color:#a535ae;">[ </span><span>$theme_status </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;&#39;prefer-light&#39;&quot; </span><span style="color:#a535ae;">]
+</span><span style="color:#ff5600;">then
+</span><span>  notify-send </span><span style="color:#00a33f;">&quot;dark theme set up&quot;
+</span><span>  gsettings set org.gnome.desktop.interface gtk-theme $dark_theme
+</span><span>  gsettings set org.gnome.desktop.interface color-scheme </span><span style="color:#00a33f;">&quot;prefer-dark&quot;
+</span><span style="color:#ff5600;">else
+</span><span>  notify-send </span><span style="color:#00a33f;">&quot;light theme set up&quot;
+</span><span>  gsettings set org.gnome.desktop.interface gtk-theme $light_theme
+</span><span>  gsettings set org.gnome.desktop.interface color-scheme </span><span style="color:#00a33f;">&quot;prefer-light&quot;
+</span><span style="color:#ff5600;">fi
+</span></code></pre>
+<p>Hyprland</p>
+<pre style="background-color:#ffffff;color:#000000;"><code><span>binde=SUPER,t,exec,$HOME/.config/hypr/script/theme
+</span></code></pre>
+<h1 id="festivals-are-over">Festivals are over</h1>
+<p>Dashain and Tihar is over (30 days). I can finally relax, stay in home and do things I like. Festives
+makes me busy so I cannot focus on things I was planning to do. Festives this year was fun (mostly) and I look forward to it next year.</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

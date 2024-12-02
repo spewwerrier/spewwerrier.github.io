@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> Franz Kafka</title>
+</head>
+
+
+<h1 class="title">
+  Franz Kafka
+</h1>
+<p class="subtitle"><strong>2023-12-19</strong></p>
+
+<article>
+  <h1 id="franz-kafka">franz_kafka</h1>
+<p><em>I read all of these in 1-2 months without giving it enough thought process, so I might be wrong or biased.</em></p>
+<p>Till now I've read his three writings</p>
+<ul>
+<li>"The Trial"</li>
+<li>"Metamorphosis"</li>
+<li>"Kafka's letter to his father"</li>
+</ul>
+<p>Truth to be told, I am not fan of his works, but I like the essence behind it. Being raised by his domineering father he became very timid and insecure. This led to his absurd thoughts of existentialism. Weirdly enough not nihilism. Existentialism says life is meaningless (which correlates to much of Kafka's life where he was simply following orders of his father, not truly living his own life) but it also says you can create your own purpose of your life (which weirdly enough Kafka did not succeed in his real life but wrote lots of in his books).</p>
+<p>Most of his books have absurd ending. I will not spoil but it felt like spilling a fine cup of tea after spending 3hrs to boil it. To me this is wrong. But it says a lot about his personality. How his thought correlates in his books and how he write things he wished was true for him. Remembering his books are not great experience to me but... but when on melancholy state, I try to view how Kafka life was and how his books relates to the condition I'm in, ultimately I feel glad someone is there with me, I feel glad its not only me. I feel glad that its normal to feel like crap and still go on with your life. That being said I am not an Existentialism guy, I don't make views on life.</p>
+<p>Right now I've nothing to compare his works against, but I will be reading Dostoevsky and see how it provokes my thought process.</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

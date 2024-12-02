@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+<title> List of blog posts</title>
+<h1 class="title">
+  List of blog posts
+</h1>
+
+<article>
+  <div class="posts">
+    <ul class="description_list">
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;burn&#x2F;> Burn of social media </a> </li>
+      <p>I always hoped for social media to burn and corrupt themself. This is happening right
+now!</p>
+<p>Reddit introduced their new API changes to kill every unofficial reddit app. Considering
+how their offical andriod/web app is a bloated mess as in both UI and their speed I don't
+think reddit would last that long. If not it will be less popular.
+Reddit threads are so horrendus that threads are not fully shown, clicking the thread
+loads the whole thread. Yes we have to load after we load since it has not been fully
+loaded. You wouldn't view thread to view that thread now would you?
+I rarely find useful content in reddit, but it depends on people. I don't google that
+much these days. Even if I do most of them are in stack overflow. This is good since
+I don't have to view reddit.</p>
+<p>Another is twitter. Twitter is a circus made for jokers. Jokers <del>perform for free</del>
+perform and pay rent to their master. This is how I see twitter. There
+is literally 0 value of twitter. The internet would stay fine, nothing important will
+be lost if twitter suddenly shuts down (excepts anime arts. I respect those). Sir Elon
+Musk decided it would be a nice idea to sign up for twitter to view tweet. Exceptionally
+well made circus. User make content, user sign up to view content, user pay to view extra
+content, Elon gets rich, users go to Mars. Profit???</p>
+<p>Go out and touch some grass</p>
+<img src="./priscilla-du-preez-AX_AXdpDfys-unsplash.jpg" width=300px>
+<p>https://unsplash.com/photos/AX_AXdpDfys</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;things-yamazaki-says&#x2F;> things yamazaki wants </a> </li>
+      <ul>
+<li>wants everyone to use text based messaging platform for day to day use. Like <a href="https://git.sr.ht/~emersion/gamja">gamja</a>.</li>
+<li>hopes for email based workflow on git instead of github</li>
+<li>wishes to find an intern in his fav field (there are none)</li>
+<li>wants a collapse of social media and see it brun</li>
+<li>wants Hoshino Ai to revive (not possible)</li>
+</ul>
+<p>All this weirdness aside, I think not opening any messaging platforms/social media and doing your own
+shit daily will massively improve you.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;helix&#x2F;> Helix editor </a> </li>
+      <p>Terminals clients are not my jam. I want to show some love to emacs but emacs is not
+snappy. VScode feels slow... resizing and re-rendering electron app is buggy
+in wayland session. Jetbrains product are too heavy and I have constant worry about
+my educational licenses.</p>
+<span id="continue-reading"></span><h1 id="helix">Helix</h1>
+<p>These are the limitations that let me stick to neovim. Don't get me wrong neovim is a fantastic
+editor. A guy like me who is heavily opinionated about terminal editors uses it due to
+its sheer performace and flexibility. Flexibility seems wonderful but for me this is the
+reason why I shifted to helix. Neovim tries to be lightweight, lightweight in a sense
+that it has lsp integration but not any initalization. I have to create config and
+manually add that language. If I have lsp installed I am not so sure why would I not
+want it on on a working dir which is set by default. Even if I add that lsp
+manually, now I have to create a keymap and there are different ways to create keymap.
+Using which-key plugin I have to re-write that keymap for which-key. These can be done once
+and solved forever but what cannot be solved is the stability of extending like this.
+Neovim does not has its own autocompletion... which is why I assume most people install lsp in the
+first place. Fine, I install an autocompletion but now I get random
+error every once a while. Maybe once every 1-2hrs. I don't know what the error is,
+it is pointing to some built-in lua scripts in runtime folder. The bug is nothing too major, it
+just stderrs on autocompletion, given
+proper patience I could find it in my config. But what you see above is my config.
+The ~200 lines jargon I wrote just to have a proper autocompletion is now giving
+me a random error. I have no clue which plugin is giving this error. I have 3-4
+different plugins just for autocompletion. 50% of the lua scripts I wrote is the
+jargon I don't understand. Rewriting will help but writing some lua scripts gluing
+basic features is rather boring and tedious. If I truly learnt the editor and what all these lua script
+did instead of just knowing the abstract, this would have been a trivial fix. Is this
+the incompetence of my patience? I don't know. Maybe I just don't like investigating
+4 sources for an error that is hard to reproduce.</p>
+<p>This is one reason of me switching editor. Another is helix has better editing
+system.  Its modal editing but its just more comfier than that of vim. You get
+to see what you act on before acting. Like instead of dw in vim where you will
+delete first and act on the word, its wd on helix where w highlights things
+and then you act, in this case pressing d to delete. This means I can press
+w and think for a second before deleting or change my act. That being said I
+see lots of people getting put off by this - "Helix modal is not implemented
+on other editors" which I find kinda stupid. I sometime use vscode (with vim)
+to do occasional css and python and I don't find doing simple editing difficult
+just because the mappings are different. If I'm doing real project I would
+fire up helix to become efficient but that does not mean I will dumb out
+and forget all my vim stuffs. Coincidentally helix also uses HKJL and many
+ctrl keybinds that vim uses so things become much easier after some time.
+So anyone who is used to modal editing system will be able
+to smoothly navigate this editor in few days. Multiple cursors are also generally comfier to use in helix.
+Another good to know is helix mostly uses leader key shortcut orientation but you
+can also implement emacs style 'C-x C-f'.
+Plugin system is also on the <a href="https://github.com/helix-editor/helix/discussions/3806">way</a>
+(thankfully not lua)
+and since most core features are already in editor I don't need to worry about basic
+stuffs breaking.</p>
+<p>The only thing that's bugging me is helix treatment to <code>ctrl-c</code>. Unlike
+neovim <code>ctrl-c</code>, helix does not has same functionality like of <code>esc</code> and rebinding hardcoded
+keybind like <code>ctrl-c</code> is buggy from what I have experienced.</p>
+<p>This is the basic config I've been using and it just werks.</p>
+<pre data-lang="toml" style="background-color:#ffffff;color:#000000;" class="language-toml "><code class="language-toml" data-lang="toml"><span>theme = </span><span style="color:#00a33f;">&quot;catppuccin_mocha&quot;
+</span><span>
+</span><span>[editor]
+</span><span>line-number = </span><span style="color:#00a33f;">&quot;relative&quot;
+</span><span>cursorline = </span><span style="color:#a535ae;">true
+</span><span>rulers = [90]
+</span><span>gutters = [</span><span style="color:#00a33f;">&quot;diff&quot;</span><span>, </span><span style="color:#00a33f;">&quot;diagnostics&quot;</span><span>, </span><span style="color:#00a33f;">&quot;spacer&quot;</span><span>, </span><span style="color:#00a33f;">&quot;line-numbers&quot;</span><span>, </span><span style="color:#00a33f;">&quot;spacer&quot;</span><span>]
+</span><span>color-modes = </span><span style="color:#a535ae;">true
+</span><span>
+</span><span>[editor.cursor-shape]
+</span><span>insert = </span><span style="color:#00a33f;">&quot;bar&quot;
+</span><span>normal = </span><span style="color:#00a33f;">&quot;block&quot;
+</span><span>select = </span><span style="color:#00a33f;">&quot;underline&quot;
+</span><span>
+</span><span>[editor.soft-wrap]
+</span><span>enable = </span><span style="color:#a535ae;">true
+</span><span>
+</span><span>[editor.statusline]
+</span><span>left = [</span><span style="color:#00a33f;">&quot;mode&quot;</span><span>, </span><span style="color:#00a33f;">&quot;file-name&quot;</span><span>, </span><span style="color:#00a33f;">&quot;spinner&quot;</span><span>]
+</span><span>center = []
+</span><span>right = [</span><span style="color:#00a33f;">&quot;diagnostics&quot;</span><span>, </span><span style="color:#00a33f;">&quot;position&quot;</span><span>, </span><span style="color:#00a33f;">&quot;file-type&quot;</span><span>]
+</span><span>separator = </span><span style="color:#00a33f;">&quot;│&quot;
+</span><span>mode.normal = </span><span style="color:#00a33f;">&quot;N&quot;
+</span><span>mode.insert = </span><span style="color:#00a33f;">&quot;I&quot;
+</span><span>mode.select = </span><span style="color:#00a33f;">&quot;C&quot;
+</span><span>
+</span><span>[editor.lsp]
+</span><span>auto-signature-help	= </span><span style="color:#a535ae;">false
+</span><span>
+</span><span>[keys.normal]
+</span><span>C-s = </span><span style="color:#00a33f;">&quot;:w&quot;
+</span><span>C-b = [</span><span style="color:#00a33f;">&quot;keep_primary_selection&quot;</span><span>, </span><span style="color:#00a33f;">&quot;collapse_selection&quot;</span><span>]
+</span><span>y = </span><span style="color:#00a33f;">&quot;yank_joined_to_clipboard&quot;
+</span><span>p = </span><span style="color:#00a33f;">&quot;paste_clipboard_after&quot;
+</span><span>X = </span><span style="color:#00a33f;">&quot;extend_line_up&quot;
+</span><span>D = </span><span style="color:#00a33f;">&quot;delete_char_forward&quot;
+</span><span>
+</span><span>[keys.normal.</span><span style="color:#00a33f;">&quot; &quot;</span><span>]
+</span><span>q = </span><span style="color:#00a33f;">&quot;:buffer-close&quot;
+</span><span style="color:#00a33f;">&quot; &quot; </span><span>= </span><span style="color:#00a33f;">&quot;buffer_picker&quot;
+</span><span>
+</span><span style="color:#919191;"># [keys.normal.&quot;C-x&quot;]
+</span><span style="color:#919191;"># &quot;C-f&quot; = &quot;file_picker&quot;
+</span><span>
+</span><span>[keys.insert]
+</span><span>C-l = </span><span style="color:#00a33f;">&quot;move_char_right&quot;
+</span><span>C-i = </span><span style="color:#00a33f;">&quot;normal_mode&quot;
+</span><span>C-s = </span><span style="color:#00a33f;">&quot;signature_help&quot;
+</span><span>
+</span><span>[keys.select]
+</span><span>C-i = [</span><span style="color:#00a33f;">&quot;normal_mode&quot;</span><span>, </span><span style="color:#00a33f;">&quot;keep_primary_selection&quot;</span><span>, </span><span style="color:#00a33f;">&quot;collapse_selection&quot;</span><span>]
+</span><span>
+</span><span>[keys.normal.</span><span style="color:#00a33f;">&quot;+&quot;</span><span>]
+</span><span>m = </span><span style="color:#00a33f;">&quot;:run-shell-command make&quot;
+</span><span>c = </span><span style="color:#00a33f;">&quot;:run-shell-command cargo build&quot;
+</span><span>t = [</span><span style="color:#00a33f;">&quot;:run-shell-command zathura *.pdf&quot;</span><span>, </span><span style="color:#00a33f;">&quot;:run-shell-command typst w *.typ&quot;</span><span>]
+</span><span>z = [</span><span style="color:#00a33f;">&quot;:run-shell-command zola serve&quot;</span><span>, </span><span style="color:#00a33f;">&quot;:run-shell-command brave http://127.0.0.1:1111&quot;</span><span>]
+</span><span>b = </span><span style="color:#00a33f;">&quot;:run-shell-command bun run dev&quot;
+</span><span>g = </span><span style="color:#00a33f;">&quot;:sh ./gradlew build&quot;
+</span></code></pre>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;changes&#x2F;> changes </a> </li>
+      <p>I did some digging and I found that I can change how feeds works in zola.
+You basically disable feeds globally and manually enable it on the subfolders
+of the content you want. The drawback is I cannot create atom feeds so I have to
+use RSS which is limited but hey at least it works now!</p>
+<p>I also introduced new fonts called Modern Computer. This font is used in
+default latex papers and I kinda like the look of this font. For writing
+this font is better than Iosevka.</p>
+<p>And regarding the writing, I decided I will write things with YAMAZAKI and DRAFT
+tag before I shift it to /dev/null section. I am lazy so I might sneak things
+and put it in YAMAZAKI's section forever.</p>
+<span id="continue-reading"></span>
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;prison-school&#x2F;> Prison school </a> </li>
+      <p>So I finished prison school and it was my worst decision.</p>
+<p>I still can't get over that Chiyo is old Miyo now.</p>
+<p>I wished Hana won which she technically did but not like this.</p>
+<p>I had a feeling if Hana won Chiyo would be sad but what Hana and Kiyoshi
+did Chiyo in her birthday broke her.</p>
+<p>That last panel will haunt me forever. Thanks Akira Hiramoto.</p>
+<p>Will I read next manga Raw Hero by Akira Hiramoto which I presume
+made him rush prison school to the point its ending is like a plane
+disappearing in midway flight? YES I WILL.</p>
+<p>I just hope I don't get addicted and have high hopes for it.</p>
+<span id="continue-reading"></span>
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;weeklyreport&#x2F;> weekly report </a> </li>
+      <p>Dabbled with plan9. I am not sure I like it. I will give it try again another time.</p>
+<p>Dabbled with latex. I absolutely love it. Time to write something that I will be
+too embarrassed to make public.</p>
+<p>Dabbled with reactjs due to antjs. I am learning react just to use that antjs components.</p>
+<p>I think I have a project in mind that I will do after my exams. A habit tracker to
+make me feel good and productive. The frontend is reactjs, database postgres and backend
+most likely nextjs.</p>
+<p>Finished preboards. I think I can pass boards in first try.</p>
+<p>My plans for coming 30days is just write latex and study for exams.</p>
+<span id="continue-reading"></span>
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;jigokuraku&#x2F;> Jigokuraku </a> </li>
+      <h2 id="introduction">Introduction</h2>
+<p><a href="https://en.wikipedia.org/wiki/Hell%27s_Paradise:_Jigokuraku">Jigokuraku</a>
+written by Yuji Kaku is a supernatural manga. This manga takes
+best of both Japanese era as it takes place in edo period and Chinese
+religion called Taoism. Our main protagonist is a cold hearted ninja named
+Gabimaru "Gabimaru the hollow".</p>
+<h2 id="title">Title</h2>
+<p>Lets talk about the title first. Jigokuraku literally means
+"Jigoku"-&gt;Hell &amp; "Gokuraku"-&gt;Heaven/paradise translated in english its
+Hell's Paradise. Considering the story takes place where there exists
+immortal gods this title is simple and straightforward.</p>
+<h2 id="setting">Setting</h2>
+<p>The story takes place on <a href="https://en.wikipedia.org/wiki/Edo_period">edo</a>
+period somewhere in Japan. The depiction of that era is pretty well made.
+With addition to the harsh ruling in edo period it also shows us how the
+concept of life was in the edo period. It was normal for people to commit
+<a href="https://en.wikipedia.org/wiki/Seppuku">seppuku</a> and have family of
+neck choppers. There is a manga <a href="https://en.wikipedia.org/wiki/Samurai_Executioner">Samurai
+Executioner</a> whose story
+revolves around a guy "Yamada Asaemon" but weridly enough Gintama also has
+a girl from Asaemon family and this manga has also neck chopper family of
+Asaemon. I don't know if Asaemon were real family or just reference from that
+manga but it sure seems interesting.
+<img src="https://luitelaagaman.com.np/thoughts/jigokuraku/./jigokuraku_rakugo_decapitation.png" alt="" /></p>
+<p>This is one of my absolute best panels from the manga. Its subtle and
+has no effect on the plot whatsoever but this panel will keep us in check
+with the edo period and types of people that will get introduced in future.
+It also sets the expectations about the character.</p>
+<hr>
+<h2 id="story">Story</h2>
+<p>Gabimaru was not immortal, he had no meaning for his life yet he
+could not be executed. He would
+not care less if he was killed yet he was resisting subconsciously.
+Unknowing to Gabimaru, he loved his wife. Love was changing him with introducing
+emotions to the hollow man. His hineous act of murder was sentenced to
+death from Sagiri Asaemon but getting the seed of immortality would
+pardon his sentence and return to his wife. Thus the journey continues on
+island where that supposedly seed of immortality was present. He was to
+take Sagiri, his executioner. This same task were given to other
+criminals as well.</p>
+<p><img src="https://luitelaagaman.com.np/thoughts/jigokuraku/./jigokuraku_peh.png" alt="" /></p>
+<p>The island looked like paradise yet no man returned after entering the island.
+Those who returned were dead bodies, they were converted to "Tao" which seemed
+to be a source of immortality.</p>
+<p>According to Taosim the body and the mind are formed by Tao. This piece of text
+is very vital for the story. The manga actually uses this concept heavily as
+all immortality is the Tao remaking their bodies. The manga also says that
+meditation and certain breathing techniques allow to achieve immortality called
+the way of tan. This might be far fetched but Taoism do actually believe in
+spiritual immortality mostly referring to Xian. Xian being refered as Sennin in
+the Manga are the antagonist of the story with Tensen being the highest ranking
+Sennin. They are the seemingly "immortals" in the manga. They lived for
+centuries and can use Tao to regenerate themself.</p>
+<p>Jigokuraku has very natural and well designed characters. Viz let the author
+draw whatever the heck he wanted and the author did a very good job of
+potraying the characters.</p>
+<h2 id="gabimaru">Gabimaru</h2>
+<p>Gabimaru sentenced to death by Asaemon Sagiri is a ruthless but skilled ninja.
+He took this challenge just to see his wife, Yui. As the story progresses
+Gabimaru was changing not only from the harsh journey but also from Sagiri. We
+will come to that later. From the experiences he learned what he really wanted,
+it was to be free from all these killings and live a normal life with his wife.
+This resolve made him softer and more humane to the point he hesitated to kill
+Tensen. Once Yuzuriha made a concept of how Gabimaru's wife might not be real
+since she is daughter of Ninja leader who might be manipulating Gabimaru. But
+this does not let his resolve die. He does not let that concept weaken him as
+he belived in his wife. Later in the story we find our that Gabimaru is the
+title given to the most ruthless ninja. Passing the title includes killing the
+precedence Gabimaru.</p>
+<h2 id="asaemon-sagiri">Asaemon Sagiri</h2>
+<p>Another character I absolutely love. She comes from Asaemon family. Unlike
+Gabimaru she had no resolve. She was normal but strict girl who wanted to
+improve in her occupation of behading. She had weakness due to which she lacked
+confidence. I think this really shows how we humans are and how we relate to
+Sagiri. That being said Gabimaru always thought her of being strong, stronger
+than himself despite the advantage in physical bodies. Upon the adventure she
+slowly realizes what a person can do and you have to live with it. In final
+volume she says she was attached Gabimaru meaning she no longer saw Gabimaru as
+criminal but as a friend.</p>
+<p><img src="https://luitelaagaman.com.np/thoughts/jigokuraku/./jigokuraku_sagiri.png" alt="" /></p>
+<h2 id="the-asaemon-family">The Asaemon family</h2>
+<p>Each Asaemon had different personality. Some were too righteous, some were too
+laid back and some did not want to be Asaemon. I don't want to talk about all
+the Asaemons but there are some that you will love and relate to.</p>
+<p>Shugen is too righteous, he is extreme. Rumors had he not only decapitated the
+crimimal but his whole generation from the old to an infant baby. He supported
+Sagiri and all the other Asaemon and his extreme resolve made him too powerful.
+In ending volume we can see that Shugen accepts new Sagiri as she and Gabimaru
+fought together.</p>
+<p><em><strong>“Such unpleasantness could not be avoided. Your execution alone would not
+stop your wicked ways from being carried on by your relations. The blame in
+such cases lies not only with the corrupt soul of a single man but also with
+the environment that produced him.”</strong></em><br />
+Taken from https://jigokuraku.fandom.com/wiki/Yamada_Asaemon_Shugen</p>
+<p>Another Asaemon I really like is Jikka. He is useless. His personality is
+uncanningly funny. When he realizes that fighting immortals and winning is
+impossible feat, he just drinks some more booze and cheers to the death of
+humanity. He is not evil by any means, in fact he is one of the reason why
+Gabimaru and other criminals were not executed. Tl;dr he fooled the shogun.</p>
+<h2 id="criminals">Criminals</h2>
+<p>The criminals were thrown into an impossible feat of defeating immortals.
+Some died before returning to the island some were killed by Asaemons.</p>
+<p>One criminal I really like is Aza Chobei. He is the bandit leader, with his
+small brother who infiltrated the Asaemon family his plan was to live free.
+Finding the immortality and giving it to shogun? No. If he found that he would
+just gulp all of it himself. Despite being ruthless criminal he loved his
+brother. He partnered with Tensen if his brother was not harmed but instead of
+Sennin betraying him, he betrayed Sennin. Thats how ruthless this guy is!
+His ability to adapt to situations made him stronger and live how he see fit.</p>
+<p>Another one is Yuzuriha. She is a shinobi. She was selfish. As a shinobi
+her fundamentals of life was to live without any danger... despite being a
+shinobi. As manga progresses she becomes very fond of Sagiri and decides
+to go on a journey with her. I find her really cute and her seemingly
+innocent personality is really enjoyable to read. Later in chapter
+she nearly sacrifies herself to help Gabimaru.</p>
+<h2 id="ending">Ending</h2>
+<p>The ending is really well executed. Its so wholesome that you forget
+that they once fought immortals. Yui was real after all, she was waiting
+for Gabimaru to return. Sagiri and Yuzuriha went on a journey and part of it
+was to stumble Gabimaru and his wife.</p>
+<p><img src="https://luitelaagaman.com.np/thoughts/jigokuraku/./jigokuraku_yuzuriha.png" alt="" /></p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;anime-report2022&#x2F;> Anime report of spw 2022 </a> </li>
+      <p>2022 was hell of an year for my anime catalog</p>
+<span id="continue-reading"></span><h2 id="urusei-yatsura"><a href="https://anilist.co/anime/143277/Urusei-Yatsura-2022/">Urusei Yatsura</a></h2>
+<p>This has to be one of my best slice of life shows. This anime is relaxing to watch and the
+characters are is so cuteee especially Lum. I just hope the story will
+progress. New character are introduced every ep but their development is kinda
+slow to the point where its nonexistent but I guess thats one downside of slice
+of life anime. That being said their song is absolute banger. Do not skip it!</p>
+<h2 id="yojouhan-time-machine"><a href="https://anilist.co/anime/137819/Yojouhan-Time-Machine-Blues/">Yojouhan Time Machine</a></h2>
+<p>If you are fan of <a href="https://anilist.co/anime/7785/Yojouhan-Shinwa-Taikei/">Yojouhan Shinwa Takei</a> or
+<a href="https://anilist.co/anime/97917/Yoru-wa-Mijikashi-Arukeyo-Otome/">Yoru wa Mijikashi Arukeyo Otome</a> you
+will love this show as much as I did. This show is not best or mind blowing as in its original series
+but this show will certainly keep you entertained. Its relatively short featuring only 6 eps but
+it has a good concept like its originals.</p>
+<h2 id="chainsaw-man"><a href="https://anilist.co/anime/127230/Chainsaw-Man/">Chainsaw Man</a></h2>
+<p>I enjoyed this anime and it was a banger like I expected. They used <a href="https://en.wikipedia.org/wiki/Rotoscoping">rotoscoping</a>
+which contributed to some great fight scene. Overall great action anime with relatively new concept.</p>
+<h2 id="bocchi-the-rock"><a href="https://anilist.co/anime/130003/Bocchi-the-Rock/">Bocchi The Rock</a></h2>
+<p>The anime of 2022. I watched this from its 1st release thinking I would just drop this like any other
+hitoribocchi shows but holy heckk this exceeded my expectation. For some reason I was carving for next
+episode every week. The animation is so wacky I love it, I love the expressions of bocchi and I love her imagination.
+Its also fun to watch the struggles and progress of an overexaggerated hitoribocchi. I don't feel bad, kek.</p>
+<h2 id="lycoris-recoil"><a href="https://anilist.co/anime/143270/Lycoris-Recoil/">Lycoris Recoil</a></h2>
+<p>Another great anime I was not expecting. I absolutely loved the voice acting of
+<a href="https://anilist.co/staff/106030/Chika-Anzai">Chika Anzai</a> and to me great va
+are the only reason to watch anime sometime... but this anime is fun to watch.
+Its simply fun. Story is not that good to the point where I straight don't
+like it. That being said I really loved how Takina was being close to Chisato
+slowly by slowly. It has a well made character development.</p>
+<h2 id="summer-time-render"><a href="https://anilist.co/anime/129201/Summer-Time-Render/">Summer Time Render</a></h2>
+<p>Great mystery anime that forced me to read manga after 3ep. Watch this without getting spoiled. Its a fun anime
+about people having fun on summer weekends.</p>
+<h2 id="kage-no-jitsuryokusha-ni-naritakute"><a href="https://anilist.co/anime/130298/Kage-no-Jitsuryokusha-ni-Naritakute/">Kage no Jitsuryokusha ni Naritakute!</a></h2>
+<p>If you are not watching this then what are you even doing in your life. This should be the best isekai
+ever made. Current latest manga readers would know that its not exactly isekai looking at the conditions
+but ahem. This anime is cringy and makes no sense but its literally how you are supposed to watch it. The
+main character is the most perfect and well designed character for this show. The show is exaggerated but
+the manga is even more exaggerated. Just pick your poison and start watching/reading this show. All I can
+say is its hella fun.</p>
+<h2 id="vanitas-no-catre-2"><a href="https://anilist.co/anime/135136/Vanitas-no-Carte-Part-2/">Vanitas no catre 2</a></h2>
+<p>Sequel of <a href="https://anilist.co/anime/131646/Vanitas-no-Carte/">Vanitas no carte</a> this show is about vampires on
+mid-european era. Everything on this show seems like tailored to me. The main character Vanitas is doctor saving the vampire
+and his girlfriend Jeanne who accidentally loves him. The romance is cute, "Jeanne is CUTE", its intriguing and charming in its
+ways and the story and character pacing is also great. And no there is no BL even though Noe sometime
+acts like one. All the characters are designed great so you will have special attachment to some characters. My favourite
+characters became Domninique and Jeanne as they act so cute and have their own set of problems.</p>
+<h2 id="sono-bisque-doll"><a href="https://anilist.co/anime/132405/Sono-Bisque-Doll-wa-Koi-wo-Suru/">Sono Bisque Doll</a></h2>
+<p>If you are into romance sure you might like it. But wimpy main character are just not that great to me. Kitagawa
+is polar opposite of Gojou which singlehandedly backs up the anime.</p>
+<h2 id="spy-family"><a href="https://anilist.co/anime/140960/SPYFAMILY/">Spy Family</a></h2>
+<p>If you like a mind reading kid, assassin and special agent living together on mid-european era then yea this show
+might be for you. (European set is better in Vanitas. Cocky fyi by me). Nonetheless its fun to watch but
+it falls flat as you watch. It becomes repititive and you kinda know what happens next.</p>
+<h2 id="hataraku-maou-sama"><a href="https://anilist.co/anime/130592/Hataraku-Maousama/">Hataraku Maou Sama</a></h2>
+<p>Like spy if you like demon and angels living in human world catering a kid doing normal things then yea you
+might like it but it had same problem like spy had.</p>
+<p>Released before 2022 but I watched in 2022</p>
+<h2 id="space-dandy"><a href="https://anilist.co/anime/20057/SpaceDandy/">Space Dandy</a></h2>
+<p>If you told me that I copied space warrior from Dandy I would not care. Not because really I don't care,
+its just because I absolutely love spacedandy. Its wacky, its funny, its crazy,
+I just love everything about this show. Dandy and his crazy adventure to become
+rich as alien hunters and all the thing he does is just made PERFECTLY.
+10/10 would rewatch again this year.</p>
+<h2 id="working"><a href="https://anilist.co/anime/6956/Working/">Working</a></h2>
+<p>As it became more an more obvious who was gonna become the Katanashi's lover,
+my fear was growing bigger and bigger. My inner monster was feeding on that fear. I could not
+sleep and think straight for days after it struck my head. Anyways fun show.
+I hatethatgirl.</p>
+<h2 id="ika-musume"><a href="https://anilist.co/anime/8557/Shinryaku-Ika-Musume/">Ika Musume</a></h2>
+<p>A squid girl who came to destroy humanity but got forced to work on some shop. This show is cute, relatable
+and fun laid back show. Really fun anime.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;reading-asm&#x2F;> Reading assembly so you can live without fear </a> </li>
+      <p>Compilers are smart these days. You don't have to learn assembly but knowing
+them will certainly help anyone to see what the compiler is doing. I believe
+you learn assembly by referencing. There are so many opcodes/instructions that
+one might go crazy remembering them all. My preferred way is using spooky
+internet to look up the opcodes you don't know. The referencing method. There
+are so many things one need to know to program assembly but understanding basic
+compiler generated assembly needs mostly reference and assumptions.</p>
+<h2 id="a-simple-assembly-instruction">A simple assembly instruction</h2>
+<p>Assembly language are made of small instructions that do specific things
+which makes writing assembly complicated. There are various assembly language
+but most of them are similar. A CPU implements instruction set architecture
+(ISA). ISA is a binary format specifiying how an instruction should look like.
+Assembler implements the ISA, and the implmenetation syntax might differ from
+assembler to assembler.</p>
+<p>Syntax of assembly depends on the assembler
+They are either
+<code>&lt;opcode&gt; destination, source</code>
+or
+<code>&lt;opcode&gt; source, destination</code></p>
+<p>I've tried looked at clang generated assembly and nasm assembly and they both use <code>&lt;opcode&gt; destination, source</code> format</p>
+<h3 id="registers">Registers</h3>
+<p>CPU have registers. They store things temporarily like memory address and
+instructions. One can move things in registers by <code>mov rax, 2</code>. This copies 2 to
+rax register. There are also other ways of storing in assembly. Lets take
+example of x86_64 asm generated by clang which uses rbp registers like: <code>mov dword ptr[rbp - 4], 77</code>. It simply takes rbp stack, allocates 4 bytes for our integer
+77 and copies 77 there. Similarly for another variable of lets say long int (8
+bytes) the instruction set will be <code>mov dword[rbp - 12], 782</code>. It
+allocates 8 bytes futher after <code>[rbp-4]</code>.</p>
+<h3 id="instructions">Instructions</h3>
+<p>These are opcodes/instructions. If you want to add two register simply do <code>add register1, register2</code>.</p>
+<p>Some instructions https://wiki.cdot.senecacollege.ca/wiki/X86_64_Register_and_Instruction_Quick_Start</p>
+<h3 id="general-purpose-registers">General purpose registers</h3>
+<p>Some registers you will often see are rax, rbx, rcx and so on.<br>
+rax is 64 bit opcode so rax in 32 bit mode will be eax, ax in 16 bit and so on.</p>
+<p>You can find more on http://www.egr.unlv.edu/~ed/assembly64.pdf [ASM]</p>
+<p>64bit register contains 8 bytes so $2^8 = 64$ bits</p>
+<p>so 60 in rax would be</p>
+<p>00000000 00000000 00000000 00000000 00000000 00000000 00000000 0011110</p>
+<p>Msb is leftmost bit</p>
+<p>This is eax would be</p>
+<p>00000000 00000000 00000000 00111100</p>
+<p>This is ax is</p>
+<p>00000000 00111100</p>
+<p>This in al is</p>
+<p>00111100</p>
+<h3 id="types">Types</h3>
+<p>Assembly does not have type saftey. Only signed and unsigned numbers</p>
+<p>Signed -&gt; Use imul or idiv</p>
+<p>Unsigned -&gt; Use mul or div</p>
+<h3 id="example-code">Example code</h3>
+<p>Here we are doing simple demonstration of computing 2^16 using bit shift. This
+is not the actual INT_MAX since size of int is 4 bytes in C and not 2 unless
+you are using very old compiler.</p>
+<pre data-lang="asm" style="background-color:#ffffff;color:#000000;" class="language-asm "><code class="language-asm" data-lang="asm"><span style="color:#a535ae;">extern </span><span style="color:#21439c;">printf
+</span><span>
+</span><span style="color:#a535ae;">section </span><span style="color:#21439c;">.data
+</span><span style="color:#21439c;">		count </span><span style="color:#a535ae;">db </span><span style="color:#00a33f;">&quot;INT_MAX is %d&quot;</span><span>, 10, 0</span><span style="color:#919191;"> ; define a string to pass to printf
+</span><span>
+</span><span style="color:#a535ae;">section </span><span style="color:#21439c;">.text
+</span><span style="color:#a535ae;">global </span><span style="color:#21439c;">main
+</span><span style="color:#21439c;">main:
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">push </span><span>rbp</span><span style="color:#919191;">    ; set up stack
+</span><span>
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">jmp </span><span style="color:#21439c;">power</span><span style="color:#919191;">   ; jump to power section 
+</span><span style="color:#919191;">		            ; code below will not be executed unless
+</span><span style="color:#919191;">		            ; it has jump condition to main
+</span><span style="color:#21439c;">		
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">pop </span><span>rbp</span><span style="color:#919191;">     ; remove rbp stack and return
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">ret
+</span><span>
+</span><span style="color:#21439c;">power:
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">mov </span><span>rax, 1</span><span style="color:#919191;">  ; put 1 in rax register
+</span><span>
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">sal </span><span>rax, 16</span><span style="color:#919191;"> ; shift arithmetic left rax and 16 (1 &lt;&lt; 16)
+</span><span>
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">mov </span><span>rdi, </span><span style="color:#21439c;">count</span><span style="color:#919191;"> ; 1st argument for printf in rdi
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">mov </span><span>rsi, rax</span><span style="color:#919191;"> ; and next 2nd argument in rsi which is rax (1 &lt;&lt; 16)
+</span><span>
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">call </span><span style="color:#21439c;">printf</span><span style="color:#919191;"> ; and call printf
+</span><span>
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">pop </span><span>rbp</span><span style="color:#919191;"> ; remove the rbp stack
+</span><span style="color:#21439c;">		</span><span style="color:#ff5600;">ret</span><span style="color:#919191;"> ; return
+</span><span>
+</span></code></pre>
+<p>Equivalent C code.</p>
+<p>Compiler is smart enough to evaluate 1 &lt;&lt; 16 and replace with 65536 if we hardcode 1 &lt;&lt; 16 in printf without declaring variables. So we write C code like this for our purposes.</p>
+<pre data-lang="c" style="background-color:#ffffff;color:#000000;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;stdio.h&gt;
+</span><span>
+</span><span style="color:#ff5600;">int </span><span style="color:#21439c;">main</span><span>(){
+</span><span>	</span><span style="color:#ff5600;">int</span><span> a </span><span style="color:#ff5600;">= </span><span>1;
+</span><span>	</span><span style="color:#ff5600;">int</span><span> b </span><span style="color:#ff5600;">= </span><span>16;
+</span><span>	</span><span style="color:#a535ae;">printf</span><span>(</span><span style="color:#00a33f;">&quot;INT_MAX is %d\n&quot;</span><span>, a </span><span style="color:#ff5600;">&lt;&lt;</span><span> b);
+</span><span>}
+</span></code></pre>
+<p>Again, compiling to assembly with x86-64 clang you will see lots of similarity with our previous assembly snippet.</p>
+<pre data-lang="asm" style="background-color:#ffffff;color:#000000;" class="language-asm "><code class="language-asm" data-lang="asm"><span style="color:#21439c;">main: # @main
+</span><span style="color:#919191;">    ; setting up the stack
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">push </span><span>rbp
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">mov </span><span>rbp, rsp
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">sub </span><span>rsp, 16
+</span><span style="color:#21439c;"> 
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">mov </span><span style="color:#a535ae;">dword ptr </span><span>[rbp - 4], 1</span><span style="color:#919191;">      ; copy 1 to [rbp - 4] stack
+</span><span style="color:#919191;">			                ; rbp is stack pointer. This instruction is 
+</span><span style="color:#919191;">	                                ; declaring int &#39;a&#39; offset of 4 bytes from rbp
+</span><span style="color:#919191;">	                                ; int is 4 bytes. long int would make this [rbp - 8]
+</span><span>
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">mov </span><span style="color:#a535ae;">dword ptr </span><span>[rbp - 8], 16</span><span style="color:#919191;">    ; same is happening here 4 bits for int &#39;b&#39;
+</span><span>
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">mov </span><span>esi, </span><span style="color:#a535ae;">dword ptr </span><span>[rbp - 4]</span><span style="color:#919191;">   ; move a to esi register 1
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">mov </span><span>ecx, </span><span style="color:#a535ae;">dword ptr </span><span>[rbp - 8]</span><span style="color:#919191;">   ; move b to exc register 16
+</span><span>
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">shl </span><span>esi, cl</span><span style="color:#919191;">	                ; cl is 8 bit opcode for ecx
+</span><span style="color:#919191;">                                   	; no idea why its used like this
+</span><span style="color:#919191;">	                                ; anyway this is just shift left 1, 16 (1 &lt;&lt; 16)
+</span><span>
+</span><span style="color:#21439c;">	movabs </span><span>rdi, </span><span style="color:#21439c;">offset .L.</span><span style="color:#ff5600;">str</span><span style="color:#919191;">      ; this might be doing some cleanup
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">mov </span><span>al, 0
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">call </span><span style="color:#21439c;">printf</span><span style="color:#919191;">                    ; calls printf
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">xor </span><span>eax, eax</span><span style="color:#919191;">                   ; sets eax to 0. xor same value gives 0
+</span><span>
+</span><span style="color:#919191;">	; closing the stack
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">add </span><span>rsp, 16
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">pop </span><span>rbp
+</span><span style="color:#21439c;">	</span><span style="color:#ff5600;">ret
+</span><span>
+</span><span style="color:#21439c;">.L.</span><span style="color:#ff5600;">str</span><span style="color:#21439c;">:
+</span><span style="color:#21439c;">	.asciz </span><span style="color:#00a33f;">&quot;INT_MAX is %d\n&quot;
+</span></code></pre>
+<h2 id="some-resources-to-get-your-hand-dirty">Some Resources to get your hand dirty</h2>
+<ul>
+<li>https://www.intel.com/content/dam/develop/external/us/en/documents/introduction-to-x64-assembly-181178.pdf [ASM x86_64]</li>
+<li>https://youtu.be/L1ung0wil9Y [ASM]</li>
+<li>https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf [System V ABI]</li>
+<li>http://www.egr.unlv.edu/~ed/assembly64.pdf [ASM]</li>
+<li>https://linasm.sourceforge.net/docs/instructions [ASM]</li>
+<li>https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/ [Linux syscalls]</li>
+<li>https://c9x.me/articles/gthreads/mach.html [Article]</li>
+<li>https://www.nayuki.io/page/a-fundamental-introduction-to-x86-assembly-programming [Article]</li>
+<li>https://github.com/pkivolowitz/asm_book [Github]</li>
+<li>https://stackoverflow.com/a/40934959</li>
+</ul>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;war-against-social-media&#x2F;> War to make humanity a better place </a> </li>
+      <p>Tl;dr stop social media. Its meaningless and will ruin you internally like a plague.</p>
+<span id="continue-reading"></span><h2 id="introduction">Introduction</h2>
+<p>I've been restricting myself from social media these days. This includes all
+my online activity including youtube. Its all meaningless. Most people don't
+find joy using social platforms, its just because they are bored. I unknowingly
+became those npc. This is my way of taking my life back from this validation loop.</p>
+<h3 id="what-is-social-media">What is social media?</h3>
+<p>Thing that puts you in a fake validation loop to make you think that you are/have/will/might
+achieve something when in fact you ultimately do nothing and scroll a 50mb app and <em>wait</em>
+for something to happen so you could cure and grow your boredom.</p>
+<p>Here is kind of detailed explanation <strong>what it really is</strong>
+<a href="https://files.eric.ed.gov/fulltext/EJ1248481.pdf">https://files.eric.ed.gov/fulltext/EJ1248481.pdf</a></p>
+<h2 id="fake-belief">Fake belief</h2>
+<p>Some say, one of the "perk" of social media is "you will know whats happening on world". This
+drives me nuts. There are 8 billion people on earth. Of course something is
+always happening in world. Why do you need to know it? If its serious you will obviously
+know it somehow or other. A good example is pre and post covid times.</p>
+<h2 id="thinking-pattern-one-should-develop">Thinking pattern one should develop</h2>
+<p>I don't care if you travel <a href="https://instagram.com">somewhere</a>. Its not me travelling.</p>
+<p>I don't want to listen to your opinions <a href="https://reddit.com/">[1]</a>
+<a href="https://twitter.com">[2]</a>. Mine are plenty enough already.</p>
+<p>I don't want to take part on your <a href="https://twitter.com">drama</a> nor do I wish to
+know your <a href="https://youtube.com">daily life</a>.</p>
+<p>I don't want to know something <a href="https://reddit.com/r/todayilearned/">meaningless</a>. (Basically every
+productive reddit groups)</p>
+<p>I don't care about your <a href="https://tiktok.com">dance</a> nor do I like those tryhard memes.</p>
+<hr />
+<p><img src="https://luitelaagaman.com.np/thoughts/war-against-social-media/wednesday.png" alt="" /></p>
+<p>So now what?</p>
+<h2 id="what-worked-for-me">What worked for me</h2>
+<p>I've decided to read books. One of the main reason for not reading books was
+literally the need for a library system. I wanted a fast book manager with
+good reader. I once hacked my own but it was web based and pdf on web was
+not a good experience. I am using <a href="https://calibre-ebook.com/">calibre</a> with
+<a href="https://sioyek.info/">sioyek</a> now and I couldn't become more happier. Calibre
+also has automatic feed to pdf thingy. I've set it to fetch <a href="https://lwn.net/">lwn</a>
+and <a href="https://news.ycombinator.com/">hn</a> every friday to read. Plenty of news content
+if something major happens :)</p>
+<p>I've also put the show bookmark to always in brave so I have something to click
+when I'm bored instead of going back to validation loop on some pathetic social
+media.</p>
+<h2 id="suggestions">Suggestions</h2>
+<p>For others I would just say don't give more than 5 minutes to your social media
+per day. It ruins your thinking pattern. Also think "what will I gain from
+this?" everytime you consume any content. If its just for boredom then stop
+that immediately and think what you really want to do and become... except npc
+obviously. There are billion things that make you productive and happy from
+simple things like understanding arts to learning mathematical concepts. You
+just need to start somewhere.</p>
+<h2 id="note">Note</h2>
+<p><del>I kind of use <a href="https://social.linux.pizza/@prime_numbers">mastodon</a></del> just
+because it doesn't provide any feedback loop or generalized content so I won't
+spend more than 5 mins even if I want to. My home feed makes me smile and thats
+what I all care. It should make you happy not guilty.</p>
+
+      
+    </ul>
+  </div>
+
+<nav class="pagination">
+  
+  <a class="previous" href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;">‹ Previous</a>
+  
+  
+  <a class="next" href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;thoughts&#x2F;page&#x2F;3&#x2F;">Next ›</a>
+  
+</nav>
+
+
+</article>
+
+
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

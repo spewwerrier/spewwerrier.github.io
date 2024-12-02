@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> War to make humanity a better place</title>
+</head>
+
+
+<h1 class="title">
+  War to make humanity a better place
+</h1>
+<p class="subtitle"><strong>2022-10-18</strong></p>
+
+<article>
+  <p>Tl;dr stop social media. Its meaningless and will ruin you internally like a plague.</p>
+<span id="continue-reading"></span><h2 id="introduction">Introduction</h2>
+<p>I've been restricting myself from social media these days. This includes all
+my online activity including youtube. Its all meaningless. Most people don't
+find joy using social platforms, its just because they are bored. I unknowingly
+became those npc. This is my way of taking my life back from this validation loop.</p>
+<h3 id="what-is-social-media">What is social media?</h3>
+<p>Thing that puts you in a fake validation loop to make you think that you are/have/will/might
+achieve something when in fact you ultimately do nothing and scroll a 50mb app and <em>wait</em>
+for something to happen so you could cure and grow your boredom.</p>
+<p>Here is kind of detailed explanation <strong>what it really is</strong>
+<a href="https://files.eric.ed.gov/fulltext/EJ1248481.pdf">https://files.eric.ed.gov/fulltext/EJ1248481.pdf</a></p>
+<h2 id="fake-belief">Fake belief</h2>
+<p>Some say, one of the "perk" of social media is "you will know whats happening on world". This
+drives me nuts. There are 8 billion people on earth. Of course something is
+always happening in world. Why do you need to know it? If its serious you will obviously
+know it somehow or other. A good example is pre and post covid times.</p>
+<h2 id="thinking-pattern-one-should-develop">Thinking pattern one should develop</h2>
+<p>I don't care if you travel <a href="https://instagram.com">somewhere</a>. Its not me travelling.</p>
+<p>I don't want to listen to your opinions <a href="https://reddit.com/">[1]</a>
+<a href="https://twitter.com">[2]</a>. Mine are plenty enough already.</p>
+<p>I don't want to take part on your <a href="https://twitter.com">drama</a> nor do I wish to
+know your <a href="https://youtube.com">daily life</a>.</p>
+<p>I don't want to know something <a href="https://reddit.com/r/todayilearned/">meaningless</a>. (Basically every
+productive reddit groups)</p>
+<p>I don't care about your <a href="https://tiktok.com">dance</a> nor do I like those tryhard memes.</p>
+<hr />
+<p><img src="https://luitelaagaman.com.np/thoughts/war-against-social-media/wednesday.png" alt="" /></p>
+<p>So now what?</p>
+<h2 id="what-worked-for-me">What worked for me</h2>
+<p>I've decided to read books. One of the main reason for not reading books was
+literally the need for a library system. I wanted a fast book manager with
+good reader. I once hacked my own but it was web based and pdf on web was
+not a good experience. I am using <a href="https://calibre-ebook.com/">calibre</a> with
+<a href="https://sioyek.info/">sioyek</a> now and I couldn't become more happier. Calibre
+also has automatic feed to pdf thingy. I've set it to fetch <a href="https://lwn.net/">lwn</a>
+and <a href="https://news.ycombinator.com/">hn</a> every friday to read. Plenty of news content
+if something major happens :)</p>
+<p>I've also put the show bookmark to always in brave so I have something to click
+when I'm bored instead of going back to validation loop on some pathetic social
+media.</p>
+<h2 id="suggestions">Suggestions</h2>
+<p>For others I would just say don't give more than 5 minutes to your social media
+per day. It ruins your thinking pattern. Also think "what will I gain from
+this?" everytime you consume any content. If its just for boredom then stop
+that immediately and think what you really want to do and become... except npc
+obviously. There are billion things that make you productive and happy from
+simple things like understanding arts to learning mathematical concepts. You
+just need to start somewhere.</p>
+<h2 id="note">Note</h2>
+<p><del>I kind of use <a href="https://social.linux.pizza/@prime_numbers">mastodon</a></del> just
+because it doesn't provide any feedback loop or generalized content so I won't
+spend more than 5 mins even if I want to. My home feed makes me smile and thats
+what I all care. It should make you happy not guilty.</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>
