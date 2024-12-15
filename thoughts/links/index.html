@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> Useful Links</title>
+</head>
+
+
+<h1 class="title">
+  Useful Links
+</h1>
+<p class="subtitle"><strong>2022-08-08</strong></p>
+
+<article>
+  <p>I post legal as well as illegal (pirate) sites here.</p>
+<p>Most external links are lawful. Generally, permission is not needed for a regular hypertext link to the home page of another website. There is substantial case authority that provides that traditional hyperlinking is not direct copyright infringement because there is no copying or display involved.
+<a href="https://www.leidenlawblog.nl/articles/hyperlinking-to-an-illegal-source-is-an-infringement-of-copyright#:~:text=Hyperlinking%20to%20illegal%20sources%20can,it%20is%20done%20for%20profit.">Source</a></p>
+<h1 id="books"><h3><u>Books</u></h3></h1>
+<p>https://annas-archive.org/<br>
+https://gutenberg.org/<br>
+http://libgen.rs/<br>
+https://pdfdrive.com/<br>
+https://standardebooks.org/<br></p>
+<h1 id="c-c"><h3><u>C/C++</u></h3></h1>
+<p>https://cliutils.gitlab.io/modern-cmake/<br>
+https://danluu.com/malloc-tutorial/<br>
+https://github.com/changkun/modern-cpp-tutorial<br>
+https://hackingcpp.com/<br>
+https://www.lurklurk.org/linkers/linkers.html<br>
+https://luckyresistor.me/knowledge/learn-cpp/<br>
+https://mccue.dev/pages/7-27-22-c-errors<br></p>
+<h1 id="compiler"><h3><u>Compiler</u></h3></h1>
+<p>https://briancallahan.net/blog/20210814.html<br>
+https://c9x.me/compile/<br>
+https://cppinsights.io/<br>
+https://godbolt.org/<br></p>
+<h1 id="docs"><h3><u>Docs</u></h3></h1>
+<p>https://bulma.io/documentation/<br>
+https://devdocs.io/<br>
+https://quickref.me/<br>
+https://wayland.app/protocols/<br>
+https://wayland-book.com/<br></p>
+<h1 id="kernel-linux"><h3><u>Kernel/Linux</u></h3></h1>
+<p>https://freedesktop.org/wiki/Software/libinput/<br>
+https://lwn.net/Kernel/Index/<br>
+https://unix.stackexchange.com/questions/269661/how-to-turn-off-wireless-power-management-permanently<br>
+https://wikipedia.org/wiki/Evdev<br>
+http://doc.cat-v.org/<br></p>
+<h1 id="math"><h3><u>Math</u></h3></h1>
+<p>https://ashki23.github.io/markdown-latex.html<br>
+https://geogebra.org/<br>
+https://maa.org/external_archive/devlin/LockhartsLament.pdf<br></p>
+<h1 id="news"><h3><u>News</u></h3></h1>
+<p>https://kathmandupost.com/<br>
+https://lwn.net/<br></p>
+<h1 id="others"><h3><u>Others</u></h3></h1>
+<p><u>[Algorithms]<br></u>
+https://en.algorithmica.org/hpc/<br>
+https://the-algorithms.com/<br>
+https://algs4.cs.princeton.edu/home/<br>
+<u>[Anime/Art]<br></u>
+https://artstation.com/kuvshinov_ilya<br>
+https://gnupluslinux.com/anime/?C=M;O=D<br>
+<u>[CS]<br></u>
+https://www.youtube.com/watch?v=I0s1MXRxPLw<br>
+https://teachyourselfcs.com<br>
+<u>[Theorem]<br></u>
+https://leanprover.github.io/documentation/<br>
+<u>[Vim]<br></u>
+https://stackoverflow.com/questions/1218390/what-is-your-most-productive-shortcut-with-vim/1220118#1220118<br>
+<u>[Webtechnology]<br></u>
+https://blog.gitea.io/2022/04/running-gitea-on-fly.io/<br>
+https://docs.microsoft.com/en-us/learn/<br>
+https://fontshare.com/<br>
+https://forgefed.org/<br>
+https://freecodecamp.org/learn/2022/responsive-web-design/<br>
+https://hexdocs.pm/phoenix/fly.html<br>
+https://phpschool.io/<br>
+<u>[Misc]<br></u>
+https://catbox.moe/<br>
+https://monkeytype.com/<br>
+https://lichess.org/<br></p>
+<h1 id="programming"><h3><u>Programming</u></h3></h1>
+<p>https://ocaml.org/docs/first-hour<br>
+https://reberhardt.com/cs110l/spring-2020/<br>
+https://rosettacode.org/<br></p>
+<hr />
+<h1 id="pdf-links"><h3><u>Pdf Links</u></h3></h1>
+<p>[Bgnet] https://beej.us/guide/bgnet/pdf/bgnet_usl_c_1.pdf<br>
+[Bgc] https://beej.us/guide/bgc/pdf/bgc_usl_c_1.pdf<br>
+[Lib C] https://www.gnu.org/software/libc/manual/pdf/libc.pdf<br>
+[Linux C] http://www.cse.hcmut.edu.vn/~hungnq/courses/nap/alp.pdf<br>
+[Memory] https://people.freebsd.org/~lstewart/articles/cpumemory.pdf<br>
+[Modern C] https://hal.inria.fr/hal-02383654/document<br>
+[Practical C] https://lainchan.org/λ/src/1635115265428-2.pdf<br></p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

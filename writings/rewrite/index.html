@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> hugo to zola</title>
+</head>
+<h1 class="title">
+  hugo to zola
+</h1>
+
+<p class="subtitle">
+  <strong>2024-11-20 | 2mins </strong>
+</p>
+
+<!-- https://www.getzola.org/documentation/templates/pages-sections/#table-of-contents -->
+
+
+<article>
+  <p>So am migrating to zola mostly because I don't like
+hugo templating system, their documentation and their naming
+conventions. This is a zola site I made from scratch and I tend to
+keep it absolute minimal syntax wise. One of the best selling feature
+of zola is backlinks and easy to understand documentation. Eveything
+I want is documented in a single page with types included. Example
+<a href="https://www.getzola.org/documentation/templates/pages-sections/">pages-section</a> has
+every types included in a single coherent manner.
+This makes creating templates so much easier and neater with extra advantage
+of a proper naming convention. Everything is contained in page variable as
+mentioned in docs.</p>
+<p>Here is an example of backlink: <a href="https://luitelaagaman.com.np/writings/reverseproxy/">this is a backlink to reverse proxy</a>
+and now my reverseproxy page automatically gets updated with backlink to this page. This
+feature is very handy and one I never thought of even though I use obsidian.</p>
+<p>Plans moving forward</p>
+<ul>
+<li><del>have a design plan</del></li>
+<li><del>write css (sigh...)</del></li>
+<li><del>a search feature</del></li>
+<li><del>absolute minimal design</del></li>
+<li>themes &amp; colors</li>
+</ul>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+<footer>
+  
+  
+</footer>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

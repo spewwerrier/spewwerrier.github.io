@@ -1,0 +1,10 @@
+// big thanks to: https://codeberg.org/daudix/duckquill.git
+let blocks = document.querySelectorAll("pre[class^='language-']");
+blocks.forEach((block) => {
+  let title = document.createElement("div")
+  let lang = block.getAttribute("data-lang");
+  title.innerHTML = lang
+
+  block.insertBefore(title, block.firstChild)
+})
+

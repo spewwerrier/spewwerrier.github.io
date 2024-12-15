@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> Bakemonogatari</title>
+</head>
+
+
+<h1 class="title">
+  Bakemonogatari
+</h1>
+<p class="subtitle"><strong>2024-09-27</strong></p>
+
+<article>
+  <p>I have watched every monogatari series but only read ~30ish chapters of bakemonogatari since
+I thought its same as anime. But oh boy I was wrong. As much as like the series I loved reading the
+bakemonogatari manga more.</p>
+<p>Bake made me fall in love characters. Every character has their own funny and adorable traits.
+Lets go with something lighthearted, Kanbaru. Kanbaru story is not heavy but she is
+wayy damn cute. Her appearence and jokes are wonderfully done. Another one is Hachikuji. She
+and Rararagi's conversations are just funny to read. On a heavy note, Hanekawa.
+Boy this story made me depressed and motivated at same time. Hanekawa story is one of the
+best story I've ever read. I just feel sad and happy. Being released from a trap in an
+imperfect way you grow, suffer, cry, act, you hide your emotions, you want someone to say
+they care for you, you want to exist in someone's world. I have seen lots of scene where girls gets
+rejected and cuts her hair at end but this was more than that. The love story is beautifully
+done. This manga gave me hope, love, hate, despair and motivation. It has seemingly grown inside of me.
+I feel indebted to this story. It has changed how I think, how I should act and most of all
+what I should expect from someone and be ready to accept it after all.</p>
+<ul>
+<li>What's the difference between a man and a monkey? The difference is that man can decide the value of his own life for himself.</li>
+<li>It's ok for people to go ahead and run from bad things, but just looking away doesn't count as running.</li>
+<li>Staying miserable is nyothing more than laziness, anyway. It's cowardly to nyot fight for happiness.</li>
+<li>Bi-bi beep. Bi-bi beep. The sound of my heart throbbing. (ME CRY)</li>
+</ul>
+<p>here are some other quotes I found</p>
+<ul>
+<li>https://old.reddit.com/r/araragi/comments/z6gfee/whats_your_favorite_quote_from_the_monogatari/</li>
+</ul>
+<p>On a side note: The bake anime is an injustice to its manga. I was missing so many stuff watching bake.
+The manga is just FUCKING PERFECT!</p>
+<p>Here are my all time best anime/manga/novels</p>
+<ul>
+<li>Bakemonogatari (Manga)</li>
+<li>Tatami Galaxy (Anime/Novel)</li>
+<li>Oyasumi Punpun (Manga)</li>
+</ul>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

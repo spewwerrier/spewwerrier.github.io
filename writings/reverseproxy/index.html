@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> Writing a load balancer in golang</title>
+</head>
+<h1 class="title">
+  Writing a load balancer in golang
+</h1>
+
+<p class="subtitle">
+  <strong>2024-10-22 | 14mins </strong>
+</p>
+
+<!-- https://www.getzola.org/documentation/templates/pages-sections/#table-of-contents -->
+
+<div class="toc">
+  <details>
+    <summary>Table Of Contents</summary>
+    <ul>
+      
+      <li>
+        <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;reverseproxy&#x2F;#reverse-proxy">Reverse proxy</a>
+      </li>
+      
+      <li>
+        <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;reverseproxy&#x2F;#accepting-https-connections">Accepting HTTPS connections</a>
+      </li>
+      
+      <li>
+        <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;reverseproxy&#x2F;#finalizing">Finalizing</a>
+      </li>
+      
+    </ul>
+  </details>
+</div>
+
+
+<article>
+  <h1 id="reverse-proxy">Reverse proxy</h1>
+<p>From cloudfare: A reverse proxy is a server that sits in front of web servers and forwards client (e.g. web browser) requests to those web servers.<br />
+So our objective is to create a server that feeds in the request, send the request to one of our server and send back the request. And to make it more interesting let us make our reverse proxy decide the efficient server. Our reverse proxy will sit on Layer 4 of OSI model (Transport layer) and choose server it wants. This is essentially a L4 load balancer.</p>
+<h2 id="existing-load-balancer">Existing load balancer</h2>
+<p>I tried https://github.com/yyyar/gobetween which is a L4 load balancer with a configuration
+system. All you have to do is define your servers in gobetween.toml file and run the load balancer.
+And your request to loadbalancer will be forwarded into servers. Now that we know what we want
+lets simulate our load balancer</p>
+<ul>
+<li>
+<p>Loadbalancer takes an request</p>
+</li>
+<li>
+<p>Server1 is located on http://localhost:4444</p>
+</li>
+<li>
+<p>Server2 is located on http://localhost:4445</p>
+</li>
+<li>
+<p>Our load balancer (reverse proxy) is located on http://localhost:3000</p>
+<ul>
+<li>It has 2 servers configured at localhost:{4444,4445}</li>
+</ul>
+</li>
+<li>
+<p>request come to http://localhost:3000</p>
+</li>
+<li>
+<p>forwards the request to Server1 or Server2</p>
+</li>
+<li>
+<p>get the result</p>
+</li>
+</ul>
+<h2 id="writing-our-own">Writing our own</h2>
+<p>We will be using golang since it just works and thats what I'm most comfortable when it comes
+to developing servers.</p>
+<h3 id="server-endpoints">Server endpoints</h3>
+<p>Lets define our server, instead of using configuration files and parsing them, I will be hardcoding
+them into our source.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">const </span><span>(
+</span><span>	SERVER1 </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;localhost:4444&quot;
+</span><span>	SERVER2 </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;localhost:4445&quot;
+</span><span>	SERVER3 </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;localhost:4446&quot;
+</span><span>)
+</span></code></pre>
+<h3 id="creating-dummy-servers">Creating dummy servers</h3>
+<p>Make a separate folder and write the dummy servers. We will not be writing any super complicated servers but
+they should work as well. I have tested this load balancer in some of my local http projects and it just works but for now
+let us be simple. This server just prints which server it is, how many times it has been called and the headers
+it is receiving.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">package </span><span>main
+</span><span>
+</span><span style="color:#ff5600;">import </span><span>(
+</span><span>	</span><span style="color:#00a33f;">&quot;fmt&quot;
+</span><span>	</span><span style="color:#00a33f;">&quot;net/http&quot;
+</span><span>)
+</span><span>
+</span><span style="color:#ff5600;">var </span><span>v </span><span style="color:#a535ae;">int </span><span style="color:#ff5600;">= </span><span>0
+</span><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">HomePage</span><span>(w http.</span><span style="color:#ff5600;">ResponseWriter</span><span>, r </span><span style="color:#ff5600;">*</span><span>http.</span><span style="color:#ff5600;">Request</span><span>) {
+</span><span>	v</span><span style="color:#ff5600;">++
+</span><span>	fmt.Printf(</span><span style="color:#00a33f;">&quot;Server1 called %d times\n&quot;</span><span>, v)
+</span><span>	fmt.Println(w.Header(), r.Header)
+</span><span>	w.Write([]</span><span style="color:#a535ae;">byte</span><span>(</span><span style="color:#00a33f;">&quot;hello world from server 1&quot;</span><span>))
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">main</span><span>() {
+</span><span>	http.HandleFunc(</span><span style="color:#00a33f;">&quot;/&quot;</span><span>, HomePage)
+</span><span>	err </span><span style="color:#ff5600;">:= </span><span>http.ListenAndServe(</span><span style="color:#00a33f;">&quot;localhost:4444&quot;</span><span>, </span><span style="color:#a535ae;">nil</span><span>)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>}
+</span></code></pre>
+<p>Create 3-4 of these and put the address in SERVERS in our loadbalancer.</p>
+<h2 id="the-load-balancer">The load balancer</h2>
+<p>Golang has a powerful standard library which lets us use net, http, templates, crypto and many more
+without external library. For now we will only be using net since it provides TCP/UDP network methods
+which we need.</p>
+<p>Our loadbalancer is still a server even if it makes request to another server.</p>
+<p><code>Listen announces on the local network address. The network must be "tcp", "tcp4", "tcp6", "unix" or "unixpacket".</code>
+Sounds like what we want. A server with tcp capabilities.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">func </span><span style="color:#21439c;">main</span><span>(){
+</span><span>	listener, err </span><span style="color:#ff5600;">:= </span><span>net.Listen(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, </span><span style="color:#00a33f;">&quot;localhost:3000&quot;</span><span>)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span></code></pre>
+<p>Note that localhost does not makes our server accessible from other machines, we need to use 0.0.0.0.
+This applies everywhere. Use "localhost:3000" if you are communicating in your machine only or "0.0.0.0:3000" if
+communicating through IPs. I will be using "localhost:3000" since I am not making request through another device/ip.<br />
+And now we want to actually listen using the listener</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">...
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">for </span><span>{
+</span><span>		conn, err </span><span style="color:#ff5600;">:= </span><span>listener.Accept()
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span></code></pre>
+<p><code>Accept waits for and returns the next connection to the listener</code>. It returns a new connection
+from the incoming request. Lets do a simple ping test</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">...
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">for </span><span>{
+</span><span>		_, err </span><span style="color:#ff5600;">:= </span><span>listener.Accept()
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		fmt.Println(</span><span style="color:#00a33f;">&quot;conn&quot;</span><span>)
+</span><span>	}
+</span></code></pre>
+<p>Terminal (main)</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span> owl@archlinux~ $ go run main.go
+</span></code></pre>
+<p>Terminal (curl)</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span> owl@archlinux~ $ curl localhost:3000
+</span></code></pre>
+<p>Terminal (main)</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span> owl@archlinux~ $ go run main.go
+</span><span> conn
+</span><span> conn
+</span></code></pre>
+<p>Seems to be working.<br />
+net also provides methods to connect to other servers with net.Dial</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span>	</span><span style="color:#ff5600;">for </span><span>{
+</span><span>		_, err </span><span style="color:#ff5600;">:= </span><span>listener.Accept()
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>
+</span><span>		_, err </span><span style="color:#ff5600;">= </span><span>net.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, SERVER1)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>	}
+</span></code></pre>
+<p>Dial one of our server as soon as we get a request. This program
+panics if SERVER1 is not active. Definitely a good thing. Now we read the incoming request and send to one of our servers.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span>	</span><span style="color:#ff5600;">for </span><span>{
+</span><span>		conn, err </span><span style="color:#ff5600;">:= </span><span>listener.Accept()
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		</span><span style="color:#919191;">// read from our l4 request
+</span><span>
+</span><span>		connDial, err </span><span style="color:#ff5600;">:= </span><span>net.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, SERVER1)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		</span><span style="color:#919191;">// send the response to the server
+</span><span>		</span><span style="color:#919191;">// read the response from the server
+</span><span>		</span><span style="color:#919191;">// send the response to l4
+</span><span>
+</span><span>		fmt.Printf(</span><span style="color:#00a33f;">&quot;sent\n%s\nto server: %s\n&quot;</span><span>, recvBuf, SERVER1)
+</span><span>	}
+</span></code></pre>
+<p>Now replacing comments with code we get a reverse proxy in our hands. This works becase
+http is essentially a TCP connection with http headers. When receiving http headers on our TCP server
+we will just forward that http headers to the underlying servers. This is not the same for https servers where it
+has a TLS/SSL layer on top which makes the header encrypted.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span>
+</span><span>	sendBuf </span><span style="color:#ff5600;">:= </span><span style="color:#a535ae;">make</span><span>([]</span><span style="color:#a535ae;">byte</span><span>, 1024)
+</span><span>	recvBuf </span><span style="color:#ff5600;">:= </span><span style="color:#a535ae;">make</span><span>([]</span><span style="color:#a535ae;">byte</span><span>, 1024)
+</span><span>	</span><span style="color:#ff5600;">for </span><span>{
+</span><span>		conn, err </span><span style="color:#ff5600;">:= </span><span>listener.Accept()
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		conn.Read(sendBuf)
+</span><span>
+</span><span>		connDial, err </span><span style="color:#ff5600;">:= </span><span>net.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, SERVER1)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		connDial.Write(sendBuf)
+</span><span>
+</span><span>		connDial.Read(recvBuf)
+</span><span>
+</span><span>		conn.Write(recvBuf)
+</span><span>
+</span><span>		fmt.Printf(</span><span style="color:#00a33f;">&quot;sent\n%s\nto server: %s\n\nReceived %s&quot;</span><span>, sendBuf, recvBuf, SERVER1)
+</span><span>	}
+</span></code></pre>
+<h2 id="the-actual-load-balancer">The actual load balancer</h2>
+<p>Now that we know the basics of our reverse proxy, lets add a
+load balancer algorithm and decide the server on runtime. This can be implemented however we like. I'll be focusing on 2 algorithms.
+One is silly. Before lets make above code readable and reusable.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">main</span><span>() {
+</span><span>	listener, err </span><span style="color:#ff5600;">:= </span><span>net.Listen(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, </span><span style="color:#00a33f;">&quot;localhost:3000&quot;</span><span>)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#919191;">// buffer to store the fields we get from the incoming request
+</span><span>	recvBuf </span><span style="color:#ff5600;">:= </span><span style="color:#a535ae;">make</span><span>([]</span><span style="color:#a535ae;">byte</span><span>, 1024)
+</span><span>	</span><span style="color:#ff5600;">for </span><span>{
+</span><span>		conn, err </span><span style="color:#ff5600;">:= </span><span>listener.Accept()
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		fmt.Printf(</span><span style="color:#00a33f;">&quot;accepting a request...\n\n&quot;</span><span>)
+</span><span>		conn.Read(recvBuf)
+</span><span>
+</span><span>		b </span><span style="color:#ff5600;">:= </span><span>dial(recvBuf, SERVER1)
+</span><span>		conn.Write(b)
+</span><span>	}
+</span><span>}
+</span><span>
+</span><span style="color:#919191;">// we dial one of our server with http fields stored in fields buffer
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">dial</span><span>(fields []</span><span style="color:#a535ae;">byte</span><span>, address </span><span style="color:#a535ae;">string</span><span>) []</span><span style="color:#a535ae;">byte </span><span>{
+</span><span>	fmt.Printf(</span><span style="color:#00a33f;">&quot;dialing %s\n&quot;</span><span>, address)
+</span><span>	conn, err </span><span style="color:#ff5600;">:= </span><span>net.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, address)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>	</span><span style="color:#ff5600;">defer </span><span>conn.Close()
+</span><span>
+</span><span>	recvBuf </span><span style="color:#ff5600;">:= </span><span style="color:#a535ae;">make</span><span>([]</span><span style="color:#a535ae;">byte</span><span>, 1024)
+</span><span>
+</span><span>	conn.Write(fields)
+</span><span>	_, err </span><span style="color:#ff5600;">= </span><span>conn.Read(recvBuf)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>	</span><span style="color:#ff5600;">return </span><span>recvBuf
+</span><span>}
+</span></code></pre>
+<h3 id="round-robin-algorithm">Round Robin Algorithm</h3>
+<p>Round robin algorithm distributes work evenly among all available resources.
+In our case we will send request to SERVER1, SERVER2,... SERVER Nth, SERVER1, SERVER2.... and so on where nth is the
+last server. This is not a full proof algorithm since in
+real world there are better algorithms suited where the
+load balancer has the workload stats of the server and
+it chooses the most optimal one based on resource
+availability. We use round robin because its one of the
+algorithm used to create load balancer, and its simple.</p>
+<p>Fortunately go makes this super easy. Lets create a struct called stateful servers since every server will have
+a state where the state is number of time it is called</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">var </span><span>StatefulServers </span><span style="color:#ff5600;">= map</span><span>[</span><span style="color:#a535ae;">string</span><span>]</span><span style="color:#a535ae;">int</span><span>{
+</span><span>	SERVER1: 0,
+</span><span>	SERVER2: 0,
+</span><span>	SERVER3: 0,
+</span><span>}
+</span></code></pre>
+<p>Now for round robin we want our dial function to call any SERVER. Any SERVER that gets returned, its state is increased by one. For this we will find out the SERVER
+with least state. And return that server.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">func </span><span style="color:#21439c;">RoundRobin</span><span>(fields []</span><span style="color:#a535ae;">byte</span><span>) []</span><span style="color:#a535ae;">byte </span><span>{
+</span><span>	</span><span style="color:#919191;">// we need to get lowest value from our stateful servers
+</span><span>	prev </span><span style="color:#ff5600;">:= </span><span>StatefulServers[SERVER1]
+</span><span>
+</span><span>  </span><span style="color:#919191;">// find least state
+</span><span>	</span><span style="color:#ff5600;">for </span><span>_, v </span><span style="color:#ff5600;">:= range </span><span>StatefulServers {
+</span><span>		</span><span style="color:#ff5600;">if </span><span>v </span><span style="color:#ff5600;">&lt; </span><span>prev {
+</span><span>			prev </span><span style="color:#ff5600;">= </span><span>v
+</span><span>		}
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">var </span><span>server </span><span style="color:#a535ae;">string
+</span><span>	</span><span style="color:#ff5600;">for </span><span>k, v </span><span style="color:#ff5600;">:= range </span><span>StatefulServers {
+</span><span>		</span><span style="color:#ff5600;">if </span><span>v </span><span style="color:#ff5600;">== </span><span>prev {
+</span><span>			server </span><span style="color:#ff5600;">= </span><span>k
+</span><span>		}
+</span><span>	}
+</span><span>
+</span><span>	StatefulServers[server]</span><span style="color:#ff5600;">++
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">return </span><span>dial(fields, server)
+</span><span>}
+</span></code></pre>
+<p>And thats it! Our load balancer is now complete.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">main</span><span>(){
+</span><span style="color:#ff5600;">...
+</span><span>		fmt.Printf(</span><span style="color:#00a33f;">&quot;accepting a request...\n\n&quot;</span><span>)
+</span><span>		conn.Read(recvBuf)
+</span><span>
+</span><span>		b </span><span style="color:#ff5600;">:= </span><span>RoundRobin(recvBuf)
+</span><span>		conn.Write(b)
+</span><span>		}
+</span><span>}
+</span></code></pre>
+<h3 id="random-robin">Random Robin</h3>
+<p>This is just choosing random servers but since I used
+round robin earlier I will call this random robin. Kind
+of silly but this is also the fun in programming.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">var </span><span>servers </span><span style="color:#ff5600;">= </span><span>[]</span><span style="color:#a535ae;">string</span><span>{
+</span><span>	SERVER1,
+</span><span>	SERVER2,
+</span><span>	SERVER3,
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">RandomRobin</span><span>(fields []</span><span style="color:#a535ae;">byte</span><span>) []</span><span style="color:#a535ae;">byte </span><span>{
+</span><span>	i </span><span style="color:#ff5600;">:= </span><span>rand.Int() </span><span style="color:#ff5600;">% </span><span style="color:#a535ae;">len</span><span>(servers)
+</span><span>	</span><span style="color:#ff5600;">return </span><span>dial(fields, servers[i])
+</span><span>}
+</span></code></pre>
+<p>Use RandomRobin or RoundRobin the fact that our reverse proxy
+chooses a server on its own makes it a load balancer that
+just works.</p>
+<h1 id="accepting-https-connections">Accepting HTTPS connections</h1>
+<p>According to cloudfare: HTTPS is just the HTTP protocol but with data encryption using SSL/TLS.
+So adding a tls config to our loadbalancer should make our http only to https supported.
+Here is a great gist on how to create certificate and use tls in golang. And I followed the
+same guide and will be referencing this as the guide.</p>
+<ul>
+<li>https://gist.github.com/denji/12b3a568f092ab951456</li>
+</ul>
+<h2 id="modifying-our-original-server-to-https">Modifying our original server to https</h2>
+<p>After creating certificates</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">...
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">main</span><span>() {
+</span><span>	http.HandleFunc(</span><span style="color:#00a33f;">&quot;/&quot;</span><span>, HomePage)
+</span><span>  </span><span style="color:#919191;">// err := http.ListenAndServe(&quot;localhost:4444&quot;, nil)
+</span><span>	err </span><span style="color:#ff5600;">:= </span><span>http.ListenAndServeTLS(</span><span style="color:#00a33f;">&quot;:4446&quot;</span><span>, </span><span style="color:#00a33f;">&quot;server.crt&quot;</span><span>, </span><span style="color:#00a33f;">&quot;server.key&quot;</span><span>, </span><span style="color:#a535ae;">nil</span><span>)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span style="color:#ff5600;">...
+</span></code></pre>
+<h2 id="upgrade-loadbalancer-to-https-optional">Upgrade loadbalancer to https (optional)</h2>
+<p>A load balancer can stay without tls and can make request to https connection. Its not
+a requirement for communication but we will do here since why not. Again, make a new
+certificate or use your old ones we used in our original server.
+For tls config we should replace net with tls "crypto/package". LoadX509KeyPair parses a public and private key from a PEM encoded files (our openssl certificate).</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">func </span><span style="color:#21439c;">main</span><span>() {
+</span><span>	cer, err </span><span style="color:#ff5600;">:= </span><span>tls.LoadX509KeyPair(</span><span style="color:#00a33f;">&quot;server.crt&quot;</span><span>, </span><span style="color:#00a33f;">&quot;server.key&quot;</span><span>)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>
+</span><span>	tlsConfig </span><span style="color:#ff5600;">:= &amp;</span><span>tls.Config{
+</span><span>		Certificates: []tls.Certificate{cer},
+</span><span>	}
+</span><span>	listener, err </span><span style="color:#ff5600;">:= </span><span>tls.Listen(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, </span><span style="color:#00a33f;">&quot;localhost:3000&quot;</span><span>, tlsConfig)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>	</span><span style="color:#ff5600;">...
+</span></code></pre>
+<p>This is server part, now our loadbalancer can be called through https://localhost:3000 but it still cannot
+communicate to https servers.</p>
+<h2 id="loadbalancer-to-support-https-request-response">Loadbalancer to support https request/response</h2>
+<p>For our load balancer to make a tls request, the connection should include the tls certificate of the server. In our case we are
+assuming every connection is https and have same tls config of server.crt. This cal also be seen in config file of gobetween.
+<a href="https://github.com/yyyar/gobetween/blob/6e185295c8476810c64a27f5da28edd778e23423/config/gobetween.toml#L153">https://github.com/yyyar/gobetween/blob/6e185295c8476810c64a27f5da28edd778e23423/config/gobetween.toml#L153</a></p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">...
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">dial</span><span>(fields []</span><span style="color:#a535ae;">byte</span><span>, address </span><span style="color:#a535ae;">string</span><span>) []</span><span style="color:#a535ae;">byte </span><span>{
+</span><span>	cert, err </span><span style="color:#ff5600;">:= </span><span>os.ReadFile(</span><span style="color:#00a33f;">&quot;server.crt&quot;</span><span>)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>	certPool </span><span style="color:#ff5600;">:= </span><span>x509.NewCertPool()
+</span><span>	certPool.AppendCertsFromPEM(cert)
+</span><span>
+</span><span>	conf </span><span style="color:#ff5600;">:= &amp;</span><span>tls.Config{
+</span><span>		RootCAs: certPool,
+</span><span>	}
+</span><span>
+</span><span>	fmt.Printf(</span><span style="color:#00a33f;">&quot;dialing %s\n&quot;</span><span>, address)
+</span><span>	conn, err </span><span style="color:#ff5600;">:= </span><span>tls.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, address, conf)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>}
+</span><span style="color:#ff5600;">...
+</span></code></pre>
+<p>If we don't want to verify the tls of servers we can just ignore the
+verification process, this way we don't have to remember tls
+certificate of every server but we are essentially ignoring the
+tls step. It should only be used for testing.</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">...
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">dial</span><span>(fields []</span><span style="color:#a535ae;">byte</span><span>, address </span><span style="color:#a535ae;">string</span><span>) []</span><span style="color:#a535ae;">byte </span><span>{
+</span><span>    conf </span><span style="color:#ff5600;">:= &amp;</span><span>tls.Config{
+</span><span>      InsecureSkipVerify: </span><span style="color:#a535ae;">true</span><span>,
+</span><span>    }
+</span><span>
+</span><span>    conn, err </span><span style="color:#ff5600;">:= </span><span>tls.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, address, conf)
+</span><span>    </span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span style="color:#ff5600;">...
+</span></code></pre>
+<h1 id="finalizing">Finalizing</h1>
+<p>Now all that is left is to create a proper configuration system. I will be coding these
+in the code itself, creating a struct for server like this</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">type </span><span style="color:#21439c;">Server </span><span style="color:#ff5600;">struct </span><span>{
+</span><span>	address </span><span style="color:#a535ae;">string
+</span><span>	tlspath </span><span style="color:#a535ae;">string
+</span><span>	https   </span><span style="color:#a535ae;">bool
+</span><span>	state   </span><span style="color:#a535ae;">int
+</span><span>}
+</span></code></pre>
+<p>The other code is pretty much same with servers defined in main and changing data types of
+our Round Robin algorithm. Here is the final code for our load balancer that support http as
+well as https</p>
+<pre data-lang="go" style="background-color:#ffffff;color:#000000;" class="language-go "><code class="language-go" data-lang="go"><span style="color:#ff5600;">package </span><span>main
+</span><span>
+</span><span style="color:#ff5600;">import </span><span>(
+</span><span>	</span><span style="color:#00a33f;">&quot;crypto/tls&quot;
+</span><span>	</span><span style="color:#00a33f;">&quot;crypto/x509&quot;
+</span><span>	</span><span style="color:#00a33f;">&quot;fmt&quot;
+</span><span>	</span><span style="color:#00a33f;">&quot;net&quot;
+</span><span>	</span><span style="color:#00a33f;">&quot;os&quot;
+</span><span>)
+</span><span>
+</span><span style="color:#ff5600;">type </span><span style="color:#21439c;">Server </span><span style="color:#ff5600;">struct </span><span>{
+</span><span>	address </span><span style="color:#a535ae;">string
+</span><span>	tlspath </span><span style="color:#a535ae;">string
+</span><span>	https   </span><span style="color:#a535ae;">bool
+</span><span>	state   </span><span style="color:#a535ae;">int
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">const </span><span>(
+</span><span>	SERVER1 </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;localhost:4444&quot;
+</span><span>	SERVER2 </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;localhost:4445&quot;
+</span><span>	SERVER3 </span><span style="color:#ff5600;">= </span><span style="color:#00a33f;">&quot;localhost:4446&quot;
+</span><span>)
+</span><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">main</span><span>() {
+</span><span>	servers </span><span style="color:#ff5600;">:= </span><span>[]</span><span style="color:#ff5600;">Server</span><span>{
+</span><span>		{
+</span><span>			address: SERVER1,
+</span><span>			https:   </span><span style="color:#a535ae;">true</span><span>,
+</span><span>			state:   1,
+</span><span>		},
+</span><span>		{
+</span><span>			address: SERVER2,
+</span><span>			https:   </span><span style="color:#a535ae;">false</span><span>,
+</span><span>			state:   1,
+</span><span>		},
+</span><span>		{
+</span><span>			address: SERVER3,
+</span><span>			https:   </span><span style="color:#a535ae;">true</span><span>,
+</span><span>			state:   1,
+</span><span>		},
+</span><span>	}
+</span><span>
+</span><span>	cer, err </span><span style="color:#ff5600;">:= </span><span>tls.LoadX509KeyPair(</span><span style="color:#00a33f;">&quot;server.crt&quot;</span><span>, </span><span style="color:#00a33f;">&quot;server.key&quot;</span><span>)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>
+</span><span>	tlsConfig </span><span style="color:#ff5600;">:= &amp;</span><span>tls.Config{
+</span><span>		Certificates: []tls.Certificate{cer},
+</span><span>	}
+</span><span>	listener, err </span><span style="color:#ff5600;">:= </span><span>tls.Listen(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, </span><span style="color:#00a33f;">&quot;localhost:3000&quot;</span><span>, tlsConfig)
+</span><span>	</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>		</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>	}
+</span><span>
+</span><span>	recvBuf </span><span style="color:#ff5600;">:= </span><span style="color:#a535ae;">make</span><span>([]</span><span style="color:#a535ae;">byte</span><span>, 1024)
+</span><span>	</span><span style="color:#ff5600;">for </span><span>{
+</span><span>		conn, err </span><span style="color:#ff5600;">:= </span><span>listener.Accept()
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		fmt.Printf(</span><span style="color:#00a33f;">&quot;accepting a request...\n\n&quot;</span><span>)
+</span><span>		conn.Read(recvBuf)
+</span><span>
+</span><span>		b </span><span style="color:#ff5600;">:= </span><span>RoundRobin(recvBuf, servers)
+</span><span>		conn.Write(b)
+</span><span>	}
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">dial</span><span>(fields []</span><span style="color:#a535ae;">byte</span><span>, address </span><span style="color:#a535ae;">string</span><span>, istls </span><span style="color:#a535ae;">bool</span><span>) []</span><span style="color:#a535ae;">byte </span><span>{
+</span><span>	fmt.Printf(</span><span style="color:#00a33f;">&quot;dialing %s\n&quot;</span><span>, address)
+</span><span>	recvBuf </span><span style="color:#ff5600;">:= </span><span style="color:#a535ae;">make</span><span>([]</span><span style="color:#a535ae;">byte</span><span>, 1024)
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">if </span><span>istls {
+</span><span>		cert, err </span><span style="color:#ff5600;">:= </span><span>os.ReadFile(</span><span style="color:#00a33f;">&quot;server.crt&quot;</span><span>)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		certPool </span><span style="color:#ff5600;">:= </span><span>x509.NewCertPool()
+</span><span>		certPool.AppendCertsFromPEM(cert)
+</span><span>
+</span><span>		conf </span><span style="color:#ff5600;">:= &amp;</span><span>tls.Config{
+</span><span>			RootCAs: certPool,
+</span><span>		}
+</span><span>
+</span><span>		conn, err </span><span style="color:#ff5600;">:= </span><span>tls.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, address, conf)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		</span><span style="color:#ff5600;">defer </span><span>conn.Close()
+</span><span>
+</span><span>		conn.Write(fields)
+</span><span>		_, err </span><span style="color:#ff5600;">= </span><span>conn.Read(recvBuf)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>	} </span><span style="color:#ff5600;">else </span><span>{
+</span><span>		conn, err </span><span style="color:#ff5600;">:= </span><span>net.Dial(</span><span style="color:#00a33f;">&quot;tcp&quot;</span><span>, address)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>		</span><span style="color:#ff5600;">defer </span><span>conn.Close()
+</span><span>
+</span><span>		conn.Write(fields)
+</span><span>		_, err </span><span style="color:#ff5600;">= </span><span>conn.Read(recvBuf)
+</span><span>		</span><span style="color:#ff5600;">if </span><span>err </span><span style="color:#ff5600;">!= </span><span style="color:#a535ae;">nil </span><span>{
+</span><span>			</span><span style="color:#a535ae;">panic</span><span>(err)
+</span><span>		}
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">return </span><span>recvBuf
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">func </span><span>(s </span><span style="color:#ff5600;">*Server</span><span>) </span><span style="color:#21439c;">IncrementState</span><span>() {
+</span><span>	s.state </span><span style="color:#ff5600;">+= </span><span>1
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">func </span><span style="color:#21439c;">RoundRobin</span><span>(fields []</span><span style="color:#a535ae;">byte</span><span>, servers []</span><span style="color:#ff5600;">Server</span><span>) []</span><span style="color:#a535ae;">byte </span><span>{
+</span><span>	lowest </span><span style="color:#ff5600;">:= </span><span>servers[0].state
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">for </span><span>_, v </span><span style="color:#ff5600;">:= range </span><span>servers {
+</span><span>		</span><span style="color:#ff5600;">if </span><span>v.state </span><span style="color:#ff5600;">&lt; </span><span>lowest {
+</span><span>			lowest </span><span style="color:#ff5600;">= </span><span>v.state
+</span><span>		}
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">var </span><span>server </span><span style="color:#a535ae;">string
+</span><span>	istls </span><span style="color:#ff5600;">:= </span><span style="color:#a535ae;">false
+</span><span>	</span><span style="color:#ff5600;">for </span><span>i, v </span><span style="color:#ff5600;">:= range </span><span>servers {
+</span><span>		</span><span style="color:#ff5600;">if </span><span>v.state </span><span style="color:#ff5600;">== </span><span>lowest {
+</span><span>			server </span><span style="color:#ff5600;">= </span><span>v.address
+</span><span>			servers[i].IncrementState()
+</span><span>			istls </span><span style="color:#ff5600;">= </span><span>servers[i].https
+</span><span>			</span><span style="color:#ff5600;">break
+</span><span>		}
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#ff5600;">return </span><span>dial(fields, server, istls)
+</span><span>}
+</span></code></pre>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+<footer>
+  
+  <div class="backlinks">
+    <h3>Backlinks to this page</h3>
+    <ul class="description_list">
+      
+      <li>
+        <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;rewrite&#x2F;">hugo to zola</a>
+      </li>
+      
+    </ul>
+  </div>
+  
+</footer>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>

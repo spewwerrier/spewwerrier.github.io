@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+    <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+    <a href="https://luitelaagaman.com.np/thoughts/">Thoughts</a>
+
+    <span>
+      <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+        onclick="">T</button></span>
+    <dialog id="dialog">
+      <!-- Note the usage of `type=module` here as this is an ES6 module -->
+      <script type="module">
+        import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+        window.search = search;
+
+        async function run() {
+          await init('/wasm_output/tinysearch_engine_bg.wasm');
+        }
+
+        run();
+      </script>
+
+      <script>
+        function doSearch() {
+          let value = document.getElementById("demo").value;
+          console.log(`Search query: ${value}`);
+
+          const results = search(value, 5);
+
+          console.log(`Results: ${results}`);
+
+          let ul = document.getElementById("results");
+          ul.innerHTML = "";
+
+          for (i = 0; i < results.length; i++) {
+            var li = document.createElement("li");
+
+            let [title, url] = results[i];
+            let elemlink = document.createElement('a');
+            elemlink.innerHTML = title;
+            elemlink.setAttribute('href', url);
+            li.appendChild(elemlink);
+
+            ul.appendChild(li);
+          }
+        }
+      </script>
+
+      <h2>Search</h2>
+      <input type="text" id="demo" onkeyup="doSearch()">
+      <ul id="results">
+      </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+      <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+    </dialog>
+
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> Producer Consumer Problem</title>
+</head>
+
+
+<h1 class="title">
+  Producer Consumer Problem
+</h1>
+<p class="subtitle"><strong>2024-02-29</strong></p>
+
+<article>
+  <p>I was given a presentation task on this topic and I found it super interesting.
+Prior to this I had never properly used multithreading in my programs so discovering
+this was super fun and insightful.</p>
+<h1 id="producer-consumer-problem-bounded-buffer-problem">Producer Consumer Problem (Bounded buffer problem)</h1>
+<p>The concept is simple. There are two working entity (functions/threads) and one buffer.</p>
+<ul>
+<li>producer -&gt; produces data</li>
+<li>consumer -&gt; consumed data</li>
+<li>buffer   -&gt; Common shared buffer/data</li>
+</ul>
+<p>One simple example will be, suppose I have a stock analysis program,
+producer will generate stock values, profit and loss and so on and put
+theat generated value in the buffer, consumer takes that value
+and generates a real time graph.
+Thats it! Thats what producer and consumers are.</p>
+<p>But...</p>
+<p>On multithreading system implementing this simple architecture gives a problem.
+The problem might also happen in single threaded program but the margin of error
+is too low. Lets say its hard to get it wrong on single threaded program. But
+on multithreading, this is not a simple fix... well if you stick to this article
+its actually quite easy fix.</p>
+<p>What happens in multithreading?</p>
+<ul>
+<li>[<em>M</em>] producers</li>
+<li>[<em>N</em>] consumers</li>
+<li>buffer</li>
+</ul>
+<p>There are M no of producers and N no of consumers where
+each producers and consumers will have a thread of its own. Even so they will act on
+a single buffer. Even if there are 100 threads, all of them will put value in the
+same buffer.</p>
+<p>Now whats the problem in that? You might say</p>
+<p>Suppose if one producer thread produces 1 byte of data and one consumer thread
+consumes 1 byte of data and the buffer size is just 10 bytes. What happens if
+we have 13 threads trying to put the value in the buffer? It will most likely
+give overflow. Similarly if we have nothing in the buffer and consumers
+are trying to consume then they will consume garbage value and probably show
+garbage result or crash on some instruction error.</p>
+<h2 id="rules">Rules</h2>
+<p>To solve this we need to make some rules</p>
+<ul>
+<li>on buffer full lock the producer threads</li>
+<li>on buffer empty lock the consumer threads</li>
+<li>mutually exclusive data using mutexes</li>
+</ul>
+<p>Note: here are some definitions you need to know. Consulting wikipedia on this topics
+is preferred.</p>
+<ul>
+<li>semaphore: semaphores are signals that can be used by multiple thread to request an access</li>
+<li>mutex: mutex is like a unique key that can be used by only one thread</li>
+</ul>
+<h2 id="solution">Solution</h2>
+<p>To solve this we need to use semaphores and mutex. More specifically
+2 binary semaphores and 1 mutex is needed</p>
+<ul>
+<li>empty semaphore[P]
+<ul>
+<li>tracks no of empty slots available in the buffer</li>
+<li>producer [M] have to wait if there are no semaphores available</li>
+<li>ideally we make P semaphores where P = sizeof(buffer)/sizeof(produced item)</li>
+</ul>
+</li>
+<li>full semaphore[0]
+<ul>
+<li>acts as a flag if buffer is empty or not empty</li>
+<li>consumer [N] consumes if buffer is not empty i.e 1</li>
+</ul>
+</li>
+<li>mutex
+<ul>
+<li>does not allows other thread to access the buffer</li>
+</ul>
+</li>
+</ul>
+<p>Lets take a scenario where there are</p>
+<ul>
+<li>10 producers generates 1 byte</li>
+<li>10 consumers consumes 1 byte</li>
+<li>buffer size is 5 bytes</li>
+</ul>
+<p>In this case we make 5 semaphores since creating any more than that means
+there is a chance of buffer overflow. So in this case we create list of
+binary semaphore and call it empty_semaphore. Empty sempahore is taken
+by a thread and decreased and threads that don't have the semaphore will
+wait until its available again. Similarly consusmers use full_semaphore.
+Full semaphore is just a flag that is set by producers to say there is a
+value at the buffer. Producers increment this flag to let consumers know
+its their turn. This just makes sure that consumers never act on an
+empty buffer. After one whole process of producing and consuming conusmers
+increment full_semaphore indicating one thread can now get access now that
+one thread work had already been consumed.</p>
+<p>Here is a simple C++ program to demonstrate this. Try changing the return size
+to 1 byte (meaning we would gives semaphores to more thread).</p>
+<pre data-lang="cpp" style="background-color:#ffffff;color:#000000;" class="language-cpp "><code class="language-cpp" data-lang="cpp"><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;iostream&gt;
+</span><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;mutex&gt;
+</span><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;semaphore&gt;
+</span><span style="color:#ff5600;">#include </span><span style="color:#00a33f;">&lt;thread&gt;
+</span><span>
+</span><span style="color:#ff5600;">#define </span><span>BUFFER_SIZE 16
+</span><span style="color:#ff5600;">#define </span><span>RETURN_SIZE 2
+</span><span>
+</span><span style="color:#ff5600;">struct </span><span>IntStorage {
+</span><span>  </span><span style="color:#ff5600;">int</span><span> buffer[BUFFER_SIZE];
+</span><span>  </span><span style="color:#ff5600;">int</span><span> index </span><span style="color:#ff5600;">= </span><span>0;
+</span><span>  </span><span style="color:#ff5600;">void </span><span style="color:#21439c;">insert</span><span>(</span><span style="color:#ff5600;">int </span><span>c) {
+</span><span>    buffer[index] </span><span style="color:#ff5600;">=</span><span> c;
+</span><span>    index</span><span style="color:#ff5600;">++</span><span>;
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">int </span><span style="color:#21439c;">pop</span><span>() {
+</span><span>    </span><span style="color:#ff5600;">int</span><span> c </span><span style="color:#ff5600;">=</span><span> buffer[index];
+</span><span>    index</span><span style="color:#ff5600;">--</span><span>;
+</span><span>    </span><span style="color:#ff5600;">return</span><span> c;
+</span><span>  }
+</span><span>};
+</span><span>
+</span><span>IntStorage buffer;
+</span><span>
+</span><span>std::binary_semaphore full_semaphore{0};
+</span><span>std::binary_semaphore empty_semaphore{BUFFER_SIZE </span><span style="color:#ff5600;">/</span><span> RETURN_SIZE};
+</span><span>std::mutex mutex;
+</span><span>
+</span><span style="color:#919191;">// puts 2 byte data in the buffer
+</span><span style="color:#ff5600;">void </span><span style="color:#21439c;">producer</span><span>(</span><span style="color:#ff5600;">int </span><span>c) {
+</span><span>  </span><span style="color:#ff5600;">while </span><span>(</span><span style="color:#a535ae;">true</span><span>) {
+</span><span>    </span><span style="color:#919191;">// empty--
+</span><span>    empty_semaphore.acquire();
+</span><span>    mutex.lock();
+</span><span>    std::cout </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&quot;inserted: &quot; </span><span style="color:#ff5600;">&lt;&lt;</span><span> c </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&#39;\n&#39;</span><span>;
+</span><span>    buffer.insert(c);
+</span><span>    buffer.insert(c);
+</span><span>    mutex.unlock();
+</span><span>    full_semaphore.release();
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style="color:#919191;">// pops 2 bytes of data
+</span><span style="color:#ff5600;">void </span><span style="color:#21439c;">consumer</span><span>() {
+</span><span>  </span><span style="color:#ff5600;">while </span><span>(</span><span style="color:#a535ae;">true</span><span>) {
+</span><span>    full_semaphore.acquire();
+</span><span>    mutex.lock();
+</span><span>    std::cout </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&quot;released: &quot; </span><span style="color:#ff5600;">&lt;&lt;</span><span> buffer.pop() </span><span style="color:#ff5600;">&lt;&lt; </span><span style="color:#00a33f;">&#39;\n&#39;</span><span>;
+</span><span>    buffer.pop();
+</span><span>    mutex.unlock();
+</span><span>    empty_semaphore.release();
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style="color:#ff5600;">int </span><span style="color:#21439c;">main</span><span>() {
+</span><span>  std::thread producers[32];
+</span><span>  std::thread consumers[32];
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">int</span><span> i </span><span style="color:#ff5600;">= </span><span>0; i </span><span style="color:#ff5600;">&lt; </span><span>32; </span><span style="color:#ff5600;">++</span><span>i) {
+</span><span>    producers[i] </span><span style="color:#ff5600;">= </span><span>std::thread(producer, i);
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">int</span><span> i </span><span style="color:#ff5600;">= </span><span>0; i </span><span style="color:#ff5600;">&lt; </span><span>32; </span><span style="color:#ff5600;">++</span><span>i) {
+</span><span>    consumers[i] </span><span style="color:#ff5600;">= </span><span>std::thread(consumer);
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">auto &amp;</span><span>thread </span><span style="color:#ff5600;">:</span><span> producers) {
+</span><span>    thread.join();
+</span><span>  }
+</span><span>  </span><span style="color:#ff5600;">for </span><span>(</span><span style="color:#ff5600;">auto &amp;</span><span>thread </span><span style="color:#ff5600;">:</span><span> consumers) {
+</span><span>    thread.join();
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<p>Compile and run</p>
+<pre data-lang="sh" style="background-color:#ffffff;color:#000000;" class="language-sh "><code class="language-sh" data-lang="sh"><span>clang++ -std</span><span style="color:#ff5600;">=</span><span>c++20 pcp.cpp -o pcp
+</span><span>./pcp
+</span></code></pre>
+<p>{{&lt; pdf src="./pcproblem.pdf" &gt;}}</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+<!-- <script defer="none"> -->
+
+  <!-- var match = window.matchMedia('(prefers-color-scheme: dark)') -->
+  <!-- console.log(match) -->
+<!-- </script> -->
+
+</body>
+
+</html>
