@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css"/>
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+  <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+  <a href="https://luitelaagaman.com.np/extras/">Extras</a>
+
+  <span>
+    <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+      onclick="">T</button></span>
+  <dialog id="dialog">
+    <!-- Note the usage of `type=module` here as this is an ES6 module -->
+    <script type="module">
+      import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+      window.search = search;
+
+      async function run() {
+        await init('/wasm_output/tinysearch_engine_bg.wasm');
+      }
+
+      run();
+    </script>
+
+    <script>
+      function doSearch() {
+        let value = document.getElementById("demo").value;
+        console.log(`Search query: ${value}`);
+
+        const results = search(value, 5);
+
+        console.log(`Results: ${results}`);
+
+        let ul = document.getElementById("results");
+        ul.innerHTML = "";
+
+        for (i = 0; i < results.length; i++) {
+          var li = document.createElement("li");
+
+          let [title, url] = results[i];
+          let elemlink = document.createElement('a');
+          elemlink.innerHTML = title;
+          elemlink.setAttribute('href', url);
+          li.appendChild(elemlink);
+
+          ul.appendChild(li);
+        }
+      }
+    </script>
+
+    <h2>Search</h2>
+    <input type="text" id="demo" onkeyup="doSearch()">
+    <ul id="results">
+    </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a
+        href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+    <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+  </dialog>
+
+</nav>
+
+
+  <section class="section">
+    <div class="container">
+      
+<title> List of blog posts</title>
+<h1 class="title">
+  List of blog posts
+</h1>
+
+<article>
+  <div class="posts">
+    <ul class="description_list">
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;extras&#x2F;custom-kernel&#x2F;> compiling custom kernel just for fun </a> </li>
+      <p>Compiling custom kernel is easy actually, configuring is hard. There are some set of
+configurations that you must need for your kernel to boot, at least that what happened
+to me.</p>
+<p>step1: clone the kernel</p>
+<pre class="z-code"><code><span class="z-text z-plain">git clone https://github.com/torvalds/linux --depth=1
+</span></code></pre>
+<p>step 2</p>
+<pre class="z-code"><code><span class="z-text z-plain">make menuconfig
+</span></code></pre>
+<p>This is where things get trickier. So gentoo has lots of documentation for kernel configurations.
+Some of the links I found useful</p>
+<ul>
+<li>https://wiki.gentoo.org/wiki/Kernel#Configuration</li>
+<li>https://wiki.gentoo.org/wiki/Zram#Enabling_zram_support_in_kernel</li>
+<li>https://wiki.gentoo.org/wiki/Framebuffer</li>
+<li>https://wiki.gentoo.org/wiki/Bluetooth</li>
+</ul>
+<p>step 3: Follow arch wiki</p>
+<p>https://wiki.archlinux.org/title/Kernel/Traditional_compilation</p>
+<p>I use systemd boot so I just have to make a new loader as
+/boot/loader/entries/linux-spaceship.conf</p>
+<pre class="z-code"><code><span class="z-text z-plain">title   Arch Linux Spaceship
+</span><span class="z-text z-plain">linux   /vmlinuz-linux-spaceship
+</span><span class="z-text z-plain">initrd  /initramfs-linux-spaceship.img
+</span><span class="z-text z-plain">options root=PARTUUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx zswap.enabled=0 rootflags=subvol=@ rw rootfstype=btrfs
+</span></code></pre>
+<p>and my kernel is there when I start my pc.</p>
+<p>So why do this? Two reasons: because its fun to configure/compile your custom kernel with your
+own name and second, I disabled internet in this kernel to stop myself from any internet activity.</p>
+<p>Another thing is I also noticed my boot time got faster, maybe its because my kernel is
+minimal and does not has any extra modules enabled and is compiled in my machine.</p>
+
+      
+    </ul>
+  </div>
+
+<nav class="pagination">
+  
+  
+</nav>
+
+
+</article>
+
+
+
+
+    </div>
+  </section>
+
+  <footer style="bottom:0;">
+    <hr />
+    ©Aagaman Luitel 2025
+  </footer>
+
+</body>
+
+</html>

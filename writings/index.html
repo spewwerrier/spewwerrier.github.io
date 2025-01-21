@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css"/>
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+  <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+  <a href="https://luitelaagaman.com.np/extras/">Extras</a>
+
+  <span>
+    <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+      onclick="">T</button></span>
+  <dialog id="dialog">
+    <!-- Note the usage of `type=module` here as this is an ES6 module -->
+    <script type="module">
+      import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+      window.search = search;
+
+      async function run() {
+        await init('/wasm_output/tinysearch_engine_bg.wasm');
+      }
+
+      run();
+    </script>
+
+    <script>
+      function doSearch() {
+        let value = document.getElementById("demo").value;
+        console.log(`Search query: ${value}`);
+
+        const results = search(value, 5);
+
+        console.log(`Results: ${results}`);
+
+        let ul = document.getElementById("results");
+        ul.innerHTML = "";
+
+        for (i = 0; i < results.length; i++) {
+          var li = document.createElement("li");
+
+          let [title, url] = results[i];
+          let elemlink = document.createElement('a');
+          elemlink.innerHTML = title;
+          elemlink.setAttribute('href', url);
+          li.appendChild(elemlink);
+
+          ul.appendChild(li);
+        }
+      }
+    </script>
+
+    <h2>Search</h2>
+    <input type="text" id="demo" onkeyup="doSearch()">
+    <ul id="results">
+    </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a
+        href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+    <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+  </dialog>
+
+</nav>
+
+
+  <section class="section">
+    <div class="container">
+      
+<title> List of writing</title>
+<article>
+  <h1 class="title">
+    List of writing
+  </h1>
+  <ul class="writings_list">
+    
+    <li><a class="title" href="https://luitelaagaman.com.np/writings/reverseproxy/">=  {{   Writing a load balancer in golang  }} </a></li>2024-10-22
+    
+  </ul>
+
+</article>
+
+
+
+    </div>
+  </section>
+
+  <footer style="bottom:0;">
+    <hr />
+    ©Aagaman Luitel 2025
+  </footer>
+
+</body>
+
+</html>
