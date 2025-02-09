@@ -1,0 +1,39 @@
+section {
+  max-width: 60%;
+  margin: auto;
+}
+
+@media only screen and (max-width: 1200px) {
+  section {
+    max-width: 100%;
+    margin: auto;
+  }
+}
+
+.subtitle {
+  text-align: center;
+}
+
+.toc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.toc details {
+  text-align: center;
+}
+
+.toc ul {
+  padding: 0px;
+  list-style-type: none;
+}
+
+
+.z-code {
+  /* font-family: monospace; */
+  margin-top: 2px;
+  border: 1px solid black;
+  border-radius: 8px;
+}
