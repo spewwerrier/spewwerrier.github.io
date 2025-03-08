@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css"/>
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+  <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+  <a href="https://luitelaagaman.com.np/extras/">Extras</a>
+
+  <span>
+    <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+      onclick=changeTheme()>T</button>
+  </span>
+  <dialog id="dialog">
+    <!-- Note the usage of `type=module` here as this is an ES6 module -->
+    <script type="module">
+      import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+      window.search = search;
+
+      async function run() {
+        await init('/wasm_output/tinysearch_engine_bg.wasm');
+      }
+
+      run();
+    </script>
+
+    <script>
+      function doSearch() {
+        let value = document.getElementById("demo").value;
+        console.log(`Search query: ${value}`);
+
+        const results = search(value, 5);
+
+        console.log(`Results: ${results}`);
+
+        let ul = document.getElementById("results");
+        ul.innerHTML = "";
+
+        for (i = 0; i < results.length; i++) {
+          var li = document.createElement("li");
+
+          let [title, url] = results[i];
+          let elemlink = document.createElement('a');
+          elemlink.innerHTML = title;
+          elemlink.setAttribute('href', url);
+          li.appendChild(elemlink);
+
+          ul.appendChild(li);
+        }
+      }
+    </script>
+
+    <script>
+    const root = document.documentElement;
+    const currentTheme = localStorage.getItem("theme")
+    if(currentTheme === null){
+      localStorage.setItem("theme", "light")
+    }
+    root.classList.toggle("dark-mode", currentTheme === "dark");
+
+    function changeTheme(){
+      if (localStorage.getItem("theme") === "light"){
+        root.classList.toggle("dark-mode", true);
+        localStorage.setItem("theme", "dark")
+        return
+      }
+      root.classList.toggle("dark-mode", false);
+      localStorage.setItem("theme", "light")
+      }
+    </script>
+
+    <h2>Search</h2>
+    <input type="text" id="demo" onkeyup="doSearch()">
+    <ul id="results">
+    </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a
+        href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+    <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+  </dialog>
+
+</nav>
+
+
+  <section class="section">
+    <div class="container">
+      
+<title> List of blog posts</title>
+<h1 class="title">
+  List of blog posts
+</h1>
+
+<article>
+  <div class="posts">
+    <ul class="description_list">
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;extras&#x2F;testing&#x2F;> testing </a> </li>
+      <p>This is testing. Current text are paragraph and they are the primary fonts. Heading and blockquote have differtent fonts.</p>
+<h3 id="heading-or-smth-idk">Heading or smth idk</h3>
+<pre data-lang="scala" class="language-scala z-code"><code class="language-scala" data-lang="scala"><span class="z-source z-scala"><span class="z-meta z-class z-identifier z-scala"><span class="z-storage z-type z-class z-scala">object</span><span class="z-entity z-name z-class z-scala"> HelloWorld</span></span> <span class="z-meta z-class z-body z-scala"><span class="z-punctuation z-section z-braces z-begin z-scala">{</span>
+</span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala">	<span class="z-storage z-type z-function z-scala">def</span> <span class="z-entity z-name z-function z-scala">main</span><span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-variable z-parameter z-scala">args</span><span class="z-punctuation z-ascription z-scala">:</span> <span class="z-support z-class z-scala">Array</span><span class="z-punctuation z-definition z-generic z-begin z-scala">[</span><span class="z-support z-class z-scala">String</span><span class="z-punctuation z-definition z-generic z-end z-scala">]</span><span class="z-punctuation z-section z-group z-end z-scala">)</span><span class="z-punctuation z-ascription z-scala">:</span> <span class="z-storage z-type z-primitive z-scala">Unit</span> <span class="z-keyword z-operator z-assignment z-scala">=</span> <span class="z-meta z-block z-scala"><span class="z-punctuation z-section z-block z-begin z-scala">{</span>
+</span></span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala"><span class="z-meta z-block z-scala">	  <span class="z-meta z-group z-scala"><span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-constant z-numeric z-integer z-decimal z-scala">1</span> to <span class="z-constant z-numeric z-integer z-decimal z-scala">5</span><span class="z-punctuation z-section z-group z-end z-scala">)</span></span><span class="z-punctuation z-accessor z-scala">.</span>foreach<span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-variable z-parameter z-scala">x</span> <span class="z-storage z-type z-function z-arrow z-lambda z-scala">=&gt;</span> println<span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-string z-quoted z-double z-scala"><span class="z-punctuation z-definition z-string z-begin z-scala">&quot;</span>This is a test <span class="z-punctuation z-definition z-string z-end z-scala">&quot;</span></span> + x<span class="z-punctuation z-section z-group z-end z-scala">)</span><span class="z-punctuation z-section z-group z-end z-scala">)</span>
+</span></span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala"><span class="z-meta z-block z-scala">	<span class="z-punctuation z-section z-block z-end z-scala">}</span></span>
+</span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala"><span class="z-punctuation z-section z-braces z-end z-scala">}</span></span>
+</span></code></pre>
+<blockquote>
+<p>This is a blockquote - Sun Tzu</p>
+</blockquote>
+<br>
+<blockquote>
+<blockquote>
+<p>Double blockquote can also be done - Sun Tzu</p>
+</blockquote>
+</blockquote>
+<br>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>NOW THATS TOO MUCH - Sun Tzu</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>this is a list
+<ul>
+<li>oh wat
+<ul>
+<li>oh oh wat
+<ul>
+<li>oh oh oh oh watt</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>this is also a list</li>
+</ul>
+<p><code>a sneaky monospace text</code> hidden in a paragraph</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;extras&#x2F;lsp-symbols&#x2F;> LSP symbols </a> </li>
+      <p>Many people miss out on lsp symbols picker. It is available in helix, zed and
+similar plugin might exist for neovim. Symbol picker gathers all the code declaration
+like class, variable, functions and so on. Combined with fuzzy picker you can
+grep the code declerations very fast. This is efficient when comments pollute the
+function name you are searching for.</p>
+<p><img src="/assets/lsp_symbol.png" alt="" /></p>
+<p>This is an example of symbol picker in helix. The symbols can also be
+filtered with %kind ___% syntax.</p>
+
+      
+      <li> <a class="title" href=https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;extras&#x2F;custom-kernel&#x2F;> compiling custom kernel just for fun </a> </li>
+      <p>Compiling custom kernel is easy actually, configuring is hard. There are some set of
+configurations that you must need for your kernel to boot, at least that what happened
+to me.</p>
+<p>step1: clone the kernel</p>
+<pre class="z-code"><code><span class="z-text z-plain">git clone https://github.com/torvalds/linux --depth=1
+</span></code></pre>
+<p>step 2</p>
+<pre class="z-code"><code><span class="z-text z-plain">make menuconfig
+</span></code></pre>
+<p>This is where things get trickier. So gentoo has lots of documentation for kernel configurations.
+Some of the links I found useful</p>
+<ul>
+<li>https://wiki.gentoo.org/wiki/Kernel#Configuration</li>
+<li>https://wiki.gentoo.org/wiki/Zram#Enabling_zram_support_in_kernel</li>
+<li>https://wiki.gentoo.org/wiki/Framebuffer</li>
+<li>https://wiki.gentoo.org/wiki/Bluetooth</li>
+</ul>
+<p>step 3: Follow arch wiki</p>
+<p>https://wiki.archlinux.org/title/Kernel/Traditional_compilation</p>
+<p>I use systemd boot so I just have to make a new loader as
+/boot/loader/entries/linux-spaceship.conf</p>
+<pre class="z-code"><code><span class="z-text z-plain">title   Arch Linux Spaceship
+</span><span class="z-text z-plain">linux   /vmlinuz-linux-spaceship
+</span><span class="z-text z-plain">initrd  /initramfs-linux-spaceship.img
+</span><span class="z-text z-plain">options root=PARTUUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx zswap.enabled=0 rootflags=subvol=@ rw rootfstype=btrfs
+</span></code></pre>
+<p>and my kernel is there when I start my pc.</p>
+<p>So why do this? Two reasons: because its fun to configure/compile your custom kernel with your
+own name and second, I disabled internet in this kernel to stop myself from any internet activity.</p>
+<p>Another thing is I also noticed my boot time got faster, maybe its because my kernel is
+minimal and does not has any extra modules enabled and is compiled in my machine.</p>
+
+      
+    </ul>
+  </div>
+
+<nav class="pagination">
+  
+  
+</nav>
+
+<script src="/codeblock.js" defer="none"></script>
+
+</article>
+
+
+
+
+    </div>
+  </section>
+
+  <footer style="bottom:0;">
+    <hr />
+    ©Aagaman Luitel 2025
+  </footer>
+
+</body>
+
+</html>
