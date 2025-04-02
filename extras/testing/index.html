@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css"/>
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+  <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+  <a href="https://luitelaagaman.com.np/extras/">Extras</a>
+
+  <span>
+    <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+      onclick=changeTheme()>T</button>
+  </span>
+  <dialog id="dialog">
+    <!-- Note the usage of `type=module` here as this is an ES6 module -->
+    <script type="module">
+      import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+      window.search = search;
+
+      async function run() {
+        await init('/wasm_output/tinysearch_engine_bg.wasm');
+      }
+
+      run();
+    </script>
+
+    <script>
+      function doSearch() {
+        let value = document.getElementById("demo").value;
+        console.log(`Search query: ${value}`);
+
+        const results = search(value, 5);
+
+        console.log(`Results: ${results}`);
+
+        let ul = document.getElementById("results");
+        ul.innerHTML = "";
+
+        for (i = 0; i < results.length; i++) {
+          var li = document.createElement("li");
+
+          let [title, url] = results[i];
+          let elemlink = document.createElement('a');
+          elemlink.innerHTML = title;
+          elemlink.setAttribute('href', url);
+          li.appendChild(elemlink);
+
+          ul.appendChild(li);
+        }
+      }
+    </script>
+
+    <script>
+    const root = document.documentElement;
+    const currentTheme = localStorage.getItem("theme")
+    if(currentTheme === null){
+      localStorage.setItem("theme", "light")
+    }
+    root.classList.toggle("dark-mode", currentTheme === "dark");
+
+    function changeTheme(){
+      if (localStorage.getItem("theme") === "light"){
+        root.classList.toggle("dark-mode", true);
+        localStorage.setItem("theme", "dark")
+        return
+      }
+      root.classList.toggle("dark-mode", false);
+      localStorage.setItem("theme", "light")
+      }
+    </script>
+
+    <h2>Search</h2>
+    <input type="text" id="demo" onkeyup="doSearch()">
+    <ul id="results">
+    </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a
+        href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+    <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+  </dialog>
+
+</nav>
+
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> testing</title>
+</head>
+
+
+<h1 class="title">
+  testing
+</h1>
+<p class="subtitle"><strong>2025-03-08</strong></p>
+
+<article>
+  <p>This is testing. Current text are paragraph and they are the primary fonts. Heading and blockquote have differtent fonts.</p>
+<h3 id="heading-or-smth-idk">Heading or smth idk</h3>
+<pre data-lang="scala" class="language-scala z-code"><code class="language-scala" data-lang="scala"><span class="z-source z-scala"><span class="z-meta z-class z-identifier z-scala"><span class="z-storage z-type z-class z-scala">object</span><span class="z-entity z-name z-class z-scala"> HelloWorld</span></span> <span class="z-meta z-class z-body z-scala"><span class="z-punctuation z-section z-braces z-begin z-scala">{</span>
+</span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala">	<span class="z-storage z-type z-function z-scala">def</span> <span class="z-entity z-name z-function z-scala">main</span><span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-variable z-parameter z-scala">args</span><span class="z-punctuation z-ascription z-scala">:</span> <span class="z-support z-class z-scala">Array</span><span class="z-punctuation z-definition z-generic z-begin z-scala">[</span><span class="z-support z-class z-scala">String</span><span class="z-punctuation z-definition z-generic z-end z-scala">]</span><span class="z-punctuation z-section z-group z-end z-scala">)</span><span class="z-punctuation z-ascription z-scala">:</span> <span class="z-storage z-type z-primitive z-scala">Unit</span> <span class="z-keyword z-operator z-assignment z-scala">=</span> <span class="z-meta z-block z-scala"><span class="z-punctuation z-section z-block z-begin z-scala">{</span>
+</span></span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala"><span class="z-meta z-block z-scala">	  <span class="z-meta z-group z-scala"><span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-constant z-numeric z-integer z-decimal z-scala">1</span> to <span class="z-constant z-numeric z-integer z-decimal z-scala">5</span><span class="z-punctuation z-section z-group z-end z-scala">)</span></span><span class="z-punctuation z-accessor z-scala">.</span>foreach<span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-variable z-parameter z-scala">x</span> <span class="z-storage z-type z-function z-arrow z-lambda z-scala">=&gt;</span> println<span class="z-punctuation z-section z-group z-begin z-scala">(</span><span class="z-string z-quoted z-double z-scala"><span class="z-punctuation z-definition z-string z-begin z-scala">&quot;</span>This is a test <span class="z-punctuation z-definition z-string z-end z-scala">&quot;</span></span> + x<span class="z-punctuation z-section z-group z-end z-scala">)</span><span class="z-punctuation z-section z-group z-end z-scala">)</span>
+</span></span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala"><span class="z-meta z-block z-scala">	<span class="z-punctuation z-section z-block z-end z-scala">}</span></span>
+</span></span><span class="z-source z-scala"><span class="z-meta z-class z-body z-scala"><span class="z-punctuation z-section z-braces z-end z-scala">}</span></span>
+</span></code></pre>
+<blockquote>
+<p>This is a blockquote - Sun Tzu</p>
+</blockquote>
+<br>
+<blockquote>
+<blockquote>
+<p>Double blockquote can also be done - Sun Tzu</p>
+</blockquote>
+</blockquote>
+<br>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>NOW THATS TOO MUCH - Sun Tzu</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>this is a list
+<ul>
+<li>oh wat
+<ul>
+<li>oh oh wat
+<ul>
+<li>oh oh oh oh watt</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>this is also a list</li>
+</ul>
+<p><code>a sneaky monospace text</code> hidden in a paragraph</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+  <footer style="bottom:0;">
+    <hr />
+    ©Aagaman Luitel 2025
+  </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css"/>
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+  <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+  <a href="https://luitelaagaman.com.np/extras/">Extras</a>
+
+  <span>
+    <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+      onclick=changeTheme()>T</button>
+  </span>
+  <dialog id="dialog">
+    <!-- Note the usage of `type=module` here as this is an ES6 module -->
+    <script type="module">
+      import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+      window.search = search;
+
+      async function run() {
+        await init('/wasm_output/tinysearch_engine_bg.wasm');
+      }
+
+      run();
+    </script>
+
+    <script>
+      function doSearch() {
+        let value = document.getElementById("demo").value;
+        console.log(`Search query: ${value}`);
+
+        const results = search(value, 5);
+
+        console.log(`Results: ${results}`);
+
+        let ul = document.getElementById("results");
+        ul.innerHTML = "";
+
+        for (i = 0; i < results.length; i++) {
+          var li = document.createElement("li");
+
+          let [title, url] = results[i];
+          let elemlink = document.createElement('a');
+          elemlink.innerHTML = title;
+          elemlink.setAttribute('href', url);
+          li.appendChild(elemlink);
+
+          ul.appendChild(li);
+        }
+      }
+    </script>
+
+    <script>
+    const root = document.documentElement;
+    const currentTheme = localStorage.getItem("theme")
+    if(currentTheme === null){
+      localStorage.setItem("theme", "light")
+    }
+    root.classList.toggle("dark-mode", currentTheme === "dark");
+
+    function changeTheme(){
+      if (localStorage.getItem("theme") === "light"){
+        root.classList.toggle("dark-mode", true);
+        localStorage.setItem("theme", "dark")
+        return
+      }
+      root.classList.toggle("dark-mode", false);
+      localStorage.setItem("theme", "light")
+      }
+    </script>
+
+    <h2>Search</h2>
+    <input type="text" id="demo" onkeyup="doSearch()">
+    <ul id="results">
+    </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a
+        href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+    <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+  </dialog>
+
+</nav>
+
+
+  <section class="section">
+    <div class="container">
+      
+<title>Aagaman Luitel</title>
+
+<div class="myself">
+
+
+  <p>Hi, welcome to my spaceship.
+This is my fun little space where I write about my hobbies.
+I primarily prefer Go &amp; Js and I am learning Scala atm.
+Workflow includes linux/helix/tmux</p>
+<p>Brief summary of myself</p>
+<ul>
+<li>Likes simplicity</li>
+<li>Likes learning new programming language</li>
+<li>Appreciate classical and unique art</li>
+<li>Hobbies are Anime &amp; Books &amp; Linux</li>
+<li>Arknights music is always on background</li>
+</ul>
+<p>Links:
+@<a href="https://github.com/spewwerrier">github</a>
+@<del>discord</del>
+<a href="mailto:luitelaagaman0777@gmail.com">mail</a></p>
+
+
+</div>
+
+
+<!-- <div class="writings"> -->
+  <!-- <ul class="description_list"> -->
+    <!--  -->
+    <!--  -->
+    <!-- <li> -->
+      <!-- <a class="title" href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;reverseproxy&#x2F;">Writing a load balancer in golang</a> -->
+      <!-- <p class="subtitle"> -->
+        <!-- <strong>2024-10-22 | 14mins </strong> -->
+      <!-- </p> -->
+      <!-- <p>Reverse proxy
+From cloudfare: A reverse proxy is a server that sits in front of web servers and forwards client (e.g. web browser) requests to those web servers.
+So our objective is to create a server that feeds in the request, send the request to one of our server and send back the request. And to make it more interesting let us make our reverse proxy decide the efficient server. Our reverse proxy will sit on Layer 4 of OSI model (Transport laye…</p> -->
+    <!-- </li> -->
+    <!--  -->
+  <!-- </ul> -->
+<!-- </div> -->
+
+<!-- <div class="extras"> -->
+  <!-- <ul class="description_list"> -->
+  <!-- <h2>Extras</h2> -->
+    <!--  -->
+    <!--  -->
+    <!-- <li> -->
+      <!-- <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;extras&#x2F;year-of-linux-2025&#x2F;">personal&#x2F;year_of_linux_2025.md</a> -->
+    <!-- </li> -->
+    <!--  -->
+    <!-- <li> -->
+      <!-- <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;extras&#x2F;selfhost&#x2F;">selfhost</a> -->
+    <!-- </li> -->
+    <!--  -->
+    <!-- <li> -->
+      <!-- <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;extras&#x2F;testing&#x2F;">testing</a> -->
+    <!-- </li> -->
+    <!--  -->
+  <!-- </ul> -->
+<!-- </div> -->
+
+
+    </div>
+  </section>
+
+  <footer style="bottom:0;">
+    <hr />
+    ©Aagaman Luitel 2025
+  </footer>
+
+</body>
+
+</html>

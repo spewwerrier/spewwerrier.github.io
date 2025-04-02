@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/base.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css"/>
+  <link rel="stylesheet" href="/normalize.css">
+</head>
+
+<body>
+  <h1 class="title">
+    <a href="/">Aagaman Luitel</a>
+  </h1>
+
+  <nav class="topbar">
+  <a href="https://luitelaagaman.com.np/writings/">Writings</a>
+  <a href="https://luitelaagaman.com.np/extras/">Extras</a>
+
+  <span>
+    <button class="primary" onclick="window.dialog.showModal();">S</button>|<button class="primary"
+      onclick=changeTheme()>T</button>
+  </span>
+  <dialog id="dialog">
+    <!-- Note the usage of `type=module` here as this is an ES6 module -->
+    <script type="module">
+      import {search, default as init} from '/wasm_output/tinysearch_engine.js';
+      window.search = search;
+
+      async function run() {
+        await init('/wasm_output/tinysearch_engine_bg.wasm');
+      }
+
+      run();
+    </script>
+
+    <script>
+      function doSearch() {
+        let value = document.getElementById("demo").value;
+        console.log(`Search query: ${value}`);
+
+        const results = search(value, 5);
+
+        console.log(`Results: ${results}`);
+
+        let ul = document.getElementById("results");
+        ul.innerHTML = "";
+
+        for (i = 0; i < results.length; i++) {
+          var li = document.createElement("li");
+
+          let [title, url] = results[i];
+          let elemlink = document.createElement('a');
+          elemlink.innerHTML = title;
+          elemlink.setAttribute('href', url);
+          li.appendChild(elemlink);
+
+          ul.appendChild(li);
+        }
+      }
+    </script>
+
+    <script>
+    const root = document.documentElement;
+    const currentTheme = localStorage.getItem("theme")
+    if(currentTheme === null){
+      localStorage.setItem("theme", "light")
+    }
+    root.classList.toggle("dark-mode", currentTheme === "dark");
+
+    function changeTheme(){
+      if (localStorage.getItem("theme") === "light"){
+        root.classList.toggle("dark-mode", true);
+        localStorage.setItem("theme", "dark")
+        return
+      }
+      root.classList.toggle("dark-mode", false);
+      localStorage.setItem("theme", "light")
+      }
+    </script>
+
+    <h2>Search</h2>
+    <input type="text" id="demo" onkeyup="doSearch()">
+    <ul id="results">
+    </ul>
+    <span id="credit">Thanks to <a href="https://github.com/tinysearch/tinysearch">Tinysearch</a> and <a
+        href="https://codepen.io/designfenix/pen/oNpqMdL">designfenix!</a></span>
+
+    <button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>
+  </dialog>
+
+</nav>
+
+
+  <section class="section">
+    <div class="container">
+      
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> personal&#x2F;year_of_linux_2025.md</title>
+</head>
+
+
+<h1 class="title">
+  personal&#x2F;year_of_linux_2025.md
+</h1>
+<p class="subtitle"><strong>2025-03-31</strong></p>
+
+<article>
+  <p>For me linux has already won me but for regular people linux has still a long way.</p>
+<p>Recently I installed arch on a laptop and for a not tech savy person. And this thing was nightmare for me to setup.</p>
+<p>I tried cosmic which was fairly okay, ootb experience was supposed to include everything but
+after 20mins of exploration and making it feel more like windows/mate I realized none of the
+bluelight filter work. It was due to cosmic not implementing <code>wlr gamma control procotol</code>.
+Bummer. This was a must have so waste of my time.</p>
+<p>Now I wanted a login system, cosmic-greet worked fine but it does not remembers old user,
+meaning same user is in default login every time. Yep.</p>
+<p>I went with regreet and despite annoying ux it was fine.
+(Enter to select session and password and enter, imo a bad design)</p>
+<p>Given up on cosmic I tried KDE, KDE does not launch. I tried x version but that does not
+even work on my own desktop and it did not launch here as well.
+Last time I had kde up and running and stock experience is good but there are so many nifty
+little things that makes you go mad. Like there is no battery indicator, like half of the
+times it showed battery percentage half of the time it did not. And the frequent crashes
+made made us both go nuts that time (2024).</p>
+<p>After thinking for some while I did unimaginable. GNOME. I always used to hate gnome but I
+questioned myself. Why does fedora use gnome? I don't know better than fedora. I installed
+gnome and oh boy everything was there. No over customization needed like KDE. Battery percentage
+was there. It did not crash, froze, everything was cute and smooth. There was a blue light
+filter. Albeit I had to figure out setting to same time 4am to 4am made the blue light
+permanent throughout the day instead of just having a toggle button for it, but hey
+it works... which you might say. Surprise logging with greetd means you have to enter
+password on brave every time you launch on a new boot. This was a simple fix, just use
+gnome stock login manager. I also had to install gnome dock extension which is very much
+a necessity for a regular user. Gnome does not looks like windows, not does it try to be better
+than windows, it has its own niche and it just works.</p>
+<p>Last thing to mention, without tlp battery performance is just worse.</p>
+<p>All the above things a regular user should know just to make their environment usable
+is a bad. No non-tech enthusiast will be able to do that.</p>
+<p>With non tech people I would say just use
+windows for now. There are two sets of people, who care and who does not. Non tech people
+don't care similar as most of the hobbies I don't care. No one should force them and especially
+when the state of linux desktop is like this.</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+
+    </div>
+  </section>
+
+  <footer style="bottom:0;">
+    <hr />
+    ©Aagaman Luitel 2025
+  </footer>
+
+</body>
+
+</html>
