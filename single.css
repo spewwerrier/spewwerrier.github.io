@@ -1,0 +1,19 @@
+section {
+    max-width: 60%;
+    margin: auto;
+}
+
+@media only screen and (max-width: 1200px) {
+    section {
+        max-width: 100%;
+        margin: auto;
+    }
+}
+
+.subtitle {
+    text-align: center;
+}
+
+.dark-mode .z-code {
+    border: 1px solid white;
+}

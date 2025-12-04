@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <body>
+        <section class="section">
+<title>List of writing</title>
+<article>
+    <h1 class="title">List of writing</h1>
+    <ul class="writings_list">
+        
+        <li style="text-align: center">
+            <h1 style="text-align: center">
+                <a href="https://luitelaagaman.com.np/writings/ebpf/"
+                    >=  {{  eBPF  }}
+                    </a
+                >
+            </h1>
+        </li>
+        <div style="text-align: center">2025-06-19</div>
+        
+        <li style="text-align: center">
+            <h1 style="text-align: center">
+                <a href="https://luitelaagaman.com.np/writings/egovernance-in-nepal/"
+                    >=  {{  Egovernance in nepal  }}
+                    </a
+                >
+            </h1>
+        </li>
+        <div style="text-align: center">2025-06-08</div>
+        
+        <li style="text-align: center">
+            <h1 style="text-align: center">
+                <a href="https://luitelaagaman.com.np/writings/reverseproxy/"
+                    >=  {{  Writing a load balancer in golang  }}
+                    </a
+                >
+            </h1>
+        </li>
+        <div style="text-align: center">2024-10-22</div>
+        
+    </ul>
+</article>
+
+</section>
+    </body>
+    <script>
+        document.documentElement.setAttribute("data-theme", "pastel");
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>

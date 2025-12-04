@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <body>
+        <section class="section">
+
+<h1>404 NOT FOUND</h1>
+
+</section>
+    </body>
+    <script>
+        document.documentElement.setAttribute("data-theme", "pastel");
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>
