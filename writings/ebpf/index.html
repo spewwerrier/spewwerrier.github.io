@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script defer>
+            // this is in head to prevent flashbang
+            const theme = localStorage.getItem("data-theme") ?? "burgerburn";
+            document.documentElement.setAttribute("data-theme", theme);
+        </script>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <nav class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">Aagaman Luitel</a>
+        </div>
+        <div class="flex-none">
+            <div class="dropdown ml-10">
+                <label tabindex="0" class="btn ml-10">Themes</label>
+                <ul tabindex="0" class="menu dropdown-content shadow-sm">
+                    <li>
+                        <button class="btn" onclick="applyColor('lovelace')">
+                            lovelace
+                        </button>
+                        <button class="btn" onclick="applyColor('corporate')">
+                            corporate
+                        </button>
+                        <button class="btn" onclick="applyColor('blues')">
+                            blues
+                        </button>
+                        <button class="btn" onclick="applyColor('whites')">
+                            whites
+                        </button>
+                        <button class="btn" onclick="applyColor('burgerburn')">
+                            burgerburn
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <body>
+        <section class="section">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/single.css" />
+    <title>eBPF</title>
+</head>
+<h1 class="title">eBPF</h1>
+
+<p class="subtitle">
+    <strong>2025-06-19 | 6mins </strong>
+</p>
+
+<!-- https://www.getzola.org/documentation/templates/pages-sections/#table-of-contents -->
+<!--
+<div class="toc">
+    <details>
+        <summary>Table Of Contents</summary>
+        <ul>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;ebpf&#x2F;#kprobes">Kprobes</a>
+            </li>
+            
+        </ul>
+    </details>
+</div>
+
+-->
+
+
+<style>
+    @media (max-width: 1200px) {
+        .timeline {
+            display: none;
+        }
+    }
+</style>
+<div class="article">
+    <aside class="timeline-side" style="position: sticky; top: 2rem">
+        <ul
+            class="timeline timeline-vertical"
+            style="position: fixed; right: 0; width: 500px"
+        >
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;ebpf&#x2F;#kprobes">Kprobes</a>
+                </div>
+                <hr />
+            </li>
+            
+        </ul>
+    </aside>
+    <article style="flex: 1"><h1 id="kprobes">Kprobes</h1>
+<p>These days I've been working on ebpf and linux, especially kprobes. I wanted
+to make a system monitoring and controlling framework/tool on kernel and
+syscall level.</p>
+<p>I've already done packet filtering using ebpf and xdp. We are given a
+pointer to packet head and end and we just have to parse the packet by
+keeping length skipped in mind. Like ethhdr-&gt;ipv4/6hdr-&gt;tcphdr. My approach
+to syscall was the same. We are given registers and just parse the regs-&gt;rdi
+for first argument and so on, but this was not that simple.</p>
+<p>Kprobes (kernel probing) is as name implied are probing/monitoring system
+attached to kernel. These kprobes can be attached to any kernel routines. <code>cat /proc/kallsyms</code> curretly above 400k routines. To attach on a syscall execve
+we have to attach on routine __x64_sys_execve. Since kprobes are attached to
+the kernelspace we need to read from kernel address and somehow extract the
+value. Like ctx-&gt;rdi contains pointer to filename when calling execve. But
+this pointer is in kernel address. To access this address there is a function
+called bpf_probe_read_from_kernel that copies the bytes from kernel address
+to destination. By using this we can access the data from kernel space.
+So to read the filename called by execve we should first make a kprobe at
+execve, get its first register (rdi is used as first argument in x86_64 system abi)
+whose first argument contains all the registers we need. And now we can safely
+read the registers using read_from_kernel. Filename is in rdi register as mentioned
+in the specification for linux kernel.</p>
+<p>This is also dangerous in a sense you can bork the kernel permanently if
+you lets say send erroneous signal on crucial kernel routines. Like sending
+EPERM (no permission) signal everytime when you call write. This means you
+can't change the code and reload since you won't have write permission. Ebpf
+frameworks like cilium automatically unloads the routine when you exit program
+or have to reboot (don't ask how I know) so its not as dangerous depending
+on the attachment method of your eBPF program.</p>
+<p>I will be doing this for a while on my free time and see where this project
+goes. The more I write the more I understand this ecosystem. The only thing
+I dislike beyond fighting the verifier and stack limit is reading macros
+but that too makes me more excited.</p>
+<p>Here is the code for blocking a file from being executed.</p>
+<pre data-lang="c" class="language-c z-code"><code class="language-c" data-lang="c"><span class="z-source z-c"><span class="z-meta z-preprocessor z-include z-c"><span class="z-keyword z-control z-import z-include z-c">#include</span> <span class="z-string z-quoted z-double z-include z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>vmlinux.h<span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span>
+</span></span><span class="z-source z-c"><span class="z-meta z-preprocessor z-include z-c"><span class="z-keyword z-control z-import z-include z-c">#include</span> <span class="z-string z-quoted z-other z-lt-gt z-include z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&lt;</span>bpf/bpf_helpers.h<span class="z-punctuation z-definition z-string z-end z-c">&gt;</span></span>
+</span></span><span class="z-source z-c"><span class="z-meta z-preprocessor z-include z-c"><span class="z-keyword z-control z-import z-include z-c">#include</span> <span class="z-string z-quoted z-other z-lt-gt z-include z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&lt;</span>bpf/bpf_tracing.h<span class="z-punctuation z-definition z-string z-end z-c">&gt;</span></span>
+</span></span><span class="z-source z-c"><span class="z-meta z-preprocessor z-include z-c"><span class="z-keyword z-control z-import z-include z-c">#include</span> <span class="z-string z-quoted z-other z-lt-gt z-include z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&lt;</span>bpf/bpf_core_read.h<span class="z-punctuation z-definition z-string z-end z-c">&gt;</span></span>
+</span></span><span class="z-source z-c"><span class="z-meta z-preprocessor z-include z-c"><span class="z-keyword z-control z-import z-include z-c">#include</span> <span class="z-string z-quoted z-other z-lt-gt z-include z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&lt;</span>string.h<span class="z-punctuation z-definition z-string z-end z-c">&gt;</span></span>
+</span></span><span class="z-source z-c">
+</span><span class="z-source z-c"><span class="z-storage z-type z-c">char</span> __license<span class="z-meta z-brackets z-c"><span class="z-punctuation z-section z-brackets z-begin z-c">[</span><span class="z-punctuation z-section z-brackets z-end z-c">]</span></span> <span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">SEC</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-string z-quoted z-double z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>license<span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span> <span class="z-keyword z-operator z-assignment z-c">=</span> <span class="z-string z-quoted z-double z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>Dual MIT/GPL<span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span><span class="z-source z-c">
+</span><span class="z-source z-c"><span class="z-meta z-struct z-c"><span class="z-storage z-type z-c">struct</span> <span class="z-meta z-block z-c"><span class="z-punctuation z-section z-block z-begin z-c">{</span></span></span><span class="z-meta z-struct z-c"><span class="z-meta z-block z-c">
+</span></span></span><span class="z-source z-c"><span class="z-meta z-struct z-c"><span class="z-meta z-block z-c">	<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">__uint</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c">type<span class="z-punctuation z-separator z-c">,</span> BPF_MAP_TYPE_RINGBUF</span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-struct z-c"><span class="z-meta z-block z-c">	<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">__uint</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c">max_entries<span class="z-punctuation z-separator z-c">,</span> <span class="z-constant z-numeric z-integer z-decimal z-c">1</span> <span class="z-keyword z-operator z-arithmetic z-c">&lt;&lt;</span> <span class="z-constant z-numeric z-integer z-decimal z-c">24</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-struct z-c"><span class="z-meta z-block z-c"></span></span><span class="z-meta z-struct z-c"><span class="z-meta z-block z-c"><span class="z-punctuation z-section z-block z-end z-c">}</span></span></span> exec_events <span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">SEC</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-string z-quoted z-double z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>.maps<span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span><span class="z-source z-c">
+</span><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> 59	0x3b	execve	__x64_sys_execve	fs/exec.c:2111		const char *filename, const char *const *argv, const char *const *envp
+</span></span><span class="z-source z-c">
+</span><span class="z-source z-c"><span class="z-meta z-assumed-macro z-c"><span class="z-variable z-function z-assumed-macro z-c">SEC</span><span class="z-punctuation z-section z-group z-begin z-c">(</span><span class="z-string z-quoted z-double z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>kprobe/__x64_sys_execve<span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span><span class="z-punctuation z-section z-group z-end z-c">)</span></span>
+</span><span class="z-source z-c"><span class="z-storage z-type z-c">int</span> <span class="z-meta z-function z-c"><span class="z-entity z-name z-function z-c">kprobe_execve</span></span><span class="z-meta z-function z-parameters z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function z-parameters z-c"><span class="z-meta z-group z-c"><span class="z-storage z-type z-c">struct</span> pt_regs <span class="z-keyword z-operator z-c">*</span><span class="z-variable z-parameter z-c">ctx</span><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-meta z-function z-c"> </span><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"><span class="z-punctuation z-section z-block z-begin z-c">{</span></span></span><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-storage z-type z-c">struct</span> pt_regs <span class="z-keyword z-operator z-c">*</span>regs <span class="z-keyword z-operator z-assignment z-c">=</span> <span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span><span class="z-storage z-type z-c">struct</span> pt_regs <span class="z-keyword z-operator z-c">*</span><span class="z-punctuation z-section z-group z-end z-c">)</span></span>ctx<span class="z-punctuation z-accessor z-c">-&gt;</span>di<span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-storage z-modifier z-c">const</span> <span class="z-storage z-type z-c">char</span> <span class="z-keyword z-operator z-c">*</span>filename<span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">bpf_probe_read_kernel</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-keyword z-operator z-c">&amp;</span>filename<span class="z-punctuation z-separator z-c">,</span> <span class="z-keyword z-operator z-word z-c">sizeof</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span><span class="z-meta z-group z-c">filename</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span><span class="z-punctuation z-separator z-c">,</span> <span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span><span class="z-storage z-modifier z-c">const</span> <span class="z-storage z-type z-c">void</span><span class="z-keyword z-operator z-c">*</span><span class="z-punctuation z-section z-group z-end z-c">)</span></span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span><span class="z-keyword z-operator z-c">&amp;</span>regs<span class="z-punctuation z-accessor z-c">-&gt;</span>di<span class="z-punctuation z-section z-group z-end z-c">)</span></span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-storage z-modifier z-c">const</span> <span class="z-storage z-type z-c">int</span> <span class="z-keyword z-operator z-c">*</span>syscallid<span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">bpf_probe_read_kernel</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-keyword z-operator z-c">&amp;</span>syscallid<span class="z-punctuation z-separator z-c">,</span> <span class="z-keyword z-operator z-word z-c">sizeof</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span><span class="z-meta z-group z-c"><span class="z-keyword z-operator z-c">&amp;</span>syscallid</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span><span class="z-punctuation z-separator z-c">,</span> <span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span><span class="z-storage z-modifier z-c">const</span> <span class="z-storage z-type z-c">void</span><span class="z-keyword z-operator z-c">*</span><span class="z-punctuation z-section z-group z-end z-c">)</span></span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span><span class="z-keyword z-operator z-c">&amp;</span>regs<span class="z-punctuation z-accessor z-c">-&gt;</span>orig_ax<span class="z-punctuation z-section z-group z-end z-c">)</span></span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-storage z-type z-c">char</span> file<span class="z-meta z-brackets z-c"><span class="z-punctuation z-section z-brackets z-begin z-c">[</span><span class="z-constant z-numeric z-integer z-decimal z-c">256</span><span class="z-punctuation z-section z-brackets z-end z-c">]</span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">bpf_probe_read_user_str</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c">file<span class="z-punctuation z-separator z-c">,</span> <span class="z-keyword z-operator z-word z-c">sizeof</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span><span class="z-meta z-group z-c">file</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span><span class="z-punctuation z-separator z-c">,</span> filename</span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-keyword z-control z-c">if</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span><span class="z-meta z-function-call z-c"><span class="z-support z-function z-C99 z-c">strcmp</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c">file<span class="z-punctuation z-separator z-c">,</span> <span class="z-string z-quoted z-double z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>/sbin/godot<span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span> <span class="z-keyword z-operator z-comparison z-c">==</span> <span class="z-constant z-numeric z-integer z-decimal z-c">0</span><span class="z-punctuation z-section z-group z-end z-c">)</span></span><span class="z-meta z-block z-c"><span class="z-punctuation z-section z-block z-begin z-c">{</span>
+</span></span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"><span class="z-meta z-block z-c">		<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">bpf_send_signal</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c">EPERM</span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"><span class="z-meta z-block z-c">		<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">bpf_printk</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-string z-quoted z-double z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>blocked: <span class="z-constant z-other z-placeholder z-c">%s</span> <span class="z-constant z-other z-placeholder z-c">%d</span><span class="z-constant z-character z-escape z-c">\n</span><span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span><span class="z-punctuation z-separator z-c">,</span> file<span class="z-punctuation z-separator z-c">,</span> syscallid</span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"><span class="z-meta z-block z-c">	<span class="z-punctuation z-section z-block z-end z-c">}</span></span><span class="z-keyword z-control z-c">else</span><span class="z-meta z-block z-c"><span class="z-punctuation z-section z-block z-begin z-c">{</span>
+</span></span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"><span class="z-meta z-block z-c">		<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">bpf_printk</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-string z-quoted z-double z-c"><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>filename: <span class="z-constant z-other z-placeholder z-c">%s</span> <span class="z-constant z-other z-placeholder z-c">%d</span><span class="z-constant z-character z-escape z-c">\n</span><span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span><span class="z-punctuation z-separator z-c">,</span> file<span class="z-punctuation z-separator z-c">,</span> syscallid</span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"><span class="z-meta z-block z-c">	<span class="z-punctuation z-section z-block z-end z-c">}</span></span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">bpf_ringbuf_output</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-keyword z-operator z-c">&amp;</span>exec_events<span class="z-punctuation z-separator z-c">,</span> <span class="z-keyword z-operator z-c">&amp;</span>file<span class="z-punctuation z-separator z-c">,</span> <span class="z-keyword z-operator z-word z-c">sizeof</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span><span class="z-meta z-group z-c">file</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span><span class="z-punctuation z-separator z-c">,</span> <span class="z-constant z-numeric z-integer z-decimal z-c">0</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c">	<span class="z-keyword z-control z-flow z-return z-c">return</span> <span class="z-constant z-numeric z-integer z-decimal z-c">0</span><span class="z-punctuation z-terminator z-c">;</span>
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"></span></span><span class="z-meta z-function z-c"><span class="z-meta z-block z-c"><span class="z-punctuation z-section z-block z-end z-c">}</span></span></span>
+</span></code></pre>
+<p>Ringbuffer is for communicating with the go program (cilium framework) that is loading
+this program into kernel.</p>
+<p>Now godot refuses to launch</p>
+<pre class="z-code"><code><span class="z-text z-plain">$ godot
+</span><span class="z-text z-plain">fish: Job 1, &#39;godot&#39; terminated by signal SIGHUP (Terminal hung up)
+</span></code></pre>
+<p>There is also logging done at <code>sudo cat /sys/kernel/tracing/trace</code> where printk prints into.</p>
+<p>Another way is blocking <code>/usr/bin/cat</code> and now you won't even be able to cat the tracing file.</p>
+<!-- # More to come -->
+<!-- I plan to write more and as I understand more... -->
+<!-- ## Keylogger -->
+<!-- # Cilium and BCC -->
+<!-- # vmlinux.h and kernel stuff -->
+<!-- # XDP -->
+<!-- # IP and TCP -->
+<!-- ## Packet Sniffing and Blocking -->
+<!-- # CO-RE -->
+</article>
+</div>
+
+
+<script src="/codeblock.js" defer="none"></script>
+
+<footer>
+     
+</footer>
+
+</section>
+    </body>
+    <script>
+        // burgerburn, lovelace, corporate, whites, blues
+        const applyColor = (themeName) => {
+            localStorage.setItem("data-theme", themeName);
+            document.documentElement.setAttribute("data-theme", themeName);
+        };
+
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>

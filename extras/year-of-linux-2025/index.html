@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script defer>
+            // this is in head to prevent flashbang
+            const theme = localStorage.getItem("data-theme") ?? "burgerburn";
+            document.documentElement.setAttribute("data-theme", theme);
+        </script>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <nav class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">Aagaman Luitel</a>
+        </div>
+        <div class="flex-none">
+            <div class="dropdown ml-10">
+                <label tabindex="0" class="btn ml-10">Themes</label>
+                <ul tabindex="0" class="menu dropdown-content shadow-sm">
+                    <li>
+                        <button class="btn" onclick="applyColor('lovelace')">
+                            lovelace
+                        </button>
+                        <button class="btn" onclick="applyColor('corporate')">
+                            corporate
+                        </button>
+                        <button class="btn" onclick="applyColor('blues')">
+                            blues
+                        </button>
+                        <button class="btn" onclick="applyColor('whites')">
+                            whites
+                        </button>
+                        <button class="btn" onclick="applyColor('burgerburn')">
+                            burgerburn
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <body>
+        <section class="section">
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> personal&#x2F;year_of_linux_2025.md</title>
+</head>
+
+
+<h1 class="title">
+  personal&#x2F;year_of_linux_2025.md
+</h1>
+<p class="subtitle"><strong>2025-03-31</strong></p>
+
+<article>
+  <h1 id="year-of-linux">Year Of Linux</h1>
+<p>For me linux has already won me but for regular people linux has still a long way.</p>
+<p>Recently I installed arch on a laptop and for a not tech savy person. And this thing was nightmare for me to setup.</p>
+<p>I tried cosmic which was fairly okay, ootb experience was supposed to include everything but
+after 20mins of exploration and making it feel more like windows/mate I realized none of the
+bluelight filter work. It was due to cosmic not implementing <code>wlr gamma control procotol</code>.
+Bummer. This was a must have so waste of my time.</p>
+<p>Now I wanted a login system, cosmic-greet worked fine but it does not remembers old user,
+meaning same user is in default login every time. Yep.</p>
+<p>I went with regreet and despite annoying ux it was fine.
+(Enter to select session and password and enter, imo a bad design)</p>
+<p>Given up on cosmic I tried KDE, KDE does not launch. I tried x version but that does not
+even work on my own desktop and it did not launch here as well.
+Last time I had kde up and running and stock experience is good but there are so many nifty
+little things that makes you go mad. Like there is no battery indicator, like half of the
+times it showed battery percentage half of the time it did not. And the frequent crashes
+made made us both go nuts that time (2024).</p>
+<p>After thinking for some while I did unimaginable. GNOME. I always used to hate gnome but I
+questioned myself. Why does fedora use gnome? I don't know better than fedora. I installed
+gnome and oh boy everything was there. No over customization needed like KDE. Battery percentage
+was there. It did not crash, froze, everything was cute and smooth. There was a blue light
+filter. Albeit I had to figure out setting to same time 4am to 4am made the blue light
+permanent throughout the day instead of just having a toggle button for it, but hey
+it works... which you might say. Surprise logging with greetd means you have to enter
+password on brave every time you launch on a new boot. This was a simple fix, just use
+gnome stock login manager. I also had to install gnome dock extension which is very much
+a necessity for a regular user. Gnome does not looks like windows, not does it try to be better
+than windows, it has its own niche and it just works.</p>
+<p>Last thing to mention, without tlp battery performance is just worse.</p>
+<p>All the above things a regular user should know just to make their environment usable
+is a bad. No non-tech enthusiast will be able to do that.</p>
+<p>With non tech people I would say just use
+windows for now. There are two sets of people, who care and who does not. Non tech people
+don't care similar as most of the hobbies I don't care. No one should force them and especially
+when the state of linux desktop is like this.</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+</section>
+    </body>
+    <script>
+        // burgerburn, lovelace, corporate, whites, blues
+        const applyColor = (themeName) => {
+            localStorage.setItem("data-theme", themeName);
+            document.documentElement.setAttribute("data-theme", themeName);
+        };
+
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>

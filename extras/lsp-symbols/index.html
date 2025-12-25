@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script defer>
+            // this is in head to prevent flashbang
+            const theme = localStorage.getItem("data-theme") ?? "burgerburn";
+            document.documentElement.setAttribute("data-theme", theme);
+        </script>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <nav class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">Aagaman Luitel</a>
+        </div>
+        <div class="flex-none">
+            <div class="dropdown ml-10">
+                <label tabindex="0" class="btn ml-10">Themes</label>
+                <ul tabindex="0" class="menu dropdown-content shadow-sm">
+                    <li>
+                        <button class="btn" onclick="applyColor('lovelace')">
+                            lovelace
+                        </button>
+                        <button class="btn" onclick="applyColor('corporate')">
+                            corporate
+                        </button>
+                        <button class="btn" onclick="applyColor('blues')">
+                            blues
+                        </button>
+                        <button class="btn" onclick="applyColor('whites')">
+                            whites
+                        </button>
+                        <button class="btn" onclick="applyColor('burgerburn')">
+                            burgerburn
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <body>
+        <section class="section">
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> LSP symbols</title>
+</head>
+
+
+<h1 class="title">
+  LSP symbols
+</h1>
+<p class="subtitle"><strong>2025-02-11</strong></p>
+
+<article>
+  <p>Many people miss out on lsp symbols picker. It is available in helix, zed and
+similar plugin might exist for neovim. Symbol picker gathers all the code declaration
+like class, variable, functions and so on. Combined with fuzzy picker you can
+grep the code declerations very fast. This is efficient when comments pollute the
+function name you are searching for.</p>
+<p><img src="/assets/lsp_symbol.png" alt="" /></p>
+<p>This is an example of symbol picker in helix. The symbols can also be
+filtered with %kind ___% syntax.</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+</section>
+    </body>
+    <script>
+        // burgerburn, lovelace, corporate, whites, blues
+        const applyColor = (themeName) => {
+            localStorage.setItem("data-theme", themeName);
+            document.documentElement.setAttribute("data-theme", themeName);
+        };
+
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>

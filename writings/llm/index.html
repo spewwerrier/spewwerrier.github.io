@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script defer>
+            // this is in head to prevent flashbang
+            const theme = localStorage.getItem("data-theme") ?? "burgerburn";
+            document.documentElement.setAttribute("data-theme", theme);
+        </script>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <nav class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">Aagaman Luitel</a>
+        </div>
+        <div class="flex-none">
+            <div class="dropdown ml-10">
+                <label tabindex="0" class="btn ml-10">Themes</label>
+                <ul tabindex="0" class="menu dropdown-content shadow-sm">
+                    <li>
+                        <button class="btn" onclick="applyColor('lovelace')">
+                            lovelace
+                        </button>
+                        <button class="btn" onclick="applyColor('corporate')">
+                            corporate
+                        </button>
+                        <button class="btn" onclick="applyColor('blues')">
+                            blues
+                        </button>
+                        <button class="btn" onclick="applyColor('whites')">
+                            whites
+                        </button>
+                        <button class="btn" onclick="applyColor('burgerburn')">
+                            burgerburn
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <body>
+        <section class="section">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/single.css" />
+    <title>notes on &quot;A comprehensive overview of LLM&quot;</title>
+</head>
+<h1 class="title">notes on &quot;A comprehensive overview of LLM&quot;</h1>
+
+<p class="subtitle">
+    <strong>2025-12-20 | 14mins </strong>
+</p>
+
+<!-- https://www.getzola.org/documentation/templates/pages-sections/#table-of-contents -->
+<!--
+<div class="toc">
+    <details>
+        <summary>Table Of Contents</summary>
+        <ul>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#background">Background</a>
+            </li>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#encoding-positions">Encoding positions</a>
+            </li>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#attention-in-llm">Attention in LLM</a>
+            </li>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#layer-normalization">Layer Normalization</a>
+            </li>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#llms-adaptation-stages">LLMs adaptation stages</a>
+            </li>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#prompt-utilization">prompt utilization</a>
+            </li>
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#quantization">quantization</a>
+            </li>
+            
+        </ul>
+    </details>
+</div>
+
+-->
+
+
+<style>
+    @media (max-width: 1200px) {
+        .timeline {
+            display: none;
+        }
+    }
+</style>
+<div class="article">
+    <aside class="timeline-side" style="position: sticky; top: 2rem">
+        <ul
+            class="timeline timeline-vertical"
+            style="position: fixed; right: 0; width: 500px"
+        >
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#background">Background</a>
+                </div>
+                <hr />
+            </li>
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#encoding-positions">Encoding positions</a>
+                </div>
+                <hr />
+            </li>
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#attention-in-llm">Attention in LLM</a>
+                </div>
+                <hr />
+            </li>
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#layer-normalization">Layer Normalization</a>
+                </div>
+                <hr />
+            </li>
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#llms-adaptation-stages">LLMs adaptation stages</a>
+                </div>
+                <hr />
+            </li>
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#prompt-utilization">prompt utilization</a>
+                </div>
+                <hr />
+            </li>
+            
+            <li>
+                <hr />
+                <div class="timeline-end timeline-box">
+                    <a href="https:&#x2F;&#x2F;luitelaagaman.com.np&#x2F;writings&#x2F;llm&#x2F;#quantization">quantization</a>
+                </div>
+                <hr />
+            </li>
+            
+        </ul>
+    </aside>
+    <article style="flex: 1"><p>original paper link: <a href="https://arxiv.org/abs/2307.06435">https://arxiv.org/abs/2307.06435</a>
+There are lots of better summarizers like <a href="https://www.alphaxiv.org/">https://www.alphaxiv.org/</a> please use them instead</p>
+<h1 id="background">Background</h1>
+<h2 id="tokenization">Tokenization</h2>
+<p>Tokenization is the process of breaking down text into smaller units called tokens, which can be characters, subwords, or words, depending on the chosen tokenization scheme. Modern LLMs typically use subword-based methods to efficiently handle rare and common words, as well as out-of-vocabulary terms. Popular tokenization schemes include WordPiece, Byte Pair Encoding (BPE), and Unigram Language Model (UnigramLM). These approaches help balance vocabulary size and representation flexibility, improving both model performance and efficiency.
+see [59, 63]</p>
+<h1 id="encoding-positions">Encoding positions</h1>
+<p>The transformer processes input sequences in parallel, meaning it does not inherently capture the order of tokens. To address this, positional encodings are added to token embeddings, allowing the model to incorporate information about token positions within the sequence. Positional vectors can be calculated using several methods: absolute positional encodings (such as sinusoidal functions, where each position is mapped to a unique vector using sine and cosine functions), learned positional embeddings (where position vectors are trainable parameters), or relative positional encodings (which represent the relative distance between tokens rather than their absolute positions). Within relative encoding, Alibi and Rotary Positional Embedding (RPE) are two widely used techniques in LLMs. Alibi introduces a bias based on token distance directly into the attention mechanism, while RPE applies a rotation to the query and key vectors to encode relative positions.
+see [64, 65, 66]</p>
+<h1 id="attention-in-llm">Attention in LLM</h1>
+<p>Attention is a mechanism that enables the model to focus on the most relevant parts of the input sequence when generating each output. In transformers, attention operates by computing three vectors for each token: the query, key, and value. The attention score for each token pair is calculated by taking the dot product of the query and key vectors, which is then scaled and passed through a softmax function to produce a distribution of weights. These weights are used to combine the value vectors, allowing the model to aggregate information from different positions in the sequence according to their relevance. This process helps the model capture contextual relationships and dependencies between tokens, improving its ability to understand and generate coherent text.
+see [64, 70]</p>
+<h1 id="layer-normalization">Layer Normalization</h1>
+<p>Layer Normalization is a technique used to stabilize and accelerate the training of deep neural networks by normalizing the inputs across the features for each data point. In transformers, it is applied to the outputs of sub-layers (such as attention and feed-forward layers) to ensure consistent activation distributions, which helps prevent issues like vanishing or exploding gradients. By maintaining stable gradients and reducing internal covariate shift, Layer Normalization contributes to faster convergence and improved model performance, making it a fundamental component in transformer architectures.
+[64]</p>
+<h1 id="llms-adaptation-stages">LLMs adaptation stages</h1>
+<h2 id="pre-training">pre training</h2>
+<p>During pre-training, the model is exposed to vast amounts of unlabeled text data and learns to predict the next token in a sequence given the preceding context. This process is typically unsupervised or self-supervised, allowing the model to capture general language patterns, grammar, and world knowledge. The objective is to maximize the likelihood of the observed data, enabling the model to develop a strong foundational understanding of language before any task-specific adaptation.</p>
+<h2 id="fine-tuning">fine tuning</h2>
+<p>Fine-tuning is the process of adapting a pre-trained LLM to specific tasks or requirements using additional data and targeted training strategies. Key approaches include:</p>
+<ul>
+<li><strong>Transfer learning</strong>: The model is further trained on task-specific datasets, allowing it to specialize in particular domains or applications.</li>
+<li><strong>Instruction tuning</strong>: The model is fine-tuned using data formatted as instructions and corresponding responses, improving its ability to follow user prompts and perform a wide range of tasks.</li>
+<li><strong>Alignment tuning</strong>: The model is exposed to scenarios where it may generate undesirable outputs (such as false, biased, or harmful text), and its parameters are updated to reduce such behaviors, aligning its responses with ethical and safety standards.</li>
+<li><strong>Reward modeling</strong>: A separate model is trained to evaluate and rank generated responses based on human preferences, using classification objectives to guide the LLM toward more desirable outputs.</li>
+<li><strong>Reinforcement learning</strong>: Building on reward modeling, reinforcement learning techniques are used to further optimize the LLM by ranking its responses as preferred or non-preferred, and updating its parameters to maximize alignment with human values and task requirements.</li>
+</ul>
+<h1 id="prompt-utilization">prompt utilization</h1>
+<h2 id="zero-shot-prompting">zero-shot prompting</h2>
+<p>Zero-shot prompting refers to providing an LLM with a task or question without any prior examples or demonstrations in the prompt. The model leverages its pre-trained knowledge to generate a response, even for queries it has not encountered before.</p>
+<h2 id="in-context-learning">in-context learning</h2>
+<p>In-context learning, often called few-shot prompting, involves supplying the model with several input-output pairs as demonstrations within the prompt. The LLM uses these examples to infer the desired format or reasoning pattern and generate an appropriate response for a new query.</p>
+<h2 id="reasoning-in-llms">reasoning in LLMs</h2>
+<p>LLMs can perform reasoning tasks by structuring prompts to encourage step-by-step problem solving. This can be achieved even in zero-shot settings, but is often enhanced with explicit demonstrations.</p>
+<h2 id="chain-of-thought-cot-prompting">chain-of-thought (CoT) prompting</h2>
+<p>Chain-of-thought prompting is a technique where demonstrations in the prompt include detailed reasoning steps alongside the input and output. This guides the model to produce answers with explicit, step-by-step explanations, improving performance on complex reasoning tasks.</p>
+<h2 id="self-consistency">self-consistency</h2>
+<p>Self-consistency builds on chain-of-thought prompting by generating multiple reasoning paths for the same question and selecting the most frequent or consensus answer. This approach increases reliability and accuracy in the model’s outputs.</p>
+<h2 id="tree-of-thought-tot-prompting">tree-of-thought (ToT) prompting</h2>
+<p>Tree-of-thought prompting extends chain-of-thought by allowing the model to explore multiple reasoning branches, look ahead, and backtrack as needed. This enables more sophisticated problem solving by considering alternative solutions and refining answers.</p>
+<h2 id="single-turn-instructions">single-turn instructions</h2>
+<p>Single-turn instructions involve querying the LLM once with all relevant information included in the prompt. The model generates a response in either zero-shot or few-shot mode, depending on whether demonstrations are provided.</p>
+<h2 id="multi-turn-instructions">multi-turn instructions</h2>
+<p>Multi-turn instructions are used for complex tasks that require iterative interaction with the LLM. The process involves multiple rounds of querying, where feedback, intermediate results, or outputs from external tools are incorporated into subsequent prompts to refine or extend the solution.</p>
+<h1 id="quantization">quantization</h1>
+<h2 id="post-training-quantization">post training quantization</h2>
+<p>Post-training quantization is a technique applied to a trained model to reduce its memory footprint and computational requirements by converting weights and activations from higher precision (such as 32-bit floating point) to lower precision formats (such as 8-bit or 4-bit integers). This process typically does not require further training or access to the original training data. The main goal is to make models more efficient for deployment, especially on resource-constrained devices, while maintaining acceptable accuracy. Common methods include weight quantization, activation quantization, and mixed-precision quantization. While post-training quantization is fast and easy to implement, it may sometimes lead to a drop in model performance, especially for very low bit-widths.</p>
+<h2 id="pruning">pruning</h2>
+<p>Pruning is a model compression technique that reduces the number of parameters in a neural network by removing weights or groups of weights deemed less important, thereby improving efficiency and reducing resource requirements.</p>
+<ul>
+<li>
+<p><strong>Unstructured pruning</strong>: This approach removes individual weights based on their magnitude or contribution to the model, without regard for their position or grouping within the network. The resulting sparsity can lead to smaller models, but may not always translate to faster inference on standard hardware due to irregular memory access patterns.</p>
+</li>
+<li>
+<p><strong>Structured pruning</strong>: In structured pruning, parameters are removed in organized groups, such as entire rows, columns, channels, or blocks within matrices. This method preserves the overall structure of the model, making it more compatible with hardware acceleration and leading to actual speedups. A typical structured pruning workflow involves three stages: (1) identifying groups of hidden states or components, (2) retaining the most important groups while removing less significant ones, and (3) fine-tuning the pruned model—often using techniques like Low-Rank Adaptation (LoRA)—to recover performance lost during pruning.</p>
+</li>
+</ul>
+</article>
+</div>
+
+
+<script src="/codeblock.js" defer="none"></script>
+
+<footer>
+     
+</footer>
+
+</section>
+    </body>
+    <script>
+        // burgerburn, lovelace, corporate, whites, blues
+        const applyColor = (themeName) => {
+            localStorage.setItem("data-theme", themeName);
+            document.documentElement.setAttribute("data-theme", themeName);
+        };
+
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>

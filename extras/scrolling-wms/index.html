@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script defer>
+            // this is in head to prevent flashbang
+            const theme = localStorage.getItem("data-theme") ?? "burgerburn";
+            document.documentElement.setAttribute("data-theme", theme);
+        </script>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <nav class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">Aagaman Luitel</a>
+        </div>
+        <div class="flex-none">
+            <div class="dropdown ml-10">
+                <label tabindex="0" class="btn ml-10">Themes</label>
+                <ul tabindex="0" class="menu dropdown-content shadow-sm">
+                    <li>
+                        <button class="btn" onclick="applyColor('lovelace')">
+                            lovelace
+                        </button>
+                        <button class="btn" onclick="applyColor('corporate')">
+                            corporate
+                        </button>
+                        <button class="btn" onclick="applyColor('blues')">
+                            blues
+                        </button>
+                        <button class="btn" onclick="applyColor('whites')">
+                            whites
+                        </button>
+                        <button class="btn" onclick="applyColor('burgerburn')">
+                            burgerburn
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <body>
+        <section class="section">
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> scrolling window managers</title>
+</head>
+
+
+<h1 class="title">
+  scrolling window managers
+</h1>
+<p class="subtitle"><strong>2025-05-27</strong></p>
+
+<article>
+  <h1 id="scrolling-wm-are-saikoudes">Scrolling wm are saikoudes.</h1>
+<p>I have been sleeping on scrolling window managers. Scrolling window managers are the best. This also completely removed tmux from my workflow.</p>
+<p>In modern day and age people open tons of program that can't be contained on a single monitor so concepts of workspace was made. This allowed extra programs to be out of view by putting them in virtual workspace which we can access later.</p>
+<p>But this does not solves the problem. Virtual workspace gets cluttered easily. What if you are doing a project and you are opening 10 terminals, now you have to separate those terminal into 2-3 different workspace. You now need to remember which workspace you divided your project into.</p>
+<p>I tried to solve this by using tmux. Tmux is great and you should use it! It manages a terminal into multiple panes and a single terminal can have multiple panes divided by multiple tabs. This is exactly like workspace but for terminal. But this has some problem, using tmux means some very cool features of specific terminal becomes unusable under tmux. Like search feature and scrollback writing feature of foot is very handy but I can't use it due to tmux being an overlay on top of foot. And lastly this only applies to terminal applications.</p>
+<p>Here comes scrolling wm's. Hear me out, what if instead of virtual workspace being able to display only 1 workspace, it expanded infinitely on horizontal dimension. Welcome to scrolling window managers. A virtual workspace can have infinitely scaled horizontal dimension. So if you use 10 virtual workspace then you will have 10 infinite workspace. This means I can use workspace 1 to have all the browsing and research needs. If I need to open another browser or context I can just "scroll" right and put my application there, in the same workspace. This means I can make a mindmap that nth workspace is for certain stuff so I don't have to fragment a project into multiple workspace.</p>
+<p><img src="https://luitelaagaman.com.np/extras/scrolling-wms/./scrolling_wms_screenshot.png" alt="" />
+Fig: Screenshot of Niri, as you can see a single workspace can have multiple applications opened.</p>
+<p>For now I'm using niri and hyprland with scrolling plugin. Hyprland has not caught up to scrolling like niri but I've been trying my best to make the keybinds same so I can switch between them seamlessly.</p>
+<p>Final verdict: Fibonacci method of opening is inefficient, master layout is niche and floating window are useless. Scrolling is the future!</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+</section>
+    </body>
+    <script>
+        // burgerburn, lovelace, corporate, whites, blues
+        const applyColor = (themeName) => {
+            localStorage.setItem("data-theme", themeName);
+            document.documentElement.setAttribute("data-theme", themeName);
+        };
+
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>

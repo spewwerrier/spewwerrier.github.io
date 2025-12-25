@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script defer>
+            // this is in head to prevent flashbang
+            const theme = localStorage.getItem("data-theme") ?? "burgerburn";
+            document.documentElement.setAttribute("data-theme", theme);
+        </script>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/base.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="/syntax-theme-light.css" />
+        <link rel="stylesheet" href="/normalize.css" />
+    </head>
+
+    <nav class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">Aagaman Luitel</a>
+        </div>
+        <div class="flex-none">
+            <div class="dropdown ml-10">
+                <label tabindex="0" class="btn ml-10">Themes</label>
+                <ul tabindex="0" class="menu dropdown-content shadow-sm">
+                    <li>
+                        <button class="btn" onclick="applyColor('lovelace')">
+                            lovelace
+                        </button>
+                        <button class="btn" onclick="applyColor('corporate')">
+                            corporate
+                        </button>
+                        <button class="btn" onclick="applyColor('blues')">
+                            blues
+                        </button>
+                        <button class="btn" onclick="applyColor('whites')">
+                            whites
+                        </button>
+                        <button class="btn" onclick="applyColor('burgerburn')">
+                            burgerburn
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <body>
+        <section class="section">
+
+<head>
+  <!-- Other content -->
+  <link rel="stylesheet" type="text/css" href="/single.css">
+  <title> compiling custom kernel just for fun</title>
+</head>
+
+
+<h1 class="title">
+  compiling custom kernel just for fun
+</h1>
+<p class="subtitle"><strong>2025-01-21</strong></p>
+
+<article>
+  <p>Compiling custom kernel is easy actually, configuring is hard. There are some set of
+configurations that you must need for your kernel to boot, at least that what happened
+to me.</p>
+<p>step1: clone the kernel</p>
+<pre class="z-code"><code><span class="z-text z-plain">git clone https://github.com/torvalds/linux --depth=1
+</span></code></pre>
+<p>step 2</p>
+<pre class="z-code"><code><span class="z-text z-plain">make menuconfig
+</span></code></pre>
+<p>This is where things get trickier. So gentoo has lots of documentation for kernel configurations.
+Some of the links I found useful</p>
+<ul>
+<li>https://wiki.gentoo.org/wiki/Kernel#Configuration</li>
+<li>https://wiki.gentoo.org/wiki/Zram#Enabling_zram_support_in_kernel</li>
+<li>https://wiki.gentoo.org/wiki/Framebuffer</li>
+<li>https://wiki.gentoo.org/wiki/Bluetooth</li>
+</ul>
+<p>step 3: Follow arch wiki</p>
+<p>https://wiki.archlinux.org/title/Kernel/Traditional_compilation</p>
+<p>I use systemd boot so I just have to make a new loader as
+/boot/loader/entries/linux-spaceship.conf</p>
+<pre class="z-code"><code><span class="z-text z-plain">title   Arch Linux Spaceship
+</span><span class="z-text z-plain">linux   /vmlinuz-linux-spaceship
+</span><span class="z-text z-plain">initrd  /initramfs-linux-spaceship.img
+</span><span class="z-text z-plain">options root=PARTUUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx zswap.enabled=0 rootflags=subvol=@ rw rootfstype=btrfs
+</span></code></pre>
+<p>and my kernel is there when I start my pc.</p>
+<p>So why do this? Two reasons: because its fun to configure/compile your custom kernel with your
+own name and second, I disabled internet in this kernel to stop myself from any internet activity.</p>
+<p>Another thing is I also noticed my boot time got faster, maybe its because my kernel is
+minimal and does not has any extra modules enabled and is compiled in my machine.</p>
+
+</article>
+
+<script src="/codeblock.js" defer="none"></script>
+
+</section>
+    </body>
+    <script>
+        // burgerburn, lovelace, corporate, whites, blues
+        const applyColor = (themeName) => {
+            localStorage.setItem("data-theme", themeName);
+            document.documentElement.setAttribute("data-theme", themeName);
+        };
+
+        function pageDown() {
+            window.scrollBy({
+                top: window.innerHeight - 130,
+                behavior: "smooth",
+            });
+        }
+
+        function pageUp() {
+            window.scrollBy({
+                top: -(window.innerHeight - 130),
+                behavior: "smooth",
+            });
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "d" || event.key === "D") {
+                pageDown();
+            }
+            if (event.key === "u") {
+                pageUp();
+            }
+        });
+    </script>
+</html>
